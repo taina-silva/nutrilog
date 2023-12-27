@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "146760199274",
+    "project_id": "nutrilog-316a5",
+    "storage_bucket": "nutrilog-316a5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:146760199274:android:217b7fdaa10f7e935f6e13",
+        "android_client_info": {
+          "package_name": "com.nutrilog"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwtRg0h28z6paVsY5Z2XbvBcERJb1-GBo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

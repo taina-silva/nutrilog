@@ -1,0 +1,20 @@
+{
+  "configurations": [
+    {
+      "name": "dev",
+      "type": "dart",
+      "request": "launch",
+      "args": [
+        "--flavor=dev",
+      ]
+    },
+    {
+      "name": "prod",
+      "type": "dart",
+      "request": "launch",
+      "args": [
+        "--flavor=prod",
+      ]
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-package com.example.nutrilog
+package com.nutrilog
 
 import io.flutter.embedding.android.FlutterActivity
 
