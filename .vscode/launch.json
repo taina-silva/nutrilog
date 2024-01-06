@@ -4,6 +4,7 @@
       "name": "dev",
       "type": "dart",
       "request": "launch",
+      "program": "lib/main.dart",
       "args": [
         "--flavor=dev",
       ]
@@ -12,6 +13,7 @@
       "name": "prod",
       "type": "dart",
       "request": "launch",
+      "program": "lib/main.dart",
       "args": [
         "--flavor=prod",
       ]

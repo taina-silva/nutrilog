@@ -28,7 +28,8 @@ dependencies:
   brasil_fields: ^1.14.0
   cupertino_icons: ^1.0.2
   device_preview: 1.1.0
-  firebase_core: 2.15.0
+  equatable: ^2.0.5
+  firebase_core: ^2.17.0
   firebase_crashlytics: 3.3.4
   firebase_remote_config: 4.2.4
   flutter:
@@ -61,18 +62,26 @@ flutter:
   assets:
     - assets/
     - assets/app_icon/
+    - assets/logo/
+    - assets/icons/
 
   fonts:
-    - family: AlbertSans
+    - family: K2D
       fonts:
-        - asset: assets/fonts/AlbertSans-Light.ttf
+        - asset: assets/fonts/K2D-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/K2D-Light.ttf
           weight: 300
-        - asset: assets/fonts/AlbertSans-Regular.ttf
+        - asset: assets/fonts/K2D-Medium.ttf
           weight: 400
-        - asset: assets/fonts/AlbertSans-SemiBold.ttf
+        - asset: assets/fonts/K2D-Regular.ttf
+          weight: 500
+        - asset: assets/fonts/K2D-SemiBold.ttf
           weight: 600
-        - asset: assets/fonts/AlbertSans-Bold.ttf
+        - asset: assets/fonts/K2D-Bold.ttf
           weight: 700
+        - asset: assets/fonts/K2D-ExtraBold.ttf
+          weight: 800
 
 flutter_icons:
   android: true
