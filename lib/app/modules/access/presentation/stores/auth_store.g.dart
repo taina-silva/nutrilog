@@ -45,19 +45,19 @@ mixin _$AuthStore on AuthStoreBase, Store {
     });
   }
 
-  late final _$payloadAtom =
-      Atom(name: 'AuthStoreBase.payload', context: context);
+  late final _$passwordIsHiddenAtom =
+      Atom(name: 'AuthStoreBase.passwordIsHidden', context: context);
 
   @override
-  AuthPayloadModel? get payload {
-    _$payloadAtom.reportRead();
-    return super.payload;
+  bool get passwordIsHidden {
+    _$passwordIsHiddenAtom.reportRead();
+    return super.passwordIsHidden;
   }
 
   @override
-  set payload(AuthPayloadModel? value) {
-    _$payloadAtom.reportWrite(value, super.payload, () {
-      super.payload = value;
+  set passwordIsHidden(bool value) {
+    _$passwordIsHiddenAtom.reportWrite(value, super.passwordIsHidden, () {
+      super.passwordIsHidden = value;
     });
   }
 
@@ -65,22 +65,30 @@ mixin _$AuthStore on AuthStoreBase, Store {
       AsyncAction('AuthStoreBase.signup', context: context);
 
   @override
-  Future<void> signup() {
-    return _$signupAsyncAction.run(() => super.signup());
+  Future<void> signup(AuthPayloadModel payload) {
+    return _$signupAsyncAction.run(() => super.signup(payload));
   }
 
-  late final _$loginAsyncAction =
-      AsyncAction('AuthStoreBase.login', context: context);
+  late final _$signinAsyncAction =
+      AsyncAction('AuthStoreBase.signin', context: context);
 
   @override
-  Future<void> login() {
-    return _$loginAsyncAction.run(() => super.login());
+  Future<void> signin(AuthPayloadModel payload) {
+    return _$signinAsyncAction.run(() => super.signin(payload));
+  }
+
+  late final _$signoutAsyncAction =
+      AsyncAction('AuthStoreBase.signout', context: context);
+
+  @override
+  Future<void> signout() {
+    return _$signoutAsyncAction.run(() => super.signout());
   }
 
   @override
   String toString() {
     return '''
-payload: ${payload}
+passwordIsHidden: ${passwordIsHidden}
     ''';
   }
 }

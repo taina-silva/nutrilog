@@ -7,7 +7,8 @@ import 'package:nutrilog/app/modules/access/infra/models/auth_payload_model.dart
 
 abstract class AuthRepository {
   Future<Either<Failure, Unit>> signup(AuthPayloadModel payload);
-  Future<Either<Failure, Unit>> login(AuthPayloadModel payload);
+  Future<Either<Failure, String?>> signin(AuthPayloadModel payload);
+  Future<Either<Failure, Unit>> signout();
 }
 
 class FirebaseAuthRepository implements AuthRepository {
@@ -34,16 +35,27 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> login(AuthPayloadModel payload) async {
+  Future<Either<Failure, String?>> signin(AuthPayloadModel payload) async {
     try {
-      await _datasource.login(payload);
-      return const Right(unit);
+      String? uid = await _datasource.signin(payload);
+      return Right(uid);
     } on UserNotFoundException {
       return const Left(UserNotFoundFailure());
-    } on InvalidEmailException {
-      return const Left(InvalidEmailFailure());
+    } on InvalidLoginCredentialsException {
+      return const Left(InvalidLoginCredentialsFailure());
     } on WrongPasswordException {
       return const Left(WrongPasswordFailure());
+    } catch (exception, stackTrace) {
+      _loggerService.recordError(exception, stackTrace);
+      return const Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> signout() async {
+    try {
+      await _datasource.signout();
+      return const Right(unit);
     } catch (exception, stackTrace) {
       _loggerService.recordError(exception, stackTrace);
       return const Left(ServerFailure());

@@ -4,9 +4,9 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:nutrilog/app/core/services/logger/logger_service.dart';
 import 'package:nutrilog/app/core/utils/custom_colors.dart';
 import 'package:nutrilog/app/core/utils/log.dart';
-import 'package:nutrilog/app/core/services/logger/logger_service.dart';
 import 'package:nutrilog/app/core/utils/status_bar_theme.dart';
 
 class AppWidget extends StatefulWidget {
@@ -20,7 +20,7 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    changeStatusBarTheme(StatusBarTheme.dark, CColors.neutral900);
+    changeStatusBarTheme(StatusBarTheme.light, CColors.primaryBackground);
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
 
@@ -50,13 +50,13 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
         }
       },
       child: MaterialApp.router(
-        title: 'KasuIA | Report',
+        title: 'Nutrilog',
         debugShowCheckedModeBanner: false,
         scrollBehavior: const CustomScrollBehavior(),
         theme: ThemeData(
           useMaterial3: false,
-          primarySwatch: getMaterialColor(CColors.primary),
-          fontFamily: 'AlbertSans',
+          primarySwatch: getMaterialColor(CColors.primaryActivity),
+          fontFamily: 'K2D',
         ),
         // ignore: deprecated_member_use
         useInheritedMediaQuery: true,

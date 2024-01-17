@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:mobx/mobx.dart';
+import 'package:nutrilog/app/core/components/structure/custom_scaffold.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
-import 'package:nutrilog/app/core/utils/custom_colors.dart';
 import 'package:nutrilog/app/modules/splash/presentation/stores/splash_store.dart';
 import 'package:nutrilog/app/modules/splash/presentation/stores/states/splash_states.dart';
 
@@ -28,8 +27,7 @@ class _SplashPageState extends State<SplashPage> {
         if (state is ToEntryState) {
           Modular.to.navigate('entry/home/');
         } else if (state is ToLoginState) {
-          Modular.to.navigate('entry/home/');
-          /* Modular.to.navigate('access/'); */
+          Modular.to.navigate('access/');
         }
       }),
     ];
@@ -37,15 +35,14 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: CColors.neutral0,
+    return CustomScaffold(
+      body: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
+            Image.asset(
               Assets.logo,
               height: MediaQuery.of(context).size.width * 0.7,
               width: MediaQuery.of(context).size.width * 0.7,

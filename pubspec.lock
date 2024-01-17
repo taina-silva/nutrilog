@@ -169,6 +169,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  cloud_firestore:
+    dependency: "direct main"
+    description:
+      name: cloud_firestore
+      sha256: "1179ae4c69e2ea18179d844d70fc6ed2f082a2bbeb7fa62d35a2a24e2992bd4d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.9.3"
+  cloud_firestore_platform_interface:
+    dependency: transitive
+    description:
+      name: cloud_firestore_platform_interface
+      sha256: acdcf0743bbdd0e6b342f3d2033e15d260a2c6f9434dd34b008b8f1c35e62b23
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.16.2"
+  cloud_firestore_web:
+    dependency: transitive
+    description:
+      name: cloud_firestore_web
+      sha256: "321bb0732c8d782a49aede96805e59609e05cf98b6c34370faa04103f46a4a3a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.7.2"
   code_builder:
     dependency: transitive
     description:
@@ -233,6 +257,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  email_validator:
+    dependency: "direct main"
+    description:
+      name: email_validator
+      sha256: e9a90f27ab2b915a27d7f9c2a7ddda5dd752d6942616ee83529b686fc086221b
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.17"
   equatable:
     dependency: "direct main"
     description:
@@ -846,7 +878,7 @@ packages:
     source: hosted
     version: "1.2.3"
   shared_preferences:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: shared_preferences
       sha256: b7f41bad7e521d205998772545de63ff4e6c97714775902c199353f8bf1511ac

@@ -12,17 +12,22 @@ abstract class Layout {
   static const double borderRadiusSmall = 8;
   static const double borderRadiusMedium = 16;
   static const double borderRadiusBig = 100;
+
   static const double borderWidth = 2;
+
   static const double appBarSize = 72;
   static const double appBarTrailingHeight = 52;
   static const double appBarLeadingAndTrailingWidth = 40;
+
   static const double bottomNavBarSize = 60;
+
   static BoxShadow boxShadow = BoxShadow(
     color: Colors.grey.withOpacity(0.5),
-    spreadRadius: 2,
-    blurRadius: 2,
-    offset: const Offset(0, 3),
+    spreadRadius: 1,
+    blurRadius: 1,
+    offset: const Offset(0, 1),
   );
+
   static double bottomPadding(BuildContext context) =>
       max(24, MediaQuery.of(context).padding.bottom);
 }
@@ -67,5 +72,5 @@ abstract class ScreenMargin {
 abstract class Assets {
   static const String images = 'assets/images';
   static const String icons = 'assets/icons';
-  static const String logo = 'assets/logo/logo.svg';
+  static const String logo = 'assets/logo/logo.png';
 }

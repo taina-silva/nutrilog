@@ -12,6 +12,18 @@ class EmailAlreadyInUseException extends Equatable implements Exception {
   bool get stringify => true;
 }
 
+class InvalidLoginCredentialsException extends Equatable implements Exception {
+  final String? message;
+
+  const InvalidLoginCredentialsException({this.message});
+
+  @override
+  List<Object?> get props => [message];
+
+  @override
+  bool get stringify => true;
+}
+
 class InvalidEmailException extends Equatable implements Exception {
   final String? message;
 

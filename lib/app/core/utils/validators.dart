@@ -1,6 +1,8 @@
-import 'package:brasil_fields/brasil_fields.dart';
+import 'package:email_validator/email_validator.dart';
 
 class Validators {
+  static bool _isEmptyOrNull(String? value) => value?.trim().isEmpty ?? true;
+
   String? basicValidator(String? value) {
     if (value == null || value.trim() == '') {
       return 'Valor inválido';
@@ -9,66 +11,33 @@ class Validators {
     return null;
   }
 
-  String? usernameValidator(String? value) {
-    if (value == null || value.trim() == '') {
-      return 'Nome de usuário inválido';
+  static String? emailValidator(String? value) {
+    if (_isEmptyOrNull(value)) {
+      return "É necessário digitar o e-mail!";
+    } else if (!EmailValidator.validate(value!.trim())) {
+      return "E-mail inválido";
     }
 
     return null;
   }
 
-  String? passwordValidator(String? value) {
-    if (value == null || value.trim() == '') {
+  static String? passwordValidator(String? value) {
+    if (_isEmptyOrNull(value)) {
       return 'Senha inválida';
-    } else if (value.trim().length < 6) {
+    } else if (value!.trim().length < 6) {
       return 'Senha muito curta';
     }
 
     return null;
   }
 
-  String? confirmPasswordValidator(String? value, String? original) {
-    if (value == null || original == null || value.trim() == '' || original.trim() == '') {
+  static String? confirmPasswordValidator(String? value, String? original) {
+    if (_isEmptyOrNull(value) || _isEmptyOrNull(original)) {
       return 'Senha inválida';
-    } else if (value.trim().length < 6) {
+    } else if (value!.trim().length < 6) {
       return 'Senha muito curta';
     } else if (value != original) {
       return 'Senhas diferentes';
-    }
-
-    return null;
-  }
-
-  String? cpfOrCpnjValidator(String? value) {
-    if (value == null || value.trim() == '') {
-      return 'CPF ou CPNJ inválido';
-    } else if (value.length == 14 && UtilBrasilFields.isCPFValido(value)) {
-      return null;
-    } else if (value.length == 18 && UtilBrasilFields.isCNPJValido(value)) {
-      return null;
-    }
-    // login da apple
-    else if (value == '123.456.789-10') {
-      return null;
-    }
-
-    return 'CPF ou CPNJ inválido';
-  }
-
-  String? completeNameValidator(String? value) {
-    if (value == null || value.trim() == '') {
-      return 'É necessário digitar o nome';
-    }
-
-    return null;
-  }
-
-  String? phoneWithDDDValidator(String? value) {
-    if (value == null || value.trim() == '') {
-      return 'É necessário digitar o telefone';
-    } else if (UtilBrasilFields.removeCaracteres(value).length < 10 ||
-        UtilBrasilFields.removeCaracteres(value).length > 11) {
-      return 'Telefone inválido';
     }
 
     return null;

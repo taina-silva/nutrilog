@@ -28,6 +28,17 @@ class EmailAlreadyInUseFailure extends Failure {
   List<Object> get props => [message];
 }
 
+class InvalidLoginCredentialsFailure extends Failure {
+  final String msg;
+
+  const InvalidLoginCredentialsFailure([
+    this.msg = "Credenciais inválidas! Tente novamente.",
+  ]) : super(msg);
+
+  @override
+  List<Object> get props => [message];
+}
+
 class InvalidEmailFailure extends Failure {
   final String msg;
 

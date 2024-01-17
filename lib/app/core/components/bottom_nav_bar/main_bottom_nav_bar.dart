@@ -17,11 +17,9 @@ class MainBottomNavBar extends StatelessWidget {
     return Container(
       height: Layout.bottomNavBarSize + MediaQuery.of(context).padding.bottom + 8,
       padding: const EdgeInsets.symmetric(vertical: 4),
-      margin: const EdgeInsets.only(left: 72, right: 72, bottom: 8),
       decoration: BoxDecoration(
         color: CColors.neutral0,
         boxShadow: [Layout.boxShadow],
-        borderRadius: const BorderRadius.all(Radius.circular(Layout.borderRadiusBig)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -35,8 +33,8 @@ class MainBottomNavBar extends StatelessWidget {
           ),
           _CommonBottomNavBarIcon(
             onTap: () => onTap(1),
-            icon: Icons.sticky_note_2_outlined,
-            title: 'Notas',
+            icon: Icons.trending_up,
+            title: 'Gráficos',
             selected: currentIndex == 1,
           ),
         ],
@@ -65,11 +63,11 @@ class _CommonBottomNavBarIcon extends StatelessWidget {
       onTap: onTap,
       child: Column(
         children: [
-          Icon(icon, color: selected ? CColors.primary : CColors.neutral900, size: 35),
+          Icon(icon, color: selected ? CColors.primaryActivity : CColors.neutral400, size: 35),
           const SizedBox(height: 4),
           Text(
             title,
-            style: TextStyle(color: selected ? CColors.primary : CColors.neutral900),
+            style: TextStyle(color: selected ? CColors.primaryActivity : CColors.neutral400),
           )
         ],
       ),

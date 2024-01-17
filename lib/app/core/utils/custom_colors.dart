@@ -6,9 +6,11 @@ abstract class CColors {
   static const primaryBackground = Color.fromRGBO(248, 248, 248, 1);
   static const secondaryBackground = Color.fromRGBO(251, 246, 241, 1);
 
-  static const primary = Color(0x002aaaac);
-  static const primaryWithOpacity = Color.fromRGBO(188, 113, 23, 0.16);
-  static const primaryWithMoreOpacity = Color.fromRGBO(188, 113, 23, 0.08);
+  static const primaryActivity = Color.fromARGB(255, 42, 170, 172);
+  static const primaryActivityWithOpacity = Color.fromARGB(50, 42, 170, 172);
+
+  static const primaryNutrition = Color.fromARGB(255, 172, 44, 42);
+  static const primaryNutritionWithOpacity = Color.fromARGB(50, 172, 44, 42);
 
   static const neutral0 = Color.fromRGBO(255, 255, 255, 1);
   static const neutral100 = Color.fromRGBO(250, 250, 250, 1);
@@ -24,12 +26,6 @@ abstract class CColors {
   static const neutral700 = Color.fromRGBO(104, 104, 104, 1);
   static const neutral800 = Color.fromRGBO(53, 53, 53, 1);
   static const neutral900 = Color.fromRGBO(0, 0, 0, 1);
-
-  static const highlight100 = Color.fromRGBO(213, 243, 248, 1);
-  static const highlight200 = Color.fromRGBO(228, 247, 250, 1);
-  static const highlight300 = Color.fromRGBO(235, 249, 252, 1);
-  static const highlight400 = Color.fromRGBO(164, 232, 242, 1);
-  static const highlight500 = Color.fromRGBO(152, 198, 205, 1);
 
   static const error100 = Color.fromRGBO(212, 170, 168, 1);
   static const error200 = Color.fromRGBO(195, 125, 125, 1);
@@ -52,10 +48,6 @@ abstract class CColors {
   static const info100 = Color.fromRGBO(79, 195, 247, 1);
   static const info200 = Color.fromRGBO(41, 182, 246, 1);
   static const info300 = Color.fromRGBO(2, 136, 209, 1);
-
-  static const optimistic = Color.fromRGBO(149, 201, 180, 1);
-  static const indifferent = Color.fromARGB(221, 244, 222, 53);
-  static const pessimistic = Color.fromRGBO(216, 136, 132, 1);
 }
 
 MaterialColor getMaterialColor(Color color) {

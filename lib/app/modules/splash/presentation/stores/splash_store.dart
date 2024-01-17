@@ -23,8 +23,10 @@ abstract class SplashStoreBase with Store {
     _state = LoadingState();
     try {
       final String? isLogged = await _localStorage.read<String>(StorageKeys.isLogged);
-      final String? token = await _localStorage.read<String>(StorageKeys.token);
-      _state = isLogged == 'true' && token != null ? ToEntryState() : ToLoginState();
+      final String? userId = await _localStorage.read<String>(StorageKeys.userId);
+
+      await Future.delayed(const Duration(seconds: 3));
+      _state = isLogged == 'true' && userId != null ? ToEntryState() : ToLoginState();
     } on PlatformException catch (exception, stackTrace) {
       _state = ToLoginState();
       _localStorage.clearAll();

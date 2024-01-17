@@ -4,8 +4,8 @@ import 'dart:isolate';
 
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
-import 'package:nutrilog/app/core/utils/env_vars.dart';
 import 'package:nutrilog/app/core/services/local_storage/local_storage_service.dart';
+import 'package:nutrilog/app/core/utils/env_vars.dart';
 import 'package:nutrilog/app/core/utils/storage_keys.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -58,7 +58,7 @@ class CrashlyticsLogger extends LoggerService {
       dev.log('StackTrace: ${stackTrace.toString()}');
     }
     if (exception != null && FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled) {
-      final userId = await _localStorage.read<String>(StorageKeys.token);
+      final userId = await _localStorage.read<String>(StorageKeys.userId);
       if (userId != null && !kReleaseMode) {
         dev.log('Report from user of device: $userId');
       }
