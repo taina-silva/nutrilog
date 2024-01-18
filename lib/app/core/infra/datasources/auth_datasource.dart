@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:nutrilog/app/core/errors/exceptions.dart';
-import 'package:nutrilog/app/modules/access/infra/models/auth_payload_model.dart';
+import 'package:nutrilog/app/core/infra/models/auth_payload_model.dart';
 
 abstract class AuthDatasource {
   Future<void> signup(AuthPayloadModel payload);

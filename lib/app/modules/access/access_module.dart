@@ -1,22 +1,21 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:nutrilog/app/modules/access/infra/datasources/auth_datasource.dart';
-import 'package:nutrilog/app/modules/access/infra/repositories/auth_repository.dart';
-import 'package:nutrilog/app/modules/access/presentation/pages/login_page.dart';
-import 'package:nutrilog/app/modules/access/presentation/stores/auth_store.dart';
+import 'package:nutrilog/app/modules/access/presentation/pages/signin_page.dart';
+import 'package:nutrilog/app/modules/access/presentation/pages/signup_page.dart';
 
 class AccessModule extends Module {
   @override
-  List<Bind> binds = [
-    Bind.factory<AuthDatasource>((i) => FirebaseAuthDatasource(i.get())),
-    Bind.factory<AuthRepository>((i) => FirebaseAuthRepository(i.get(), i.get())),
-    Bind.lazySingleton((i) => AuthStore(i.get(), i.get())),
-  ];
+  List<Bind> binds = [];
 
   @override
   List<ModularRoute> routes = [
     ChildRoute(
       '/',
-      child: (_, __) => const LoginPage(),
+      child: (_, __) => const SigninPage(),
+      transition: TransitionType.fadeIn,
+    ),
+    ChildRoute(
+      '/signup',
+      child: (_, __) => const SignupPage(),
       transition: TransitionType.fadeIn,
     ),
   ];

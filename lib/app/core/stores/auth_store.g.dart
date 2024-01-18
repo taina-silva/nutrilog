@@ -27,21 +27,39 @@ mixin _$AuthStore on AuthStoreBase, Store {
     });
   }
 
-  late final _$_loginStateAtom =
-      Atom(name: 'AuthStoreBase._loginState', context: context);
+  late final _$_signinStateAtom =
+      Atom(name: 'AuthStoreBase._signinState', context: context);
 
-  LoginState get loginState {
-    _$_loginStateAtom.reportRead();
-    return super._loginState;
+  SigninState get signinState {
+    _$_signinStateAtom.reportRead();
+    return super._signinState;
   }
 
   @override
-  LoginState get _loginState => loginState;
+  SigninState get _signinState => signinState;
 
   @override
-  set _loginState(LoginState value) {
-    _$_loginStateAtom.reportWrite(value, super._loginState, () {
-      super._loginState = value;
+  set _signinState(SigninState value) {
+    _$_signinStateAtom.reportWrite(value, super._signinState, () {
+      super._signinState = value;
+    });
+  }
+
+  late final _$_signoutStateAtom =
+      Atom(name: 'AuthStoreBase._signoutState', context: context);
+
+  SignoutState get signoutState {
+    _$_signoutStateAtom.reportRead();
+    return super._signoutState;
+  }
+
+  @override
+  SignoutState get _signoutState => signoutState;
+
+  @override
+  set _signoutState(SignoutState value) {
+    _$_signoutStateAtom.reportWrite(value, super._signoutState, () {
+      super._signoutState = value;
     });
   }
 

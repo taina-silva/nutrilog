@@ -1,9 +1,9 @@
 import 'package:mobx/mobx.dart';
+import 'package:nutrilog/app/core/infra/models/auth_payload_model.dart';
+import 'package:nutrilog/app/core/infra/repositories/auth_repository.dart';
 import 'package:nutrilog/app/core/services/local_storage/local_storage_service.dart';
+import 'package:nutrilog/app/core/stores/states/auth_states.dart';
 import 'package:nutrilog/app/core/utils/storage_keys.dart';
-import 'package:nutrilog/app/modules/access/infra/models/auth_payload_model.dart';
-import 'package:nutrilog/app/modules/access/infra/repositories/auth_repository.dart';
-import 'package:nutrilog/app/modules/access/presentation/stores/states/auth_states.dart';
 
 part 'auth_store.g.dart';
 
@@ -19,7 +19,10 @@ abstract class AuthStoreBase with Store {
   SignupState _signupState = SignupInitialState();
 
   @readonly
-  LoginState _loginState = LoginInitialState();
+  SigninState _signinState = SigninInitialState();
+
+  @readonly
+  SignoutState _signoutState = SignoutInitialState();
 
   @observable
   bool passwordIsHidden = true;
@@ -38,34 +41,34 @@ abstract class AuthStoreBase with Store {
 
   @action
   Future<void> signin(AuthPayloadModel payload) async {
-    _loginState = LoginLoadingState();
+    _signinState = SigninLoadingState();
 
     final result = await _repository.signin(payload);
 
     result.fold(
-      (l) => _loginState = LoginErrorState(l.message),
+      (l) => _signinState = SigninErrorState(l.message),
       (r) async {
         await _localStorage.write(StorageKeys.userId, r);
         await _localStorage.write(StorageKeys.isLogged, 'true');
 
-        _loginState = LoginSuccessState();
+        _signinState = SigninSuccessState();
       },
     );
   }
 
   @action
   Future<void> signout() async {
-    _loginState = LoginLoadingState();
+    _signoutState = SignoutLoadingState();
 
     final result = await _repository.signout();
 
     result.fold(
-      (l) => _loginState = LoginErrorState(l.message),
+      (l) => _signoutState = SignoutErrorState(l.message),
       (r) async {
         await _localStorage.delete(StorageKeys.userId);
         await _localStorage.write(StorageKeys.isLogged, 'false');
 
-        _loginState = LoginSuccessState();
+        _signoutState = SignoutSuccessState();
       },
     );
   }

@@ -13,6 +13,7 @@ class AdaptiveText extends StatelessWidget {
   final int? maxLines;
   final TextAlign textAlign;
   final TextOverflow textOverflow;
+  final TextDecoration textDecoration;
   final FontStyle? fontStyle;
 
   const AdaptiveText({
@@ -24,6 +25,7 @@ class AdaptiveText extends StatelessWidget {
     this.maxLines,
     this.textAlign = TextAlign.start,
     this.textOverflow = TextOverflow.visible,
+    this.textDecoration = TextDecoration.none,
     this.fontStyle,
   });
 
@@ -60,7 +62,12 @@ class AdaptiveText extends StatelessWidget {
       textScaleFactor: getTextScaleFactor(),
       maxLines: maxLines ?? getMaxLines(),
       textAlign: textAlign,
-      style: TextStyle(fontWeight: fWeight, color: color, fontStyle: fontStyle),
+      style: TextStyle(
+        fontWeight: fWeight,
+        color: color,
+        fontStyle: fontStyle,
+        decoration: textDecoration,
+      ),
       softWrap: true,
       overflow: textOverflow,
     );
