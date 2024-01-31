@@ -27,7 +27,7 @@ class AppModule extends Module {
     Bind.lazySingleton<LoggerService>((i) => CrashlyticsLogger(i.get())),
 
     // Access
-    Bind.factory<AuthDatasource>((i) => FirebaseAuthDatasource(i.get())),
+    Bind.factory<AuthDatasource>((i) => FirebaseAuthDatasource(i.get(), i.get())),
     Bind.factory<AuthRepository>((i) => FirebaseAuthRepository(i.get(), i.get())),
     Bind.lazySingleton((i) => AuthStore(i.get(), i.get())),
   ];
