@@ -71,3 +71,15 @@ class WrongPasswordException extends Equatable implements Exception {
   @override
   bool get stringify => true;
 }
+
+class NoPermissionsException extends Equatable implements Exception {
+  final String? message;
+
+  const NoPermissionsException({this.message});
+
+  @override
+  List<Object?> get props => [message];
+
+  @override
+  bool get stringify => true;
+}

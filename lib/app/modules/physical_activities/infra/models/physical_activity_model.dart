@@ -14,4 +14,18 @@ class PhysicalActivityModel extends Equatable {
 
   @override
   bool get stringify => true;
+
+  factory PhysicalActivityModel.fromMap(Map<String, dynamic> map) {
+    return PhysicalActivityModel(
+      name: map['name'],
+      activityType: map['type'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'type': activityType,
+    };
+  }
 }
