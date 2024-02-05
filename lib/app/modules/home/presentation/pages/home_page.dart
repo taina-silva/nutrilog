@@ -8,12 +8,10 @@ import 'package:nutrilog/app/core/components/structure/custom_app_bar.dart';
 import 'package:nutrilog/app/core/components/structure/custom_scaffold.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
 import 'package:nutrilog/app/core/components/toasts/toasts.dart';
-import 'package:nutrilog/app/core/infra/models/register_physical_activity_payload_model.dart';
 import 'package:nutrilog/app/core/stores/auth_store.dart';
 import 'package:nutrilog/app/core/stores/states/auth_states.dart';
 import 'package:nutrilog/app/core/stores/user_store.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
-import 'package:nutrilog/app/core/utils/date_extension.dart';
 import 'package:nutrilog/app/modules/physical_activities/infra/models/physical_activity_model.dart';
 import 'package:nutrilog/app/modules/physical_activities/stores/physical_activities_store.dart';
 import 'package:nutrilog/app/modules/physical_activities/stores/states/physical_activities_states.dart';
@@ -36,17 +34,9 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    userStore.registerPhysicalActivity(
-      DateTime.now().datetimeWithTimeReset(),
-      const RegisterPhysicalActivityPayloadModel(
-        duration: Duration(hours: 1),
-        physicalActivity: PhysicalActivityModel(
-          name: 'corrida',
-          activityType: 'aeróbico',
-        ),
-      ),
-    );
-    /*    physicalActivitiesStore.getAllPhysicalActivities(); */
+    // PopulateDatabase.populateDatabase();
+
+    physicalActivitiesStore.getAllPhysicalActivities();
 
     reactions = [
       reaction((_) => authStore.signoutState, (SignoutState state) async {
@@ -92,16 +82,18 @@ class _HomePageState extends State<HomePage> {
         List<PhysicalActivityModel> list =
             (state as GetPhysicalActivitiesSuccessState).physicalActivities;
 
-        if (list.isEmpty) {
-          return CustomButton.secondaryNeutroMedium(
-              const ButtonParameters(text: 'Adicionar registro'));
-        }
-
-        return ListView.builder(
-          itemCount: list.length,
-          itemBuilder: (context, index) {
-            return AdaptiveText(text: list[index].name, textType: TextType.small);
-          },
+        return Column(
+          children: [
+            CustomButton.secondaryNeutroMedium(const ButtonParameters(text: 'Adicionar registro')),
+            Expanded(
+              child: ListView.builder(
+                itemCount: list.length,
+                itemBuilder: (context, index) {
+                  return AdaptiveText(text: list[index].name, textType: TextType.small);
+                },
+              ),
+            ),
+          ],
         );
       }),
     );

@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:nutrilog/app/core/infra/models/register_physical_activity_payload_model.dart';
-import 'package:nutrilog/app/modules/physical_activities/infra/models/physical_activity_model.dart';
 
 class UserPhysicalActivitiesPayloadModel extends Equatable {
   final DateTime date;
