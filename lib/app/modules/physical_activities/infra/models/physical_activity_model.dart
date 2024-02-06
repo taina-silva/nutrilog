@@ -1,8 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:nutrilog/app/modules/physical_activities/infra/models/physical_activity_type_model.dart';
 
 class PhysicalActivityModel extends Equatable {
   final String name;
-  final String activityType;
+  final PhysicalActivityTypeModel activityType;
 
   const PhysicalActivityModel({
     required this.name,
@@ -18,14 +19,14 @@ class PhysicalActivityModel extends Equatable {
   factory PhysicalActivityModel.fromMap(Map<String, dynamic> map) {
     return PhysicalActivityModel(
       name: map['name'],
-      activityType: map['type'],
+      activityType: PhysicalActivityTypeModel(type: map['type']),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'type': activityType,
+      'type': activityType.type,
     };
   }
 }

@@ -43,8 +43,7 @@ class AppModule extends Module {
     Bind.lazySingleton((i) => UserStore(i.get())),
 
     // PhysicalActivities
-    Bind.factory<PhysicalActivitiesDatasource>(
-        (i) => PhysicalActivitiesDatasourceImpl(i.get(), i.get())),
+    Bind.factory<PhysicalActivitiesDatasource>((i) => PhysicalActivitiesDatasourceImpl(i.get())),
     Bind.factory<PhysicalActivitiesRepository>(
         (i) => PhysicalActivitiesRepositoryImpl(i.get(), i.get())),
     Bind.lazySingleton((i) => PhysicalActivitiesStore(i.get())),
