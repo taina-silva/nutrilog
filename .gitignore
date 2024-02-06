@@ -44,4 +44,5 @@ app.*.map.json
 
 /env
 
-service_account.json
+service_account_key_dev.json
+service_account_key_prod.json

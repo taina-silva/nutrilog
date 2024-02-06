@@ -3,7 +3,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 import json
 
-cred = credentials.Certificate("lib/scripts/service_account.json")
+cred = credentials.Certificate("lib/scripts/service_account_key_dev.json")
 app = firebase_admin.initialize_app(cred)
 client = firestore.client()
 
@@ -24,8 +24,7 @@ with open('assets/jsons/physical_activities.json') as f:
     for item in physical_activities:
       print(item)
       doc_ref = client.collection('physical-activities').document()
-      doc_ref.set({'name': item['name']})
-      doc_ref.set({'type': item['type']})
+      doc_ref.set({'name': item['name'], 'type': item['type']})
 
 print('\nDone uploading physical activities data to firesore!\n')
 
