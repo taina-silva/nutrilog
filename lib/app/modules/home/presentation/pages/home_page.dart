@@ -10,6 +10,7 @@ import 'package:nutrilog/app/core/stores/auth_store.dart';
 import 'package:nutrilog/app/core/stores/states/auth_states.dart';
 import 'package:nutrilog/app/core/stores/user_store.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
+import 'package:nutrilog/app/core/utils/show_date_picker.dart';
 import 'package:nutrilog/app/modules/nutrition/presentation/stores/nutritions_store.dart';
 
 class HomePage extends StatefulWidget {
@@ -64,7 +65,11 @@ class _HomePageState extends State<HomePage> {
             CustomButton.secondaryActivityMedium(ButtonParameters(
               text: 'Atividade física',
               prefixIcon: Icons.add_outlined,
-              onTap: () => Modular.to.pushNamed('physical-activity', forRoot: true),
+              onTap: () {
+                showCustomDatePicker(context: context, initialDate: DateTime.now());
+
+                // Modular.to.pushNamed('physical-activity', forRoot: true);
+              },
             )),
             const SizedBox(height: 8),
             CustomButton.secondaryNutritionMedium(
