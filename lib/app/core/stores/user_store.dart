@@ -1,4 +1,5 @@
 import 'package:mobx/mobx.dart';
+import 'package:nutrilog/app/core/infra/models/register_nutrition_payload_model.dart';
 import 'package:nutrilog/app/core/infra/models/register_physical_activity_payload_model.dart';
 import 'package:nutrilog/app/core/infra/repositories/user_repository.dart';
 
@@ -12,8 +13,16 @@ abstract class UserStoreBase with Store {
   const UserStoreBase(this._repository);
 
   @action
-  Future<void> registerPhysicalActivity(DateTime date, RegisterPhysicalActivityPayloadModel payload) async {
+  Future<void> registerPhysicalActivity(
+      DateTime date, RegisterPhysicalActivityPayloadModel payload) async {
     final result = await _repository.registerPhysicalActivity(date, payload);
+
+    result.fold((l) => null, (r) => null);
+  }
+
+  @action
+  Future<void> registerNutrition(DateTime date, RegisterNutritionPayloadModel payload) async {
+    final result = await _repository.registerNutrition(date, payload);
 
     result.fold((l) => null, (r) => null);
   }

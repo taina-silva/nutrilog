@@ -19,6 +19,16 @@ mixin _$UserStore on UserStoreBase, Store {
         .run(() => super.registerPhysicalActivity(date, payload));
   }
 
+  late final _$registerNutritionAsyncAction =
+      AsyncAction('UserStoreBase.registerNutrition', context: context);
+
+  @override
+  Future<void> registerNutrition(
+      DateTime date, RegisterNutritionPayloadModel payload) {
+    return _$registerNutritionAsyncAction
+        .run(() => super.registerNutrition(date, payload));
+  }
+
   @override
   String toString() {
     return '''

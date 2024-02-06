@@ -13,9 +13,9 @@ import 'package:nutrilog/app/core/stores/auth_store.dart';
 import 'package:nutrilog/app/core/stores/user_store.dart';
 import 'package:nutrilog/app/modules/access/access_module.dart';
 import 'package:nutrilog/app/modules/entry/entry_module.dart';
-import 'package:nutrilog/app/modules/physical_activities/infra/datasources/physical_activities_datasource.dart';
-import 'package:nutrilog/app/modules/physical_activities/infra/repositories/physical_activities_repository.dart';
-import 'package:nutrilog/app/modules/physical_activities/stores/physical_activities_store.dart';
+import 'package:nutrilog/app/modules/nutrition/infra/datasources/nutritions_datasource.dart';
+import 'package:nutrilog/app/modules/nutrition/infra/repositories/nutritions_repository.dart';
+import 'package:nutrilog/app/modules/nutrition/presentation/stores/nutritions_store.dart';
 import 'package:nutrilog/app/modules/splash/splash_module.dart';
 
 class AppModule extends Module {
@@ -42,11 +42,10 @@ class AppModule extends Module {
     Bind.factory<UserRepository>((i) => UserRepositoryImpl(i.get(), i.get())),
     Bind.lazySingleton((i) => UserStore(i.get())),
 
-    // PhysicalActivities
-    Bind.factory<PhysicalActivitiesDatasource>((i) => PhysicalActivitiesDatasourceImpl(i.get())),
-    Bind.factory<PhysicalActivitiesRepository>(
-        (i) => PhysicalActivitiesRepositoryImpl(i.get(), i.get())),
-    Bind.lazySingleton((i) => PhysicalActivitiesStore(i.get())),
+    // Nutritions
+    Bind.factory<NutritionsDatasource>((i) => NutritionsDatasourceImpl(i.get())),
+    Bind.factory<NutritionsRepository>((i) => NutritionsRepositoryImpl(i.get(), i.get())),
+    Bind.lazySingleton((i) => NutritionsStore(i.get())),
   ];
 
   @override

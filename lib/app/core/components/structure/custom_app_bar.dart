@@ -69,7 +69,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                               text: title,
                               textType: TextType.large,
                               fWeight: FWeight.bold,
-                              color: widget.itemsColor ?? CColors.neutral0,
+                              color: widget.itemsColor ?? CColors.neutral900,
                             ),
                           ),
                           (widget) => Container(
@@ -116,7 +116,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           },
           child: Icon(
             Icons.keyboard_arrow_left,
-            color: widget.itemsColor ?? CColors.neutral0,
+            color: widget.itemsColor ?? CColors.neutral900,
             size: Layout.appBarLeadingAndTrailingWidth,
             semanticLabel: 'Voltar para a página anterior',
           ),

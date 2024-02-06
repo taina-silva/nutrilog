@@ -20,12 +20,12 @@ class PhysicalActivitiesDatasourceImpl implements PhysicalActivitiesDatasource {
       getAllPhysicalActivities() async {
     try {
       QuerySnapshot snapshot = await _firestore.collection('physical-activities').get();
-      List<PhysicalActivityTypeModel> types = ((snapshot.docs
-              .firstWhere((doc) => doc.id == 'types')
-              .data() as Map<String, dynamic>)['types'] as List<String>)
-          .map((t) => PhysicalActivityTypeModel(type: t))
-          .toList();
+      List<dynamic> typesList = (snapshot.docs.firstWhere((doc) => doc.id == 'types').data()
+          as Map<String, dynamic>)['types'];
+      List<PhysicalActivityTypeModel> types =
+          typesList.map((t) => PhysicalActivityTypeModel.fromMap(t)).toList();
       List<PhysicalActivityModel> pA = snapshot.docs
+          .where((doc) => doc.id != 'types')
           .map((doc) => PhysicalActivityModel.fromMap(doc.data() as Map<String, dynamic>))
           .toList();
       return Tuple2(types, pA);

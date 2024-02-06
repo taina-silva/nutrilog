@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nutrilog/app/core/errors/exceptions.dart';
+import 'package:nutrilog/app/core/infra/models/register_nutrition_payload_model.dart';
 import 'package:nutrilog/app/core/infra/models/register_physical_activity_payload_model.dart';
 import 'package:nutrilog/app/core/services/local_storage/local_storage_service.dart';
 import 'package:nutrilog/app/core/utils/storage_keys.dart';
 
 abstract class UserDatasource {
   Future<List<RegisterPhysicalActivityPayloadModel>> getPhysicalActivitiesByDate(DateTime date);
+  Future<List<RegisterNutritionPayloadModel>> getNutritionsByDate(DateTime date);
   Future<void> registerPhysicalActivityAtDate(
       DateTime date, RegisterPhysicalActivityPayloadModel payload);
+  Future<void> registerNutritionAtDate(DateTime date, RegisterNutritionPayloadModel payload);
 }
 
 class UserDatasourceImpl implements UserDatasource {
@@ -40,6 +43,28 @@ class UserDatasourceImpl implements UserDatasource {
   }
 
   @override
+  Future<List<RegisterNutritionPayloadModel>> getNutritionsByDate(DateTime date) async {
+    try {
+      String? userId = await _localStorage.read<String>(StorageKeys.userId);
+
+      if (userId == null) throw const NoPermissionsException();
+
+      QuerySnapshot snapshot = await _firestore
+          .collection('users/$userId/nutrition')
+          .where('date', isEqualTo: date.millisecondsSinceEpoch.toString())
+          .get();
+      List<RegisterNutritionPayloadModel> docs =
+          ((snapshot.docs.first.data() as Map<String, dynamic>)['nutrition'] as List)
+              .map((pA) => RegisterNutritionPayloadModel.fromMap(pA))
+              .toList();
+
+      return docs;
+    } catch (exception) {
+      rethrow;
+    }
+  }
+
+  @override
   Future<void> registerPhysicalActivityAtDate(
       DateTime date, RegisterPhysicalActivityPayloadModel payload) async {
     try {
@@ -61,6 +86,29 @@ class UserDatasourceImpl implements UserDatasource {
         {
           'date': date.millisecondsSinceEpoch.toString(),
           'physical-activities': registered.map((e) => e.toMap()).toList()
+        },
+      );
+    } catch (exception) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> registerNutritionAtDate(DateTime date, RegisterNutritionPayloadModel payload) async {
+    try {
+      String? userId = await _localStorage.read<String>(StorageKeys.userId);
+
+      if (userId == null) throw const NoPermissionsException();
+
+      List<RegisterNutritionPayloadModel> registered = await getNutritionsByDate(date);
+      registered.add(payload);
+
+      String physicalActivityDocId = date.millisecondsSinceEpoch.toString();
+
+      await _firestore.doc('users/$userId').collection('nutrition').doc(physicalActivityDocId).set(
+        {
+          'date': date.millisecondsSinceEpoch.toString(),
+          'nutrition': registered.map((e) => e.toMap()).toList()
         },
       );
     } catch (exception) {

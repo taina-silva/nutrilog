@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fpdart/fpdart.dart' hide State;
 import 'package:mobx/mobx.dart';
 import 'package:nutrilog/app/core/components/buttons/custom_button.dart';
 import 'package:nutrilog/app/core/components/structure/custom_app_bar.dart';
 import 'package:nutrilog/app/core/components/structure/custom_scaffold.dart';
-import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
 import 'package:nutrilog/app/core/components/toasts/toasts.dart';
 import 'package:nutrilog/app/core/stores/auth_store.dart';
 import 'package:nutrilog/app/core/stores/states/auth_states.dart';
 import 'package:nutrilog/app/core/stores/user_store.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
-import 'package:nutrilog/app/modules/physical_activities/infra/models/physical_activity_model.dart';
-import 'package:nutrilog/app/modules/physical_activities/stores/physical_activities_store.dart';
-import 'package:nutrilog/app/modules/physical_activities/stores/states/physical_activities_states.dart';
+import 'package:nutrilog/app/modules/nutrition/presentation/stores/nutritions_store.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,17 +22,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final authStore = Modular.get<AuthStore>();
   final userStore = Modular.get<UserStore>();
-  final physicalActivitiesStore = Modular.get<PhysicalActivitiesStore>();
+  final nutritionsStore = Modular.get<NutritionsStore>();
 
   List<ReactionDisposer> reactions = [];
 
   @override
   void initState() {
     super.initState();
-
-    // PopulateDatabase.populateDatabase();
-
-    physicalActivitiesStore.getAllPhysicalActivities();
 
     reactions = [
       reaction((_) => authStore.signoutState, (SignoutState state) async {
@@ -64,38 +56,22 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: Observer(builder: (context) {
-        final state = physicalActivitiesStore.state;
-
-        if (state is GetPhysicalActivitiesInitialState) {
-          return const SizedBox();
-        }
-
-        if (state is GetPhysicalActivitiesLoadingState) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (state is GetPhysicalActivitiesErrorState) {
-          return Center(child: AdaptiveText(text: state.message, textType: TextType.medium));
-        }
-
-        List<PhysicalActivityModel> list =
-            (state as GetPhysicalActivitiesSuccessState).physicalActivities;
-
-        return Column(
+      body: Container(
+        margin: const EdgeInsets.symmetric(
+            horizontal: ScreenMargin.horizontal, vertical: ScreenMargin.vertical),
+        child: Column(
           children: [
-            CustomButton.secondaryNeutroMedium(const ButtonParameters(text: 'Adicionar registro')),
-            Expanded(
-              child: ListView.builder(
-                itemCount: list.length,
-                itemBuilder: (context, index) {
-                  return AdaptiveText(text: list[index].name, textType: TextType.small);
-                },
-              ),
-            ),
+            CustomButton.secondaryActivityMedium(ButtonParameters(
+              text: 'Atividade física',
+              prefixIcon: Icons.add_outlined,
+              onTap: () => Modular.to.pushNamed('physical-activity', forRoot: true),
+            )),
+            const SizedBox(height: 8),
+            CustomButton.secondaryNutritionMedium(
+                const ButtonParameters(text: 'Alimentação', prefixIcon: Icons.add_outlined)),
           ],
-        );
-      }),
+        ),
+      ),
     );
   }
 }

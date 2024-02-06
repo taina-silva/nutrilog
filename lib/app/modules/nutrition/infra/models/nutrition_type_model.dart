@@ -1,9 +1,9 @@
 import 'package:equatable/equatable.dart';
 
-class PhysicalActivityTypeModel extends Equatable {
+class NutritionTypeModel extends Equatable {
   final String type;
 
-  const PhysicalActivityTypeModel({
+  const NutritionTypeModel({
     required this.type,
   });
 
@@ -13,7 +13,7 @@ class PhysicalActivityTypeModel extends Equatable {
   @override
   bool get stringify => true;
 
-  factory PhysicalActivityTypeModel.fromMap(dynamic t) {
-    return PhysicalActivityTypeModel(type: t);
+  factory NutritionTypeModel.fromMap(dynamic t) {
+    return NutritionTypeModel(type: t);
   }
 }

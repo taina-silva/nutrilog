@@ -1,8 +1,6 @@
-// ignore_for_file: prefer_final_fields
-
 import 'package:mobx/mobx.dart';
 import 'package:nutrilog/app/modules/physical_activities/infra/repositories/physical_activities_repository.dart';
-import 'package:nutrilog/app/modules/physical_activities/stores/states/physical_activities_states.dart';
+import 'package:nutrilog/app/modules/physical_activities/presentation/stores/states/physical_activities_states.dart';
 
 part 'physical_activities_store.g.dart';
 
@@ -18,6 +16,8 @@ abstract class PhysicalActivitiesStoreBase with Store {
 
   @action
   Future<void> getAllPhysicalActivities() async {
+    _state = GetPhysicalActivitiesLoadingState();
+
     final result = await _repository.getAllPhysicalActivities();
 
     result.fold(
