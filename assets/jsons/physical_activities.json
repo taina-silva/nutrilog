@@ -1,253 +1,121 @@
 {
-  "types": ["Força", "Esportes individuais", "Esportes coletivos", "Esportes de raquete", "Esportes aquáticos", "Esportes de combate", "Flexibilidade", "Aeróbico"],
-  "physical-activities" : [
+  "types": [
+    "Força",
+    "Esportes individuais",
+    "Esportes coletivos",
+    "Esportes de raquete",
+    "Esportes aquáticos",
+    "Esportes de combate",
+    "Flexibilidade",
+    "Aeróbico"
+  ],
+  "physical-activities": [
     {
-      "name": "Musculação",
-      "type": "Força"
+      "type": "Força",
+      "pA": [
+        "Musculação",
+        "Cross training (Funcional)",
+        "Crossfit",
+        "HIIT (Treinamento de alta intensidade)"
+      ]
     },
     {
-      "name": "Cross training (Funcional)",
-      "type": "Força"
+      "type": "Esportes individuais",
+      "pA": [
+        "Atletismo",
+        "Golfe",
+        "Ciclismo",
+        "Esgrima",
+        "Levantamento de peso",
+        "Tiro com arco",
+        "Ginástica artística",
+        "Salto com vara",
+        "Patinação artística"
+      ]
     },
     {
-      "name": "Crossfit",
-      "type": "Força"
+      "type": "Esportes coletivos",
+      "pA": [
+        "Futebol de campo",
+        "Basquete",
+        "Vôlei",
+        "Handebol",
+        "Rugby",
+        "Hóquei",
+        "Críquete",
+        "Futebol americano",
+        "Beisebol",
+        "Softbol",
+        "Futsal"
+      ]
     },
     {
-      "name": "HIIT (Treinamento de alta intensidade)",
-      "type": "Força"
+      "type": "Esportes com raquete",
+      "pA": [
+        "Tênis de mesa",
+        "Badminton",
+        "Tênis",
+        "Squash",
+        "Beach tennis"
+      ]
     },
     {
-      "name": "Atletismo",
-      "type": "Esportes individuais"
+      "type": "Esportes de aventura",
+      "pA": [
+        "Escalada",
+        "Surf",
+        "Esqui",
+        "Canoagem",
+        "BMX",
+        "Parapente"
+      ]
     },
     {
-      "name": "Golfe",
-      "type": "Esportes individuais"
+      "type": "Esportes aquáticos",
+      "pA": [
+        "Natação",
+        "Saltos ornamentais",
+        "Polo aquático",
+        "Nado sincronizado",
+        "Maratona aquática",
+        "Esqui aquático",
+        "Vela",
+        "Remo"
+      ]
     },
     {
-      "name": "Ciclismo",
-      "type": "Esportes individuais"
+      "type": "Esportes de combate",
+      "pA": [
+        "Boxe",
+        "Judô",
+        "Karatê",
+        "Taekwondo",
+        "Luta livre",
+        "MMA",
+        "Muay thai",
+        "Capoeira"
+      ]
     },
     {
-      "name": "Esgrima",
-      "type": "Esportes individuais"
+      "type": "Flexibilidade",
+      "pA": [
+        "Yoga",
+        "Pilates",
+        "Ginástica rítmica",
+        "Dança",
+        "Tai chi",
+        "Acrobacia"
+      ]
     },
     {
-      "name": "Levantamento de peso",
-      "type": "Esportes individuais"
-    },
-    {
-      "name": "Tiro com arco",
-      "type": "Esportes individuais"
-    },
-    {
-      "name": "Ginástica artística",
-      "type": "Esportes individuais"
-    },
-    {
-      "name": "Salto com vara",
-      "type": "Esportes individuais"
-    },
-    {
-      "name": "Patinação artística",
-      "type": "Esportes individuais"
-    },
-    {
-      "name": "Futebol de campo",
-      "type": "Esportes coletivos"
-    },
-    {
-      "name": "Basquete",
-      "type": "Esportes coletivos"
-    },
-    {
-      "name": "Vôlei",
-      "type": "Esportes coletivos"
-    },
-    {
-      "name": "Handebol",
-      "type": "Esportes coletivos"
-    },
-    {
-      "name": "Rugby",
-      "type": "Esportes coletivos"
-    },
-    {
-      "name": "Hóquei",
-      "type": "Esportes coletivos"
-    },
-    {
-      "name": "Críquete",
-      "type": "Esportes coletivos"
-    },
-    {
-      "name": "Futebol americano",
-      "type": "Esportes coletivos"
-    },
-    {
-      "name": "Beisebol",
-      "type": "Esportes coletivos"
-    },
-    {
-      "name": "Softbol",
-      "type": "Esportes coletivos"
-    },
-    {
-      "name": "Futsal",
-      "type": "Esportes coletivos"
-    },
-    {
-      "name": "Tênis de mesa",
-      "type": "Esportes de raquete"
-    },
-    {
-      "name": "Badminton",
-      "type": "Esportes de raquete"
-    },
-    {
-      "name": "Tênis",
-      "type": "Esportes de raquete"
-    },
-    {
-      "name": "Squash",
-      "type": "Esportes de raquete"
-    },
-    {
-      "name": "Beach tennis",
-      "type": "Esportes de raquete"
-    },
-    {
-      "name": "Escalada",
-      "type": "Esportes de aventura"
-    },
-    {
-      "name": "Surf",
-      "type": "Esportes de aventura"
-    },
-    {
-      "name": "Esqui",
-      "type": "Esportes de aventura"
-    },
-    {
-      "name": "Canoagem",
-      "type": "Esportes de aventura"
-    },
-    {
-      "name": "BMX",
-      "type": "Esportes de aventura"
-    },
-    {
-      "name": "Parapente",
-      "type": "Esportes de aventura"
-    },
-    {
-      "name": "Natação",
-      "type": "Esportes aquáticos"
-    },
-    {
-      "name": "Saltos ornamentais",
-      "type": "Esportes aquáticos"
-    },
-    {
-      "name": "Polo aquáticos",
-      "type": "Esportes aquáticos"
-    },
-    {
-      "name": "Nado sincronizado",
-      "type": "Esportes aquáticos"
-    },
-    {
-      "name": "Maratona aquática",
-      "type": "Esportes aquáticos"
-    },
-    {
-      "name": "Esqui aquático",
-      "type": "Esportes aquáticos"
-    },
-    {
-      "name": "Vela",
-      "type": "Esportes aquáticos"
-    },
-    {
-      "name": "Remo",
-      "type": "Esportes aquáticos"
-    },
-    {
-      "name": "Boxe",
-      "type": "Esportes de combate"
-    },
-    {
-      "name": "Judô",
-      "type": "Esportes de combate"
-    },
-    {
-      "name": "Karatê",
-      "type": "Esportes de combate"
-    },
-    {
-      "name": "Taekwondo",
-      "type": "Esportes de combate"
-    },
-    {
-      "name": "Luta livre",
-      "type": "Esportes de combate"
-    },
-    {
-      "name": "MMA",
-      "type": "Esportes de combate"
-    },
-    {
-      "name": "Muay thai",
-      "type": "Esportes de combate"
-    },
-    {
-      "name": "Capoeira",
-      "type": "Esportes de combate"
-    },
-    {
-      "name": "Yoga",
-      "type": "Flexibilidade"
-    },
-    {
-      "name": "Pilates",
-      "type": "Flexibilidade"
-    },
-    {
-      "name": "Ginástica rítmica",
-      "type": "Flexibilidade"
-    },
-    {
-      "name": "Dança",
-      "type": "Flexibilidade"
-    },
-    {
-      "name": "Tai chi",
-      "type": "Flexibilidade"
-    },
-    {
-      "name": "Acrobacia",
-      "type": "Flexibilidade"
-    },
-    {
-      "name": "Corrida",
-      "type": "Aeróbico"
-    },
-    {
-      "name": "Caminhada rápida",
-      "type": "Aeróbico"
-    },
-    {
-      "name": "Pular corda",
-      "type": "Aeróbico"
-    },
-    {
-      "name": "Zumba",
-      "type": "Aeróbico"
-    },
-    {
-      "name": "Spinning",
-      "type": "Aeróbico"
+      "type": "Aeróbico",
+      "pA": [
+        "Corrida",
+        "Caminhada rápida",
+        "Pular corda",
+        "Zumba",
+        "Spinning"
+      ]
     }
   ]
 }
