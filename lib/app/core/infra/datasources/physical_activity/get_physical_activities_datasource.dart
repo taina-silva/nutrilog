@@ -1,24 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:nutrilog/app/modules/physical_activities/infra/models/physical_activity_model.dart';
-import 'package:nutrilog/app/modules/physical_activities/infra/models/physical_activity_type_model.dart';
+import 'package:nutrilog/app/core/infra/models/physical_activity/list_physical_activities_model.dart';
+import 'package:nutrilog/app/core/infra/models/physical_activity/physical_activity_model.dart';
 
-abstract class PhysicalActivitiesDatasource {
-  Future<List<PhysicalActivitiesModel>> getAllPhysicalActivities();
-  Future<void> registerNewPhysicalActivity(UniquePhysicalActivityModel payload);
+abstract class GetPhysicalActivityDatasource {
+  Future<List<ListPhysicalActivitiesModel>> getAllPhysicalActivities();
+  Future<void> registerNewPhysicalActivity(PhysicalActivityModel payload);
 }
 
-class PhysicalActivitiesDatasourceImpl implements PhysicalActivitiesDatasource {
+class GetPhysicalActivityDatasourceImpl implements GetPhysicalActivityDatasource {
   final FirebaseFirestore _firestore;
 
-  PhysicalActivitiesDatasourceImpl(this._firestore);
+  GetPhysicalActivityDatasourceImpl(this._firestore);
 
   @override
-  Future<List<PhysicalActivitiesModel>> getAllPhysicalActivities() async {
+  Future<List<ListPhysicalActivitiesModel>> getAllPhysicalActivities() async {
     try {
       QuerySnapshot snapshot = await _firestore.collection('physical-activities').get();
-      List<PhysicalActivitiesModel> pA = snapshot.docs
+      List<ListPhysicalActivitiesModel> pA = snapshot.docs
           .where((doc) => doc.id != 'types')
-          .map((doc) => PhysicalActivitiesModel.fromMap(doc.data() as Map<String, dynamic>))
+          .map((doc) => ListPhysicalActivitiesModel.fromMap(doc.data() as Map<String, dynamic>))
           .toList();
       return pA;
     } catch (exception) {
@@ -27,7 +27,7 @@ class PhysicalActivitiesDatasourceImpl implements PhysicalActivitiesDatasource {
   }
 
   @override
-  Future<void> registerNewPhysicalActivity(UniquePhysicalActivityModel payload) async {
+  Future<void> registerNewPhysicalActivity(PhysicalActivityModel payload) async {
     try {
       QuerySnapshot snapshot = await _firestore
           .collection('physical-activities')

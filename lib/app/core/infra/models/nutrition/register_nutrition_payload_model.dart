@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:nutrilog/app/modules/nutrition/infra/models/nutrition_model.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_model.dart';
 
 class RegisterNutritionPayloadModel extends Equatable {
   final NutritionModel nutrition;

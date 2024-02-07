@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'physical_activities_store.dart';
+part of 'get_physical_activities_store.dart';
 
 // **************************************************************************
 // StoreGenerator
@@ -8,9 +8,9 @@ part of 'physical_activities_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$PhysicalActivitiesStore on PhysicalActivitiesStoreBase, Store {
+mixin _$GetPhysicalActivityStore on GetPhysicalActivityStoreBase, Store {
   late final _$_stateAtom =
-      Atom(name: 'PhysicalActivitiesStoreBase._state', context: context);
+      Atom(name: 'GetPhysicalActivityStoreBase._state', context: context);
 
   GetPhysicalActivitiesState get state {
     _$_stateAtom.reportRead();
@@ -28,7 +28,7 @@ mixin _$PhysicalActivitiesStore on PhysicalActivitiesStoreBase, Store {
   }
 
   late final _$getAllPhysicalActivitiesAsyncAction = AsyncAction(
-      'PhysicalActivitiesStoreBase.getAllPhysicalActivities',
+      'GetPhysicalActivityStoreBase.getAllPhysicalActivities',
       context: context);
 
   @override

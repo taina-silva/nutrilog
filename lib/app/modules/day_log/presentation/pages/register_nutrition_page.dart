@@ -5,20 +5,22 @@ import 'package:fpdart/fpdart.dart' hide State;
 import 'package:nutrilog/app/core/components/structure/custom_app_bar.dart';
 import 'package:nutrilog/app/core/components/structure/custom_scaffold.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
+import 'package:nutrilog/app/core/infra/models/physical_activity/list_physical_activities_model.dart';
+import 'package:nutrilog/app/core/stores/get_physical_activities_store.dart';
+import 'package:nutrilog/app/core/stores/states/get_physical_activity_states.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
-import 'package:nutrilog/app/modules/physical_activities/infra/models/physical_activity_model.dart';
-import 'package:nutrilog/app/modules/physical_activities/presentation/stores/physical_activities_store.dart';
-import 'package:nutrilog/app/modules/physical_activities/presentation/stores/states/physical_activities_states.dart';
 
-class RegisterPhysicalActivityPage extends StatefulWidget {
-  const RegisterPhysicalActivityPage({super.key});
+class RegisterNutritionPage extends StatefulWidget {
+  final DateTime date;
+
+  const RegisterNutritionPage({super.key, required this.date});
 
   @override
-  State<RegisterPhysicalActivityPage> createState() => _RegisterPhysicalActivityPageState();
+  State<RegisterNutritionPage> createState() => _RegisterNutritionPageState();
 }
 
-class _RegisterPhysicalActivityPageState extends State<RegisterPhysicalActivityPage> {
-  final physicalActivitiesStore = Modular.get<PhysicalActivitiesStore>();
+class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
+  final physicalActivitiesStore = Modular.get<GetPhysicalActivityStore>();
 
   @override
   void initState() {
@@ -51,7 +53,7 @@ class _RegisterPhysicalActivityPageState extends State<RegisterPhysicalActivityP
           ));
         }
 
-        List<PhysicalActivitiesModel> list =
+        List<ListPhysicalActivitiesModel> list =
             (state as GetPhysicalActivitiesSuccessState).physicalActivities;
 
         return Container(

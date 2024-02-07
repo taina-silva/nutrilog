@@ -1,8 +1,8 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:nutrilog/app/core/errors/failures.dart';
 import 'package:nutrilog/app/core/infra/datasources/user_datasource.dart';
-import 'package:nutrilog/app/core/infra/models/register_nutrition_payload_model.dart';
-import 'package:nutrilog/app/core/infra/models/register_physical_activity_payload_model.dart';
+import 'package:nutrilog/app/core/infra/models/physical_activity/register_physical_activity_payload_model.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/register_nutrition_payload_model.dart';
 import 'package:nutrilog/app/core/services/logger/logger_service.dart';
 
 abstract class UserRepository {

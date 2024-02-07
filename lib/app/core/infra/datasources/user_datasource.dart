@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nutrilog/app/core/errors/exceptions.dart';
-import 'package:nutrilog/app/core/infra/models/register_nutrition_payload_model.dart';
-import 'package:nutrilog/app/core/infra/models/register_physical_activity_payload_model.dart';
+import 'package:nutrilog/app/core/infra/models/physical_activity/register_physical_activity_payload_model.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/register_nutrition_payload_model.dart';
 import 'package:nutrilog/app/core/services/local_storage/local_storage_service.dart';
 import 'package:nutrilog/app/core/utils/storage_keys.dart';
 

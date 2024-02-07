@@ -1,17 +1,16 @@
 import 'package:equatable/equatable.dart';
-import 'package:nutrilog/app/modules/nutrition/infra/models/nutrition_type_model.dart';
 
 class NutritionModel extends Equatable {
   final String name;
-  final NutritionTypeModel nutritionType;
+  final String type;
 
   const NutritionModel({
     required this.name,
-    required this.nutritionType,
+    required this.type,
   });
 
   @override
-  List<Object> get props => [name, nutritionType];
+  List<Object> get props => [name, type];
 
   @override
   bool get stringify => true;
@@ -19,14 +18,14 @@ class NutritionModel extends Equatable {
   factory NutritionModel.fromMap(Map<String, dynamic> map) {
     return NutritionModel(
       name: map['name'],
-      nutritionType: NutritionTypeModel(type: map['type']),
+      type: map['type'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'name': name,
-      'type': nutritionType.type,
+      'type': type,
     };
   }
 }

@@ -1,6 +1,6 @@
 import 'package:mobx/mobx.dart';
-import 'package:nutrilog/app/core/infra/models/register_nutrition_payload_model.dart';
-import 'package:nutrilog/app/core/infra/models/register_physical_activity_payload_model.dart';
+import 'package:nutrilog/app/core/infra/models/physical_activity/register_physical_activity_payload_model.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/register_nutrition_payload_model.dart';
 import 'package:nutrilog/app/core/infra/repositories/user_repository.dart';
 
 part 'user_store.g.dart';

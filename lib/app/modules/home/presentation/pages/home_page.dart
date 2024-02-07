@@ -10,7 +10,8 @@ import 'package:nutrilog/app/core/stores/auth_store.dart';
 import 'package:nutrilog/app/core/stores/states/auth_states.dart';
 import 'package:nutrilog/app/core/stores/user_store.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
-import 'package:nutrilog/app/modules/nutrition/presentation/stores/nutritions_store.dart';
+import 'package:nutrilog/app/core/utils/show_date_picker.dart';
+import 'package:nutrilog/app/core/stores/get_nutrition_store.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,7 +23,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final authStore = Modular.get<AuthStore>();
   final userStore = Modular.get<UserStore>();
-  final nutritionsStore = Modular.get<NutritionsStore>();
+  final nutritionsStore = Modular.get<GetNutritionStore>();
 
   List<ReactionDisposer> reactions = [];
 
@@ -64,18 +65,28 @@ class _HomePageState extends State<HomePage> {
             CustomButton.secondaryActivityMedium(ButtonParameters(
               text: 'Atividade física',
               prefixIcon: Icons.add_outlined,
-              onTap: () => Modular.to.pushNamed(
-                'day-log',
-                arguments: {'pathAfterSelectDate': 'physical-activity'},
-                forRoot: true,
-              ),
+              onTap: () async => onTapRegister('physical-activity'),
             )),
             const SizedBox(height: 8),
-            CustomButton.secondaryNutritionMedium(
-                const ButtonParameters(text: 'Alimentação', prefixIcon: Icons.add_outlined)),
+            CustomButton.secondaryNutritionMedium(ButtonParameters(
+              text: 'Alimentação',
+              prefixIcon: Icons.add_outlined,
+              onTap: () async => onTapRegister('nutrition'),
+            )),
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> onTapRegister(String path) async {
+    DateTime? date = await showCustomDatePicker(context: context, initialDate: DateTime.now());
+    if (date == null) return;
+
+    Modular.to.pushNamed(
+      'day-log/$path',
+      arguments: {'date': date},
+      forRoot: true,
     );
   }
 }

@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 
-class PhysicalActivitiesModel extends Equatable {
+class ListNutritionsModel extends Equatable {
   final String type;
   final List<String> list;
 
-  const PhysicalActivitiesModel({
+  const ListNutritionsModel({
     required this.type,
     required this.list,
   });
@@ -15,10 +15,10 @@ class PhysicalActivitiesModel extends Equatable {
   @override
   bool get stringify => true;
 
-  factory PhysicalActivitiesModel.fromMap(Map<String, dynamic> map) {
-    return PhysicalActivitiesModel(
+  factory ListNutritionsModel.fromMap(Map<String, dynamic> map) {
+    return ListNutritionsModel(
       type: map['type'],
-      list: map['physical-activities'],
+      list: map['nutrition'],
     );
   }
 }
