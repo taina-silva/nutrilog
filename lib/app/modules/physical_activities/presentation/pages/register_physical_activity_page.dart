@@ -51,7 +51,7 @@ class _RegisterPhysicalActivityPageState extends State<RegisterPhysicalActivityP
           ));
         }
 
-        List<PhysicalActivityModel> list =
+        List<PhysicalActivitiesModel> list =
             (state as GetPhysicalActivitiesSuccessState).physicalActivities;
 
         return Container(
@@ -61,9 +61,9 @@ class _RegisterPhysicalActivityPageState extends State<RegisterPhysicalActivityP
             children: [
               Expanded(
                 child: ListView.builder(
-                  itemCount: list.length,
+                  itemCount: list.first.list.length,
                   itemBuilder: (context, index) {
-                    return AdaptiveText(text: list[index].name, textType: TextType.small);
+                    return AdaptiveText(text: list.first.list[index], textType: TextType.small);
                   },
                 ),
               ),

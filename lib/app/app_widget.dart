@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:nutrilog/app/core/services/logger/logger_service.dart';
 import 'package:nutrilog/app/core/utils/custom_colors.dart';
@@ -60,7 +61,12 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
         ),
         // ignore: deprecated_member_use
         useInheritedMediaQuery: true,
-        locale: DevicePreview.locale(context),
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [Locale('pt', 'BR')],
         builder: DevicePreview.appBuilder,
         routeInformationParser: Modular.routeInformationParser,
         routerDelegate: Modular.routerDelegate,

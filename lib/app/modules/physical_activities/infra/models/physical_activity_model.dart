@@ -1,32 +1,24 @@
 import 'package:equatable/equatable.dart';
-import 'package:nutrilog/app/modules/physical_activities/infra/models/physical_activity_type_model.dart';
 
-class PhysicalActivityModel extends Equatable {
-  final String name;
-  final PhysicalActivityTypeModel activityType;
+class PhysicalActivitiesModel extends Equatable {
+  final String type;
+  final List<String> list;
 
-  const PhysicalActivityModel({
-    required this.name,
-    required this.activityType,
+  const PhysicalActivitiesModel({
+    required this.type,
+    required this.list,
   });
 
   @override
-  List<Object> get props => [name, activityType];
+  List<Object> get props => [type, list];
 
   @override
   bool get stringify => true;
 
-  factory PhysicalActivityModel.fromMap(Map<String, dynamic> map) {
-    return PhysicalActivityModel(
-      name: map['name'],
-      activityType: PhysicalActivityTypeModel(type: map['type']),
+  factory PhysicalActivitiesModel.fromMap(Map<String, dynamic> map) {
+    return PhysicalActivitiesModel(
+      type: map['type'],
+      list: map['physical-activities'],
     );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'type': activityType.type,
-    };
   }
 }

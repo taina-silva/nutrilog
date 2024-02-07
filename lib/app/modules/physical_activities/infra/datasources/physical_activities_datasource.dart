@@ -1,13 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fpdart/fpdart.dart';
 import 'package:nutrilog/app/modules/physical_activities/infra/models/physical_activity_model.dart';
 import 'package:nutrilog/app/modules/physical_activities/infra/models/physical_activity_type_model.dart';
-import 'package:uuid/uuid.dart';
 
 abstract class PhysicalActivitiesDatasource {
-  Future<Tuple2<List<PhysicalActivityTypeModel>, List<PhysicalActivityModel>>>
-      getAllPhysicalActivities();
-  Future<void> registerNewPhysicalActivity(PhysicalActivityModel payload);
+  Future<List<PhysicalActivitiesModel>> getAllPhysicalActivities();
+  Future<void> registerNewPhysicalActivity(UniquePhysicalActivityModel payload);
 }
 
 class PhysicalActivitiesDatasourceImpl implements PhysicalActivitiesDatasource {
@@ -16,28 +13,34 @@ class PhysicalActivitiesDatasourceImpl implements PhysicalActivitiesDatasource {
   PhysicalActivitiesDatasourceImpl(this._firestore);
 
   @override
-  Future<Tuple2<List<PhysicalActivityTypeModel>, List<PhysicalActivityModel>>>
-      getAllPhysicalActivities() async {
+  Future<List<PhysicalActivitiesModel>> getAllPhysicalActivities() async {
     try {
       QuerySnapshot snapshot = await _firestore.collection('physical-activities').get();
-      List<dynamic> typesList = (snapshot.docs.firstWhere((doc) => doc.id == 'types').data()
-          as Map<String, dynamic>)['types'];
-      List<PhysicalActivityTypeModel> types =
-          typesList.map((t) => PhysicalActivityTypeModel.fromMap(t)).toList();
-      List<PhysicalActivityModel> pA = snapshot.docs
+      List<PhysicalActivitiesModel> pA = snapshot.docs
           .where((doc) => doc.id != 'types')
-          .map((doc) => PhysicalActivityModel.fromMap(doc.data() as Map<String, dynamic>))
+          .map((doc) => PhysicalActivitiesModel.fromMap(doc.data() as Map<String, dynamic>))
           .toList();
-      return Tuple2(types, pA);
+      return pA;
     } catch (exception) {
       rethrow;
     }
   }
 
   @override
-  Future<void> registerNewPhysicalActivity(PhysicalActivityModel payload) async {
+  Future<void> registerNewPhysicalActivity(UniquePhysicalActivityModel payload) async {
     try {
-      _firestore.collection('physical-activities').doc(const Uuid().v4()).set(payload.toMap());
+      QuerySnapshot snapshot = await _firestore
+          .collection('physical-activities')
+          .where("type", isEqualTo: payload.type)
+          .get();
+      QueryDocumentSnapshot doc = snapshot.docs.first;
+      List<String> pA = List.from((doc.data() as Map<String, dynamic>)["physical-activities"]);
+      pA.add(payload.name);
+
+      await _firestore.collection('physical-activities').doc(doc.id).set({
+        'type': payload.type,
+        'physical-activities': pA,
+      });
     } catch (exception) {
       rethrow;
     }

@@ -22,7 +22,7 @@ abstract class PhysicalActivitiesStoreBase with Store {
 
     result.fold(
       (l) => _state = GetPhysicalActivitiesErrorState(l.message),
-      (r) => _state = GetPhysicalActivitiesSuccessState(r.first, r.second),
+      (r) => _state = GetPhysicalActivitiesSuccessState(r),
     );
   }
 }
