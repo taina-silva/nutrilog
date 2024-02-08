@@ -27,6 +27,24 @@ mixin _$GetPhysicalActivityStore on GetPhysicalActivityStoreBase, Store {
     });
   }
 
+  late final _$_afterSearchAtom =
+      Atom(name: 'GetPhysicalActivityStoreBase._afterSearch', context: context);
+
+  List<ListPhysicalActivitiesModel> get afterSearch {
+    _$_afterSearchAtom.reportRead();
+    return super._afterSearch;
+  }
+
+  @override
+  List<ListPhysicalActivitiesModel> get _afterSearch => afterSearch;
+
+  @override
+  set _afterSearch(List<ListPhysicalActivitiesModel> value) {
+    _$_afterSearchAtom.reportWrite(value, super._afterSearch, () {
+      super._afterSearch = value;
+    });
+  }
+
   late final _$getAllPhysicalActivitiesAsyncAction = AsyncAction(
       'GetPhysicalActivityStoreBase.getAllPhysicalActivities',
       context: context);
@@ -35,6 +53,20 @@ mixin _$GetPhysicalActivityStore on GetPhysicalActivityStoreBase, Store {
   Future<void> getAllPhysicalActivities() {
     return _$getAllPhysicalActivitiesAsyncAction
         .run(() => super.getAllPhysicalActivities());
+  }
+
+  late final _$GetPhysicalActivityStoreBaseActionController =
+      ActionController(name: 'GetPhysicalActivityStoreBase', context: context);
+
+  @override
+  void onSearch(String value) {
+    final _$actionInfo = _$GetPhysicalActivityStoreBaseActionController
+        .startAction(name: 'GetPhysicalActivityStoreBase.onSearch');
+    try {
+      return super.onSearch(value);
+    } finally {
+      _$GetPhysicalActivityStoreBaseActionController.endAction(_$actionInfo);
+    }
   }
 
   @override

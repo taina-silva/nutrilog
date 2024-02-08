@@ -1,7 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:nutrilog/app/core/errors/failures.dart';
 import 'package:nutrilog/app/core/infra/datasources/nutrition/get_nutritions_datasource.dart';
-import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_type_model.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/list_nutritions_model.dart';
 import 'package:nutrilog/app/core/services/logger/logger_service.dart';
 
 abstract class GetNutritionRepository {

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_model.dart';
-import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_type_model.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/list_nutritions_model.dart';
 
 abstract class GetNutritionDatasource {
   Future<List<ListNutritionsModel>> getAllNutritions();

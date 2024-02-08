@@ -18,7 +18,7 @@ class ListPhysicalActivitiesModel extends Equatable {
   factory ListPhysicalActivitiesModel.fromMap(Map<String, dynamic> map) {
     return ListPhysicalActivitiesModel(
       type: map['type'],
-      list: map['physical-activities'],
+      list: (map['physical-activities'] as List).map((e) => e as String).toList(),
     );
   }
 }

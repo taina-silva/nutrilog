@@ -18,7 +18,7 @@ class ListNutritionsModel extends Equatable {
   factory ListNutritionsModel.fromMap(Map<String, dynamic> map) {
     return ListNutritionsModel(
       type: map['type'],
-      list: map['nutrition'],
+      list: (map['nutrition'] as List).map((e) => e as String).toList(),
     );
   }
 }

@@ -6,11 +6,11 @@ abstract class CColors {
   static const primaryBackground = Color.fromRGBO(248, 248, 248, 1);
   static const secondaryBackground = Color.fromRGBO(251, 246, 241, 1);
 
-  static const primaryActivity = Color.fromARGB(255, 42, 170, 172);
-  static const primaryActivityWithOpacity = Color.fromARGB(50, 42, 170, 172);
+  static const primaryActivity = Color.fromRGBO(42, 170, 172, 1);
+  static const primaryActivityWithOpacity = Color.fromRGBO(42, 170, 172, 0.05);
 
-  static const primaryNutrition = Color.fromARGB(255, 172, 44, 42);
-  static const primaryNutritionWithOpacity = Color.fromARGB(50, 172, 44, 42);
+  static const primaryNutrition = Color.fromRGBO(172, 44, 42, 1);
+  static const primaryNutritionWithOpacity = Color.fromRGBO(172, 44, 42, 0.05);
 
   static const neutral0 = Color.fromRGBO(255, 255, 255, 1);
   static const neutral100 = Color.fromRGBO(250, 250, 250, 1);
