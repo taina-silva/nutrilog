@@ -27,12 +27,44 @@ mixin _$GetNutritionStore on GetNutritionStoreBase, Store {
     });
   }
 
+  late final _$_afterSearchAtom =
+      Atom(name: 'GetNutritionStoreBase._afterSearch', context: context);
+
+  List<ListNutritionsModel> get afterSearch {
+    _$_afterSearchAtom.reportRead();
+    return super._afterSearch;
+  }
+
+  @override
+  List<ListNutritionsModel> get _afterSearch => afterSearch;
+
+  @override
+  set _afterSearch(List<ListNutritionsModel> value) {
+    _$_afterSearchAtom.reportWrite(value, super._afterSearch, () {
+      super._afterSearch = value;
+    });
+  }
+
   late final _$getAllNutritionsAsyncAction =
       AsyncAction('GetNutritionStoreBase.getAllNutritions', context: context);
 
   @override
   Future<void> getAllNutritions() {
     return _$getAllNutritionsAsyncAction.run(() => super.getAllNutritions());
+  }
+
+  late final _$GetNutritionStoreBaseActionController =
+      ActionController(name: 'GetNutritionStoreBase', context: context);
+
+  @override
+  void onSearch(String value) {
+    final _$actionInfo = _$GetNutritionStoreBaseActionController.startAction(
+        name: 'GetNutritionStoreBase.onSearch');
+    try {
+      return super.onSearch(value);
+    } finally {
+      _$GetNutritionStoreBaseActionController.endAction(_$actionInfo);
+    }
   }
 
   @override

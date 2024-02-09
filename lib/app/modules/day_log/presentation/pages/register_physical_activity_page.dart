@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fpdart/fpdart.dart' hide State;
-import 'package:nutrilog/app/core/components/fields/search_field.dart';
+import 'package:nutrilog/app/core/components/buttons/custom_button.dart';
+import 'package:nutrilog/app/core/components/fields/common_field.dart';
 import 'package:nutrilog/app/core/components/structure/custom_app_bar.dart';
 import 'package:nutrilog/app/core/components/structure/custom_scaffold.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
 import 'package:nutrilog/app/core/infra/models/physical_activity/list_physical_activities_model.dart';
+import 'package:nutrilog/app/core/infra/models/physical_activity/physical_activity_model.dart';
 import 'package:nutrilog/app/core/stores/get_physical_activities_store.dart';
 import 'package:nutrilog/app/core/stores/states/get_physical_activity_states.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
 import 'package:nutrilog/app/core/utils/custom_colors.dart';
-import 'package:nutrilog/app/modules/day_log/presentation/components/list_physical_activities_details.dart';
+import 'package:nutrilog/app/modules/day_log/presentation/components/details/list_physical_activities_details.dart';
+import 'package:nutrilog/app/modules/day_log/presentation/stores/day_log_store.dart';
 
 class RegisterPhysicalActivityPage extends StatefulWidget {
   final DateTime date;
@@ -24,6 +27,7 @@ class RegisterPhysicalActivityPage extends StatefulWidget {
 
 class _RegisterPhysicalActivityPageState extends State<RegisterPhysicalActivityPage> {
   final getPhysicalActivityStore = Modular.get<GetPhysicalActivityStore>();
+  final dayLogStore = Modular.get<DayLogStore>();
 
   final _textEditingController = TextEditingController();
 
@@ -31,6 +35,15 @@ class _RegisterPhysicalActivityPageState extends State<RegisterPhysicalActivityP
   Widget build(BuildContext context) {
     return CustomScaffold(
       appBar: const CustomAppBar(title: Left('Atividade Física')),
+      floatingActionButton: Container(
+        margin: const EdgeInsets.symmetric(horizontal: ScreenMargin.horizontal),
+        child: Observer(builder: (context) {
+          return CustomButton.primaryActivityMedium(ButtonParameters(
+            text: 'OK',
+            isDisabled: dayLogStore.physicalActivity == null,
+          ));
+        }),
+      ),
       body: Observer(builder: (context) {
         final state = getPhysicalActivityStore.state;
 
@@ -58,16 +71,25 @@ class _RegisterPhysicalActivityPageState extends State<RegisterPhysicalActivityP
           color: CColors.primaryActivityWithOpacity,
           padding: const EdgeInsets.symmetric(
               horizontal: ScreenMargin.horizontal, vertical: ScreenMargin.vertical),
+          margin: const EdgeInsets.only(bottom: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const AdaptiveText(text: 'Selecione uma atividade física', textType: TextType.small),
               const SizedBox(height: 8),
-              SearchField(
-                onChanged: (v) => getPhysicalActivityStore.onSearch(v),
+              CommonField(
+                onChange: (_) => getPhysicalActivityStore.onSearch(_textEditingController.text),
                 controller: _textEditingController,
-                iconColor: CColors.primaryActivity,
-                hintText: 'Buscar atividade',
+                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                fillColor: Colors.white,
+                suffixIcon: GestureDetector(
+                  onTap: () {
+                    if (_textEditingController.text.isNotEmpty) _textEditingController.clear();
+                  },
+                  child: Icon(_textEditingController.text.isEmpty ? Icons.search : Icons.close,
+                      color: CColors.primaryActivity),
+                ),
+                placeholder: 'Buscar atividade',
               ),
               const SizedBox(height: 16),
               Expanded(
@@ -77,7 +99,19 @@ class _RegisterPhysicalActivityPageState extends State<RegisterPhysicalActivityP
                   itemBuilder: (context, index) {
                     return Container(
                       margin: const EdgeInsets.only(bottom: 48),
-                      child: ListPhysicalActivitiesWidget(list: pA[index]),
+                      child: ListPhysicalActivitiesWidget(
+                        list: pA[index],
+                        initalSelected: dayLogStore.physicalActivity,
+                        onSelect: (p) {
+                          setState(() {
+                            PhysicalActivityModel aux =
+                                PhysicalActivityModel(type: pA[index].type, name: p);
+
+                            dayLogStore.physicalActivity =
+                                aux == dayLogStore.physicalActivity ? null : aux;
+                          });
+                        },
+                      ),
                     );
                   },
                 ),

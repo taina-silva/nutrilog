@@ -11,8 +11,8 @@ final class GetNutritionInitialState extends GetNutritionState {}
 final class GetNutritionLoadingState extends GetNutritionState {}
 
 final class GetNutritionSuccessState extends GetNutritionState {
-  final List<ListNutritionsModel> list;
-  GetNutritionSuccessState(this.list);
+  final List<ListNutritionsModel> nutritions;
+  GetNutritionSuccessState(this.nutritions);
 }
 
 final class GetNutritionErrorState extends GetNutritionState {
