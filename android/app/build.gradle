@@ -68,7 +68,7 @@ android {
 
     defaultConfig {
         applicationId "nutrilog"
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

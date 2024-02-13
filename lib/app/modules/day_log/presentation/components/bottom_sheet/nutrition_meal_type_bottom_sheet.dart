@@ -6,6 +6,7 @@ import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
 import 'package:nutrilog/app/core/infra/enums/meal_type.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
 import 'package:nutrilog/app/core/utils/custom_colors.dart';
+import 'package:nutrilog/app/core/utils/show_time_picker.dart';
 
 class NutritionMealTypeBottomSheet extends StatefulWidget {
   final MealType initialMealValue;
@@ -35,6 +36,17 @@ class _NutritionMealTypeBottomSheetState extends State<NutritionMealTypeBottomSh
     selectedTime = widget.initialTimeValue;
   }
 
+  Future<void> onSetTimeCallback() async {
+    TimeOfDay? time = await showCustomTimePicker(
+      context: context,
+      initialTime: selectedTime ?? TimeOfDay.now(),
+    );
+
+    if (time == null) return;
+
+    setState(() => selectedTime = time);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -50,29 +62,23 @@ class _NutritionMealTypeBottomSheetState extends State<NutritionMealTypeBottomSh
               options: MealType.values,
               initialOption: MealType.breakfast,
               text: (mT) => mT.title,
-              onTap: (item) {
-                setState(() => selectedMeal = item);
-              },
+              onTap: (mT) => setState(() => selectedMeal = mT),
               primaryColor: CColors.primaryNutrition,
             ),
-            const SizedBox(height: 32),
-            Theme(
-              data: Theme.of(context).copyWith(
-                colorScheme: const ColorScheme.light(
-                  primary: CColors.neutral900,
-                  onPrimary: CColors.neutral0,
-                  onSurface: CColors.neutral900,
+            SizedBox(height: selectedTime == null ? 32 : 48),
+            if (selectedTime != null)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [_timeWidget()],
+              ),
+            if (selectedTime == null)
+              CustomButton.secondaryNutritionMedium(
+                ButtonParameters(
+                  text: 'Selecionar horário',
+                  onTap: onSetTimeCallback,
+                  prefixIcon: Icons.schedule_outlined,
                 ),
               ),
-              child: TimePickerDialog(
-                initialTime: selectedTime ?? TimeOfDay.now(),
-                cancelText: 'Cancelar',
-                errorInvalidText: 'Hora inválida.',
-                hourLabelText: 'Hora (24h)',
-                minuteLabelText: 'Minuto',
-                initialEntryMode: TimePickerEntryMode.input,
-              ),
-            ),
             const SizedBox(height: 32),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -96,6 +102,56 @@ class _NutritionMealTypeBottomSheetState extends State<NutritionMealTypeBottomSh
           ],
         ),
       ),
+    );
+  }
+
+  Widget _timeWidget() {
+    Widget partTimeWidget(String value) {
+      return Container(
+        padding: const EdgeInsets.symmetric(
+            horizontal: DefaultPadding.large, vertical: DefaultPadding.small),
+        decoration: const BoxDecoration(
+          color: CColors.neutral350,
+          borderRadius: BorderRadius.all(Radius.circular(Layout.borderRadiusSmall)),
+        ),
+        child: AdaptiveText(text: value, textType: TextType.large),
+      );
+    }
+
+    return Stack(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(right: DefaultPadding.nano, bottom: DefaultPadding.large),
+          child: Row(
+            children: [
+              partTimeWidget(
+                  selectedTime!.hour < 10 ? '0${selectedTime!.hour}' : '${selectedTime!.hour}'),
+              const SizedBox(width: 16),
+              const AdaptiveText(text: ':', textType: TextType.large, fWeight: FWeight.bold),
+              const SizedBox(width: 16),
+              partTimeWidget(selectedTime!.minute < 10
+                  ? '0${selectedTime!.minute}'
+                  : '${selectedTime!.minute}'),
+              const SizedBox(width: 8),
+            ],
+          ),
+        ),
+        Positioned(
+          right: 0,
+          bottom: 0,
+          child: GestureDetector(
+            onTap: onSetTimeCallback,
+            child: Container(
+              padding: const EdgeInsets.all(DefaultPadding.nano),
+              decoration: const BoxDecoration(
+                color: CColors.primaryNutrition,
+                borderRadius: BorderRadius.all(Radius.circular(Layout.borderRadiusBig)),
+              ),
+              child: const Icon(Icons.edit_outlined, color: CColors.neutral0),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

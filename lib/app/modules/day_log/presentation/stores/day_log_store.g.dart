@@ -41,11 +41,28 @@ mixin _$DayLogStore on DayLogStoreBase, Store {
     });
   }
 
+  late final _$mealTypeAtom =
+      Atom(name: 'DayLogStoreBase.mealType', context: context);
+
+  @override
+  MealType? get mealType {
+    _$mealTypeAtom.reportRead();
+    return super.mealType;
+  }
+
+  @override
+  set mealType(MealType? value) {
+    _$mealTypeAtom.reportWrite(value, super.mealType, () {
+      super.mealType = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 physicalActivity: ${physicalActivity},
-nutrition: ${nutrition}
+nutrition: ${nutrition},
+mealType: ${mealType}
     ''';
   }
 }

@@ -1,4 +1,5 @@
 import 'package:mobx/mobx.dart';
+import 'package:nutrilog/app/core/infra/enums/meal_type.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_model.dart';
 import 'package:nutrilog/app/core/infra/models/physical_activity/physical_activity_model.dart';
 
@@ -12,4 +13,7 @@ abstract class DayLogStoreBase with Store {
 
   @observable
   List<NutritionModel>? nutrition;
+
+  @observable
+  MealType? mealType;
 }
