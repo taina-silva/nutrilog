@@ -7,13 +7,19 @@ import 'package:nutrilog/app/core/components/fields/common_field.dart';
 import 'package:nutrilog/app/core/components/structure/custom_app_bar.dart';
 import 'package:nutrilog/app/core/components/structure/custom_scaffold.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
+import 'package:nutrilog/app/core/infra/enums/meal_type.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/list_nutritions_model.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_model.dart';
 import 'package:nutrilog/app/core/stores/get_nutrition_store.dart';
 import 'package:nutrilog/app/core/stores/states/get_nutrition_states.dart';
+import 'package:nutrilog/app/core/stores/user_store.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
 import 'package:nutrilog/app/core/utils/custom_colors.dart';
+import 'package:nutrilog/app/core/utils/formatters/formatters.dart';
+import 'package:nutrilog/app/core/utils/show_bottom_sheet.dart';
+import 'package:nutrilog/app/modules/day_log/presentation/components/bottom_sheet/nutrition_meal_type_bottom_sheet.dart';
 import 'package:nutrilog/app/modules/day_log/presentation/components/details/list_nutritions_details.dart';
+import 'package:nutrilog/app/modules/day_log/presentation/components/details/nutrition_tag.dart';
 import 'package:nutrilog/app/modules/day_log/presentation/stores/day_log_store.dart';
 
 class RegisterNutritionPage extends StatefulWidget {
@@ -28,19 +34,34 @@ class RegisterNutritionPage extends StatefulWidget {
 class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
   final getNutritionStore = Modular.get<GetNutritionStore>();
   final dayLogStore = Modular.get<DayLogStore>();
+  final userStore = Modular.get<UserStore>();
 
   final _textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const CustomAppBar(title: Left('Nutrição')),
+      appBar: CustomAppBar(title: Left(formatDate(widget.date))),
       floatingActionButton: Container(
         margin: const EdgeInsets.symmetric(horizontal: ScreenMargin.horizontal),
         child: Observer(builder: (context) {
           return CustomButton.primaryNutritionMedium(ButtonParameters(
             text: 'OK',
             isDisabled: dayLogStore.nutrition == null,
+            onTap: () {
+              showCustomBottomSheet(
+                context: context,
+                builder: (context) {
+                  return NutritionMealTypeBottomSheet(
+                    initialMealValue: MealType.breakfast,
+                    initialTimeValue: null,
+                    onOkCallback: (duration) {
+                      Modular.to.pop();
+                    },
+                  );
+                },
+              );
+            },
           ));
         }),
       ),
@@ -91,6 +112,15 @@ class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
                 placeholder: 'Buscar alimento',
               ),
               const SizedBox(height: 16),
+              if (dayLogStore.nutrition?.isNotEmpty ?? false)
+                NutritionTag(
+                  nutritions: dayLogStore.nutrition!,
+                  onDeleteCallback: (deleted) {
+                    List<NutritionModel> aux = List.from(dayLogStore.nutrition!);
+                    aux.remove(deleted);
+                    dayLogStore.nutrition = aux;
+                  },
+                ),
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.all(0),
@@ -103,8 +133,13 @@ class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
                         initalSelected: dayLogStore.nutrition,
                         onSelect: (p) {
                           setState(() {
-                            NutritionModel aux = NutritionModel(type: n[index].type, name: p);
-                            dayLogStore.nutrition = aux == dayLogStore.nutrition ? null : aux;
+                            List<NutritionModel> aux = [];
+
+                            for (String s in p) {
+                              aux.add(NutritionModel(type: n[index].type, name: s));
+                            }
+
+                            dayLogStore.nutrition = aux;
                           });
                         },
                       ),

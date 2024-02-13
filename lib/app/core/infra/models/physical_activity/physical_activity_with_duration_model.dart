@@ -2,11 +2,11 @@ import 'package:equatable/equatable.dart';
 import 'package:nutrilog/app/core/infra/models/physical_activity/physical_activity_model.dart';
 import 'package:nutrilog/app/core/utils/duration.dart';
 
-class RegisterPhysicalActivityPayloadModel extends Equatable {
+class PhysicalActivityWithDurationModel extends Equatable {
   final PhysicalActivityModel physicalActivity;
   final Duration duration;
 
-  const RegisterPhysicalActivityPayloadModel({
+  const PhysicalActivityWithDurationModel({
     required this.physicalActivity,
     required this.duration,
   });
@@ -17,8 +17,8 @@ class RegisterPhysicalActivityPayloadModel extends Equatable {
   @override
   bool get stringify => true;
 
-  factory RegisterPhysicalActivityPayloadModel.fromMap(Map<String, dynamic> map) {
-    return RegisterPhysicalActivityPayloadModel(
+  factory PhysicalActivityWithDurationModel.fromMap(Map<String, dynamic> map) {
+    return PhysicalActivityWithDurationModel(
       physicalActivity: PhysicalActivityModel.fromMap(map['physical-activity']),
       duration: durationFromString(map['duration']),
     );
@@ -27,7 +27,7 @@ class RegisterPhysicalActivityPayloadModel extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       'physical-activity': physicalActivity.toMap(),
-      'duration': durationToString(duration),
+      'duration': duration.toString(),
     };
   }
 }

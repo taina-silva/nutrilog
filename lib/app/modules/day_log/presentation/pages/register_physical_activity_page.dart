@@ -2,17 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fpdart/fpdart.dart' hide State;
+import 'package:mobx/mobx.dart';
 import 'package:nutrilog/app/core/components/buttons/custom_button.dart';
 import 'package:nutrilog/app/core/components/fields/common_field.dart';
 import 'package:nutrilog/app/core/components/structure/custom_app_bar.dart';
 import 'package:nutrilog/app/core/components/structure/custom_scaffold.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
+import 'package:nutrilog/app/core/components/toasts/toasts.dart';
 import 'package:nutrilog/app/core/infra/models/physical_activity/list_physical_activities_model.dart';
 import 'package:nutrilog/app/core/infra/models/physical_activity/physical_activity_model.dart';
+import 'package:nutrilog/app/core/infra/models/physical_activity/physical_activity_with_duration_model.dart';
 import 'package:nutrilog/app/core/stores/get_physical_activities_store.dart';
 import 'package:nutrilog/app/core/stores/states/get_physical_activity_states.dart';
+import 'package:nutrilog/app/core/stores/states/user_states.dart';
+import 'package:nutrilog/app/core/stores/user_store.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
 import 'package:nutrilog/app/core/utils/custom_colors.dart';
+import 'package:nutrilog/app/core/utils/formatters/formatters.dart';
+import 'package:nutrilog/app/core/utils/show_bottom_sheet.dart';
+import 'package:nutrilog/app/modules/day_log/presentation/components/bottom_sheet/physical_activity_duration_bottom_sheet.dart';
 import 'package:nutrilog/app/modules/day_log/presentation/components/details/list_physical_activities_details.dart';
 import 'package:nutrilog/app/modules/day_log/presentation/stores/day_log_store.dart';
 
@@ -28,19 +36,57 @@ class RegisterPhysicalActivityPage extends StatefulWidget {
 class _RegisterPhysicalActivityPageState extends State<RegisterPhysicalActivityPage> {
   final getPhysicalActivityStore = Modular.get<GetPhysicalActivityStore>();
   final dayLogStore = Modular.get<DayLogStore>();
+  final userStore = Modular.get<UserStore>();
 
   final _textEditingController = TextEditingController();
+
+  List<ReactionDisposer> reactions = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    reactions = [
+      reaction((_) => userStore.registerPhysicalActitityState,
+          (RegisterPhysicalActitityState state) {
+        if (state is RegisterPhysicalActititySuccessState) {
+          Modular.to.pop();
+        } else if (state is RegisterPhysicalActitityErrorState) {
+          errorToast(context, state.message);
+        }
+      })
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const CustomAppBar(title: Left('Atividade Física')),
+      appBar: CustomAppBar(title: Left(formatDate(widget.date))),
       floatingActionButton: Container(
         margin: const EdgeInsets.symmetric(horizontal: ScreenMargin.horizontal),
         child: Observer(builder: (context) {
           return CustomButton.primaryActivityMedium(ButtonParameters(
             text: 'OK',
             isDisabled: dayLogStore.physicalActivity == null,
+            isLoading:
+                userStore.registerPhysicalActitityState is RegisterPhysicalActitityLoadingState,
+            onTap: () {
+              showCustomBottomSheet(
+                context: context,
+                builder: (context) {
+                  return PhysicalActivityDurationBottomSheet(
+                    onOkCallback: (duration) {
+                      Modular.to.pop();
+                      userStore.registerPhysicalActivity(
+                        widget.date,
+                        PhysicalActivityWithDurationModel(
+                            physicalActivity: dayLogStore.physicalActivity!, duration: duration),
+                      );
+                    },
+                  );
+                },
+              );
+            },
           ));
         }),
       ),

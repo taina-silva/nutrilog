@@ -41,7 +41,7 @@ dependencies:
   flutter_modular: 5.0.3
   flutter_secure_storage: 8.0.0
   flutter_svg: 2.0.0+1
-  fluttertoast: 8.2.1
+  fluttertoast: ^8.2.4
   fpdart: 0.4.1
   intl: ^0.18.0
   mobx: 2.2.0

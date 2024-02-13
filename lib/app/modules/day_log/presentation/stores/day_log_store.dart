@@ -11,5 +11,5 @@ abstract class DayLogStoreBase with Store {
   PhysicalActivityModel? physicalActivity;
 
   @observable
-  NutritionModel? nutrition;
+  List<NutritionModel>? nutrition;
 }

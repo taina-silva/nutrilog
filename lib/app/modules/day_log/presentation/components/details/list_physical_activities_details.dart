@@ -57,11 +57,17 @@ class _ListPhysicalActivitiesWidgetState extends State<ListPhysicalActivitiesWid
                 decoration: BoxDecoration(
                   color: p == selected && widget.initalSelected?.type == widget.list.type
                       ? CColors.primaryActivity
-                      : CColors.neutral0, 
+                      : CColors.neutral0,
                   border: Border.all(color: CColors.primaryActivity, width: Layout.borderWidth),
                   borderRadius: const BorderRadius.all(Radius.circular(Layout.borderRadiusMedium)),
                 ),
-                child: AdaptiveText(text: p, textType: TextType.small),
+                child: AdaptiveText(
+                  text: p,
+                  textType: TextType.small,
+                  color: p == selected && widget.initalSelected?.type == widget.list.type
+                      ? CColors.neutral0
+                      : CColors.primaryActivity,
+                ),
               ),
             );
           }).toList(),

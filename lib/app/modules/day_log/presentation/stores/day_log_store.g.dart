@@ -29,13 +29,13 @@ mixin _$DayLogStore on DayLogStoreBase, Store {
       Atom(name: 'DayLogStoreBase.nutrition', context: context);
 
   @override
-  NutritionModel? get nutrition {
+  List<NutritionModel>? get nutrition {
     _$nutritionAtom.reportRead();
     return super.nutrition;
   }
 
   @override
-  set nutrition(NutritionModel? value) {
+  set nutrition(List<NutritionModel>? value) {
     _$nutritionAtom.reportWrite(value, super.nutrition, () {
       super.nutrition = value;
     });

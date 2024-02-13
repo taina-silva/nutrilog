@@ -7,8 +7,8 @@ import 'package:nutrilog/app/core/utils/custom_colors.dart';
 
 class ListNutritionsWidget extends StatefulWidget {
   final ListNutritionsModel list;
-  final NutritionModel? initalSelected;
-  final void Function(String) onSelect;
+  final List<NutritionModel>? initalSelected;
+  final void Function(List<String>) onSelect;
 
   const ListNutritionsWidget({
     super.key,
@@ -22,17 +22,13 @@ class ListNutritionsWidget extends StatefulWidget {
 }
 
 class _ListNutritionsWidgetState extends State<ListNutritionsWidget> {
-  late String selected;
-
-  @override
-  void initState() {
-    super.initState();
-
-    selected = widget.initalSelected?.name ?? '';
-  }
+  late List<String> selected;
 
   @override
   Widget build(BuildContext context) {
+    selected =
+        widget.initalSelected == null ? [] : widget.initalSelected!.map((e) => e.name).toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -49,19 +45,25 @@ class _ListNutritionsWidgetState extends State<ListNutritionsWidget> {
           children: widget.list.list.map((n) {
             return GestureDetector(
               onTap: () {
-                setState(() => selected = n);
-                widget.onSelect(n);
+                setState(() {
+                  List<String> aux = List.from(selected);
+                  aux.contains(n) ? aux.remove(n) : aux.add(n);
+                  selected = aux;
+                });
+                widget.onSelect(selected);
               },
               child: Container(
                 padding: const EdgeInsets.all(DefaultPadding.nano),
                 decoration: BoxDecoration(
-                  color: n == selected && widget.initalSelected?.type == widget.list.type
-                      ? CColors.primaryNutrition
-                      : CColors.neutral0,
+                  color: selected.contains(n) ? CColors.primaryNutrition : CColors.neutral0,
                   border: Border.all(color: CColors.primaryNutrition, width: Layout.borderWidth),
                   borderRadius: const BorderRadius.all(Radius.circular(Layout.borderRadiusMedium)),
                 ),
-                child: AdaptiveText(text: n, textType: TextType.small),
+                child: AdaptiveText(
+                  text: n,
+                  textType: TextType.small,
+                  color: selected.contains(n) ? CColors.neutral0 : CColors.primaryNutrition,
+                ),
               ),
             );
           }).toList(),

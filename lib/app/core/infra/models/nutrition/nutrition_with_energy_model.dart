@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_model.dart';
 
-class RegisterNutritionPayloadModel extends Equatable {
+class NutritionWithEnergyModel extends Equatable {
   final NutritionModel nutrition;
   final double energy;
 
-  const RegisterNutritionPayloadModel({
+  const NutritionWithEnergyModel({
     required this.nutrition,
     required this.energy,
   });
@@ -16,8 +16,8 @@ class RegisterNutritionPayloadModel extends Equatable {
   @override
   bool get stringify => true;
 
-  factory RegisterNutritionPayloadModel.fromMap(Map<String, dynamic> map) {
-    return RegisterNutritionPayloadModel(
+  factory NutritionWithEnergyModel.fromMap(Map<String, dynamic> map) {
+    return NutritionWithEnergyModel(
       nutrition: NutritionModel.fromMap(map['nutrition']),
       energy: map['energy'],
     );

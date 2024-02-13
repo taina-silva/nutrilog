@@ -1,12 +1,3 @@
-String durationToString(Duration duration) {
-  int timeInMinutes = duration.inMinutes;
-
-  int minutes = timeInMinutes % 60;
-  double hours = ((timeInMinutes - minutes) / 60) % 24;
-
-  return '${hours.round()}:$minutes';
-}
-
 Duration durationFromString(String duration) {
   int hours = 0;
   int minutes = 0;
@@ -19,4 +10,17 @@ Duration durationFromString(String duration) {
   micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
 
   return Duration(hours: hours, minutes: minutes, microseconds: micros);
+}
+
+String totalHoursFromDurations(List<Duration> durations) {
+  int seconds = 0;
+
+  for (Duration duration in durations) {
+    seconds += duration.inSeconds;
+  }
+
+  double hours = seconds / 3600;
+  bool isInteger = (hours % 1) == 0;
+
+  return '${hours.toStringAsFixed(isInteger ? 0 : 2)}h';
 }
