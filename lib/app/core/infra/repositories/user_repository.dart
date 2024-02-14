@@ -2,7 +2,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:nutrilog/app/core/errors/failures.dart';
 import 'package:nutrilog/app/core/infra/datasources/user_datasource.dart';
 import 'package:nutrilog/app/core/infra/models/day_log_model.dart';
-import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_with_energy_model.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_for_meal_model.dart';
 import 'package:nutrilog/app/core/infra/models/physical_activity/physical_activity_with_duration_model.dart';
 import 'package:nutrilog/app/core/services/logger/logger_service.dart';
 
@@ -10,7 +10,7 @@ abstract class UserRepository {
   Future<Either<Failure, List<DayLogModel>?>> getDayLogList();
   Future<Either<Failure, Unit>> registerPhysicalActivity(
       DateTime date, PhysicalActivityWithDurationModel payload);
-  Future<Either<Failure, Unit>> registerNutrition(DateTime date, NutritionWithEnergyModel payload);
+  Future<Either<Failure, Unit>> registerNutrition(DateTime date, NutritionsForMealModel payload);
 }
 
 class UserRepositoryImpl implements UserRepository {
@@ -44,7 +44,7 @@ class UserRepositoryImpl implements UserRepository {
 
   @override
   Future<Either<Failure, Unit>> registerNutrition(
-      DateTime date, NutritionWithEnergyModel payload) async {
+      DateTime date, NutritionsForMealModel payload) async {
     try {
       await _datasource.registerNutritionAtDate(date, payload);
       return const Right(unit);

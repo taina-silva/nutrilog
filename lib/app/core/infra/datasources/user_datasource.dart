@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nutrilog/app/core/errors/exceptions.dart';
 import 'package:nutrilog/app/core/infra/models/day_log_model.dart';
-import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_with_energy_model.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_by_meals_model.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_for_meal_model.dart';
 import 'package:nutrilog/app/core/infra/models/physical_activity/physical_activity_with_duration_model.dart';
 import 'package:nutrilog/app/core/services/local_storage/local_storage_service.dart';
 import 'package:nutrilog/app/core/utils/storage_keys.dart';
@@ -9,10 +10,10 @@ import 'package:nutrilog/app/core/utils/storage_keys.dart';
 abstract class UserDatasource {
   Future<List<DayLogModel>?> getDayLogList();
   Future<List<PhysicalActivityWithDurationModel>> getPhysicalActivitiesByDate(DateTime date);
-  Future<List<NutritionWithEnergyModel>> getNutritionsByDate(DateTime date);
+  Future<NutritionsByMealsModel?> getNutritionsByDate(DateTime date);
   Future<void> registerPhysicalActivityAtDate(
       DateTime date, PhysicalActivityWithDurationModel payload);
-  Future<void> registerNutritionAtDate(DateTime date, NutritionWithEnergyModel payload);
+  Future<void> registerNutritionAtDate(DateTime date, NutritionsForMealModel payload);
 }
 
 class UserDatasourceImpl implements UserDatasource {
@@ -70,7 +71,7 @@ class UserDatasourceImpl implements UserDatasource {
   }
 
   @override
-  Future<List<NutritionWithEnergyModel>> getNutritionsByDate(DateTime date) async {
+  Future<NutritionsByMealsModel?> getNutritionsByDate(DateTime date) async {
     try {
       String? userId = await _localStorage.read<String>(StorageKeys.userId);
 
@@ -81,12 +82,10 @@ class UserDatasourceImpl implements UserDatasource {
           .where('date', isEqualTo: date.millisecondsSinceEpoch.toString())
           .get();
 
-      if (snapshot.docs.isEmpty) return [];
+      if (snapshot.docs.isEmpty) return null;
 
-      List<NutritionWithEnergyModel> docs =
-          ((snapshot.docs.first.data() as Map<String, dynamic>)['nutrition'] as List)
-              .map((pA) => NutritionWithEnergyModel.fromMap(pA))
-              .toList();
+      NutritionsByMealsModel docs = NutritionsByMealsModel.fromMap(
+          (snapshot.docs.first.data() as Map<String, dynamic>)['nutrition']);
 
       return docs;
     } catch (exception) {
@@ -119,21 +118,30 @@ class UserDatasourceImpl implements UserDatasource {
   }
 
   @override
-  Future<void> registerNutritionAtDate(DateTime date, NutritionWithEnergyModel payload) async {
+  Future<void> registerNutritionAtDate(DateTime date, NutritionsForMealModel payload) async {
     try {
       String? userId = await _localStorage.read<String>(StorageKeys.userId);
 
       if (userId == null) throw const NoPermissionsException();
 
-      List<NutritionWithEnergyModel> registered = await getNutritionsByDate(date);
-      registered.add(payload);
+      NutritionsByMealsModel? registered = await getNutritionsByDate(date);
+
+      if (registered != null) {
+        registered.nutritions[payload.mealType] ??= [];
+        registered.nutritions[payload.mealType] =
+            registered.nutritions[payload.mealType]! + payload.nutritions;
+      } else {
+        registered = NutritionsByMealsModel(energy: payload.energy, nutritions: {
+          payload.mealType: payload.nutritions,
+        });
+      }
 
       String physicalActivityDocId = date.millisecondsSinceEpoch.toString();
 
       await _firestore.doc('users/$userId').collection('day-log').doc(physicalActivityDocId).set(
         {
           'date': date.millisecondsSinceEpoch.toString(),
-          'nutrition': registered.map((e) => e.toMap()).toList()
+          'nutrition': registered.toMap(),
         },
       );
     } catch (exception) {

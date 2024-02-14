@@ -1,5 +1,5 @@
 import 'package:mobx/mobx.dart';
-import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_with_energy_model.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_for_meal_model.dart';
 import 'package:nutrilog/app/core/infra/models/physical_activity/physical_activity_with_duration_model.dart';
 import 'package:nutrilog/app/core/infra/repositories/user_repository.dart';
 import 'package:nutrilog/app/core/stores/states/user_states.dart';
@@ -52,7 +52,7 @@ abstract class UserStoreBase with Store {
   }
 
   @action
-  Future<void> registerNutrition(DateTime date, NutritionWithEnergyModel payload) async {
+  Future<void> registerNutrition(DateTime date, NutritionsForMealModel payload) async {
     _registerNutritionState = RegisterNutritionLoadingState();
 
     final result = await _repository.registerNutrition(date, payload);
