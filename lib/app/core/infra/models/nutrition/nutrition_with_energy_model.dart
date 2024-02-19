@@ -1,13 +1,14 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_model.dart';
 
 class NutritionWithEnergyModel extends Equatable {
   final NutritionModel nutrition;
-  final double energy;
+  final double? energy;
 
   const NutritionWithEnergyModel({
     required this.nutrition,
-    required this.energy,
+    this.energy = 0,
   });
 
   @override
@@ -26,7 +27,17 @@ class NutritionWithEnergyModel extends Equatable {
   Map<String, dynamic> toMap() {
     return {
       'nutrition': nutrition.toMap(),
-      'duration': energy,
+      'energy': energy,
     };
+  }
+
+  NutritionWithEnergyModel copyWith({
+    NutritionModel? nutrition,
+    double? energy,
+  }) {
+    return NutritionWithEnergyModel(
+      nutrition: nutrition ?? this.nutrition,
+      energy: energy ?? this.energy,
+    );
   }
 }

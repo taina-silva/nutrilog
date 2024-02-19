@@ -12,7 +12,7 @@ Duration durationFromString(String duration) {
   return Duration(hours: hours, minutes: minutes, microseconds: micros);
 }
 
-String totalHoursFromDurations(List<Duration> durations) {
+String totalHoursFromDurationsAsStr(List<Duration> durations) {
   int seconds = 0;
 
   for (Duration duration in durations) {
@@ -22,5 +22,5 @@ String totalHoursFromDurations(List<Duration> durations) {
   double hours = seconds / 3600;
   bool isInteger = (hours % 1) == 0;
 
-  return '${hours.toStringAsFixed(isInteger ? 0 : 2)}h';
+  return '${hours.toStringAsFixed(isInteger ? 0 : 2)} h';
 }

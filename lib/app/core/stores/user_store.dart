@@ -1,7 +1,7 @@
 import 'package:mobx/mobx.dart';
-import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_for_meal_model.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_one_meal_model.dart';
 import 'package:nutrilog/app/core/infra/models/physical_activity/physical_activity_with_duration_model.dart';
-import 'package:nutrilog/app/core/infra/repositories/user_repository.dart';
+import 'package:nutrilog/app/core/infra/repositories/user/user_repository.dart';
 import 'package:nutrilog/app/core/stores/states/user_states.dart';
 
 part 'user_store.g.dart';
@@ -52,14 +52,17 @@ abstract class UserStoreBase with Store {
   }
 
   @action
-  Future<void> registerNutrition(DateTime date, NutritionsForMealModel payload) async {
+  Future<void> registerNutrition(DateTime date, NutritionsOneMealModel payload) async {
     _registerNutritionState = RegisterNutritionLoadingState();
 
     final result = await _repository.registerNutrition(date, payload);
 
     result.fold(
       (l) => _registerNutritionState = RegisterNutritionErrorState(l.message),
-      (r) => _registerNutritionState = RegisterNutritionSuccessState(),
+      (r) async {
+        await getUserDayLog();
+        _registerNutritionState = RegisterNutritionSuccessState();
+      },
     );
   }
 }

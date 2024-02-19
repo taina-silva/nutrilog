@@ -8,7 +8,7 @@ import 'package:nutrilog/app/core/components/structure/custom_app_bar.dart';
 import 'package:nutrilog/app/core/components/structure/custom_scaffold.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
 import 'package:nutrilog/app/core/components/toasts/toasts.dart';
-import 'package:nutrilog/app/core/infra/models/day_log_model.dart';
+import 'package:nutrilog/app/core/infra/models/day_log/day_log_model.dart';
 import 'package:nutrilog/app/core/stores/auth_store.dart';
 import 'package:nutrilog/app/core/stores/get_nutrition_store.dart';
 import 'package:nutrilog/app/core/stores/states/auth_states.dart';

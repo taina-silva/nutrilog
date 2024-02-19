@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
-import 'package:nutrilog/app/core/infra/models/day_log_model.dart';
+import 'package:nutrilog/app/core/infra/enums/meal_type.dart';
+import 'package:nutrilog/app/core/infra/models/day_log/day_log_model.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_one_meal_model.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
 import 'package:nutrilog/app/core/utils/custom_colors.dart';
 import 'package:nutrilog/app/core/utils/duration.dart';
@@ -30,19 +32,28 @@ class DayLogResume extends StatelessWidget {
             children: [
               itemFromDayLog(
                 dayLog.physicalActivities.isEmpty
-                    ? 'Atividades Físicas (Sem registro)'
-                    : 'Atividades Físicas (${totalHoursFromDurations(dayLog.physicalActivities.map((e) => e.duration).toList())})',
+                    ? 'Atividades Físicas'
+                    : 'Atividades Físicas (${totalHoursFromDurationsAsStr(dayLog.physicalActivities.map((e) => e.duration).toList())})',
                 Icons.fitness_center_outlined,
                 CColors.primaryActivity,
               ),
               const SizedBox(height: 8),
-              itemFromDayLog(
-                dayLog.nutritions.isEmpty
-                    ? 'Nutrição (Sem registro)'
-                    : 'Nutrição (${totalHoursFromDurations(dayLog.physicalActivities.map((e) => e.duration).toList())})',
-                Icons.local_grocery_store_outlined,
-                CColors.primaryNutrition,
-              ),
+              Builder(builder: (context) {
+                double totalNergy = 0;
+
+                if (dayLog.nutritions != null) {
+                  for (MapEntry<MealType, NutritionsOneMealModel> item
+                      in (dayLog.nutritions!.nutritions.entries)) {
+                    totalNergy += item.value.energy;
+                  }
+                }
+
+                return itemFromDayLog(
+                  dayLog.nutritions == null ? 'Nutrição' : 'Nutrição ($totalNergy Kcal)',
+                  Icons.local_grocery_store_outlined,
+                  CColors.primaryNutrition,
+                );
+              }),
             ],
           ),
         )

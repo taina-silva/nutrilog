@@ -1,6 +1,6 @@
 import 'package:mobx/mobx.dart';
-import 'package:nutrilog/app/core/infra/models/auth_payload_model.dart';
-import 'package:nutrilog/app/core/infra/repositories/auth_repository.dart';
+import 'package:nutrilog/app/core/infra/models/auth/auth_payload_model.dart';
+import 'package:nutrilog/app/core/infra/repositories/auth/auth_repository.dart';
 import 'package:nutrilog/app/core/services/local_storage/local_storage_service.dart';
 import 'package:nutrilog/app/core/stores/states/auth_states.dart';
 import 'package:nutrilog/app/core/utils/storage_keys.dart';

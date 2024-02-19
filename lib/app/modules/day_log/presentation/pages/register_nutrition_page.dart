@@ -2,21 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fpdart/fpdart.dart' hide State;
+import 'package:mobx/mobx.dart';
 import 'package:nutrilog/app/core/components/buttons/custom_button.dart';
 import 'package:nutrilog/app/core/components/fields/common_field.dart';
 import 'package:nutrilog/app/core/components/structure/custom_app_bar.dart';
 import 'package:nutrilog/app/core/components/structure/custom_scaffold.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
+import 'package:nutrilog/app/core/components/toasts/toasts.dart';
 import 'package:nutrilog/app/core/infra/enums/meal_type.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/list_nutritions_model.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_model.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_with_energy_model.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_one_meal_model.dart';
 import 'package:nutrilog/app/core/stores/get_nutrition_store.dart';
 import 'package:nutrilog/app/core/stores/states/get_nutrition_states.dart';
+import 'package:nutrilog/app/core/stores/states/user_states.dart';
 import 'package:nutrilog/app/core/stores/user_store.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
 import 'package:nutrilog/app/core/utils/custom_colors.dart';
 import 'package:nutrilog/app/core/utils/formatters/formatters.dart';
 import 'package:nutrilog/app/core/utils/show_bottom_sheet.dart';
+import 'package:nutrilog/app/modules/day_log/presentation/components/bottom_sheet/nutrition_energy_bottom_sheet.dart';
 import 'package:nutrilog/app/modules/day_log/presentation/components/bottom_sheet/nutrition_meal_type_bottom_sheet.dart';
 import 'package:nutrilog/app/modules/day_log/presentation/components/details/list_nutritions_details.dart';
 import 'package:nutrilog/app/modules/day_log/presentation/components/details/nutrition_tag.dart';
@@ -36,7 +42,24 @@ class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
   final dayLogStore = Modular.get<DayLogStore>();
   final userStore = Modular.get<UserStore>();
 
-  final _textEditingController = TextEditingController();
+  final _onSearchTextController = TextEditingController();
+
+  List<ReactionDisposer> reactions = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    reactions = [
+      reaction((_) => userStore.registerNutritionState, (RegisterNutritionState state) {
+        if (state is RegisterNutritionSuccessState) {
+          Modular.to.pop();
+        } else if (state is RegisterNutritionErrorState) {
+          errorToast(context, state.message);
+        }
+      })
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,21 +70,9 @@ class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
         child: Observer(builder: (context) {
           return CustomButton.primaryNutritionMedium(ButtonParameters(
             text: 'OK',
-            isDisabled: dayLogStore.nutrition == null,
-            onTap: () {
-              showCustomBottomSheet(
-                context: context,
-                builder: (context) {
-                  return NutritionMealTypeBottomSheet(
-                    initialMealValue: MealType.breakfast,
-                    initialTimeValue: null,
-                    onOkCallback: (duration) {
-                      Modular.to.pop();
-                    },
-                  );
-                },
-              );
-            },
+            isDisabled: dayLogStore.nutritions?.isEmpty ?? true,
+            isLoading: userStore.registerNutritionState is RegisterNutritionLoadingState,
+            onTap: onTapOkCallback,
           ));
         }),
       ),
@@ -85,7 +96,7 @@ class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
           ));
         }
 
-        getNutritionStore.onSearch(_textEditingController.text);
+        getNutritionStore.onSearch(_onSearchTextController.text);
         List<ListNutritionsModel> n = getNutritionStore.afterSearch;
 
         return Container(
@@ -98,27 +109,27 @@ class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
               const AdaptiveText(text: 'Selecione um alimento', textType: TextType.small),
               const SizedBox(height: 8),
               CommonField(
-                onChange: (_) => getNutritionStore.onSearch(_textEditingController.text),
-                controller: _textEditingController,
+                onChange: (_) => getNutritionStore.onSearch(_onSearchTextController.text),
+                controller: _onSearchTextController,
                 contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                 fillColor: Colors.white,
                 suffixIcon: GestureDetector(
                   onTap: () {
-                    if (_textEditingController.text.isNotEmpty) _textEditingController.clear();
+                    if (_onSearchTextController.text.isNotEmpty) _onSearchTextController.clear();
                   },
-                  child: Icon(_textEditingController.text.isEmpty ? Icons.search : Icons.close,
+                  child: Icon(_onSearchTextController.text.isEmpty ? Icons.search : Icons.close,
                       color: CColors.primaryNutrition),
                 ),
                 placeholder: 'Buscar alimento',
               ),
               const SizedBox(height: 16),
-              if (dayLogStore.nutrition?.isNotEmpty ?? false)
+              if (dayLogStore.nutritions?.isNotEmpty ?? false)
                 NutritionTag(
-                  nutritions: dayLogStore.nutrition!,
+                  nutritions: dayLogStore.nutritions?.map((n) => n.nutrition).toList() ?? [],
                   onDeleteCallback: (deleted) {
-                    List<NutritionModel> aux = List.from(dayLogStore.nutrition!);
-                    aux.remove(deleted);
-                    dayLogStore.nutrition = aux;
+                    List<NutritionWithEnergyModel> aux = List.from(dayLogStore.nutritions ?? []);
+                    aux.removeWhere((n) => n.nutrition == deleted);
+                    dayLogStore.nutritions = aux;
                   },
                 ),
               Expanded(
@@ -130,16 +141,18 @@ class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
                       margin: const EdgeInsets.only(bottom: 48),
                       child: ListNutritionsWidget(
                         list: n[index],
-                        initalSelected: dayLogStore.nutrition,
+                        initalSelected: dayLogStore.nutritions?.map((n) => n.nutrition).toList(),
                         onSelect: (p) {
                           setState(() {
-                            List<NutritionModel> aux = [];
+                            List<NutritionWithEnergyModel> aux = [];
 
                             for (String s in p) {
-                              aux.add(NutritionModel(type: n[index].type, name: s));
+                              aux.add(NutritionWithEnergyModel(
+                                  nutrition: NutritionModel(type: n[index].type, name: s),
+                                  energy: 0));
                             }
 
-                            dayLogStore.nutrition = aux;
+                            dayLogStore.nutritions = aux;
                           });
                         },
                       ),
@@ -151,6 +164,50 @@ class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
           ),
         );
       }),
+    );
+  }
+
+  void onTapOkCallback() {
+    showCustomBottomSheet(
+      context: context,
+      builder: (context) {
+        return NutritionMealTypeBottomSheet(
+          initialMealValue: dayLogStore.mealType ?? MealType.breakfast,
+          initialTimeValue: dayLogStore.timeOfDay,
+          onOkCallback: (mealType, time) {
+            dayLogStore.mealType = mealType;
+            dayLogStore.timeOfDay = time;
+
+            Modular.to.pop();
+
+            showCustomBottomSheet(
+              context: context,
+              builder: (context) {
+                return NutritionEnergyBottomSheet(
+                  totalEnergy: dayLogStore.energy,
+                  nutritions: dayLogStore.nutritions ?? [],
+                  onOkCallback: (newNutritions, energy) {
+                    dayLogStore.energy = energy;
+                    dayLogStore.nutritions = newNutritions;
+
+                    userStore.registerNutrition(
+                      DateTime.now(),
+                      NutritionsOneMealModel(
+                        energy: dayLogStore.energy ?? 0,
+                        mealType: dayLogStore.mealType ?? MealType.breakfast,
+                        timeOfDay: dayLogStore.timeOfDay ?? TimeOfDay.now(),
+                        nutritions: dayLogStore.nutritions ?? [],
+                      ),
+                    );
+
+                    Modular.to.pop();
+                  },
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 }

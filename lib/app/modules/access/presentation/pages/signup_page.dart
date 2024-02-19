@@ -7,7 +7,7 @@ import 'package:nutrilog/app/core/components/fields/common_field.dart';
 import 'package:nutrilog/app/core/components/structure/custom_scaffold.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
 import 'package:nutrilog/app/core/components/toasts/toasts.dart';
-import 'package:nutrilog/app/core/infra/models/auth_payload_model.dart';
+import 'package:nutrilog/app/core/infra/models/auth/auth_payload_model.dart';
 import 'package:nutrilog/app/core/stores/auth_store.dart';
 import 'package:nutrilog/app/core/stores/states/auth_states.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';

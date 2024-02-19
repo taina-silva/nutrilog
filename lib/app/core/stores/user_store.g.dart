@@ -89,7 +89,7 @@ mixin _$UserStore on UserStoreBase, Store {
 
   @override
   Future<void> registerNutrition(
-      DateTime date, NutritionsForMealModel payload) {
+      DateTime date, NutritionsOneMealModel payload) {
     return _$registerNutritionAsyncAction
         .run(() => super.registerNutrition(date, payload));
   }

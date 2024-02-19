@@ -25,19 +25,19 @@ mixin _$DayLogStore on DayLogStoreBase, Store {
     });
   }
 
-  late final _$nutritionAtom =
-      Atom(name: 'DayLogStoreBase.nutrition', context: context);
+  late final _$energyAtom =
+      Atom(name: 'DayLogStoreBase.energy', context: context);
 
   @override
-  List<NutritionModel>? get nutrition {
-    _$nutritionAtom.reportRead();
-    return super.nutrition;
+  double? get energy {
+    _$energyAtom.reportRead();
+    return super.energy;
   }
 
   @override
-  set nutrition(List<NutritionModel>? value) {
-    _$nutritionAtom.reportWrite(value, super.nutrition, () {
-      super.nutrition = value;
+  set energy(double? value) {
+    _$energyAtom.reportWrite(value, super.energy, () {
+      super.energy = value;
     });
   }
 
@@ -57,12 +57,46 @@ mixin _$DayLogStore on DayLogStoreBase, Store {
     });
   }
 
+  late final _$timeOfDayAtom =
+      Atom(name: 'DayLogStoreBase.timeOfDay', context: context);
+
+  @override
+  TimeOfDay? get timeOfDay {
+    _$timeOfDayAtom.reportRead();
+    return super.timeOfDay;
+  }
+
+  @override
+  set timeOfDay(TimeOfDay? value) {
+    _$timeOfDayAtom.reportWrite(value, super.timeOfDay, () {
+      super.timeOfDay = value;
+    });
+  }
+
+  late final _$nutritionsAtom =
+      Atom(name: 'DayLogStoreBase.nutritions', context: context);
+
+  @override
+  List<NutritionWithEnergyModel>? get nutritions {
+    _$nutritionsAtom.reportRead();
+    return super.nutritions;
+  }
+
+  @override
+  set nutritions(List<NutritionWithEnergyModel>? value) {
+    _$nutritionsAtom.reportWrite(value, super.nutritions, () {
+      super.nutritions = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 physicalActivity: ${physicalActivity},
-nutrition: ${nutrition},
-mealType: ${mealType}
+energy: ${energy},
+mealType: ${mealType},
+timeOfDay: ${timeOfDay},
+nutritions: ${nutritions}
     ''';
   }
 }

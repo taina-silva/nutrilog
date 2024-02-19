@@ -9,6 +9,7 @@ class RadiosSelectWidget<T> extends StatefulWidget {
   final String Function(T item) text;
   final void Function(T item) onTap;
   final Color primaryColor;
+  final bool displayAsRow;
 
   const RadiosSelectWidget({
     super.key,
@@ -17,6 +18,7 @@ class RadiosSelectWidget<T> extends StatefulWidget {
     required this.text,
     required this.onTap,
     required this.primaryColor,
+    this.displayAsRow = false,
   });
 
   @override
@@ -36,50 +38,62 @@ class _RadiosSelectWidgetState<T> extends State<RadiosSelectWidget<T>> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: widget.options.map((e) {
-          return Container(
-            margin: EdgeInsets.only(
-                bottom: widget.options.indexOf(e) < widget.options.length - 1 ? 24 : 0),
-            child: GestureDetector(
-              onTap: () {
-                setState(() => selected = e);
-                widget.onTap(selected as T);
-              },
-              child: Row(
-                children: [
-                  Container(
-                    width: 22,
-                    height: 22,
-                    decoration: BoxDecoration(
-                      color: e == selected ? CColors.neutral0 : CColors.neutral0,
-                      border: Border.all(
-                        color: e == selected ? widget.primaryColor : CColors.neutral600,
-                        width: Layout.borderWidth,
-                      ),
-                      borderRadius: const BorderRadius.all(Radius.circular(Layout.borderRadiusBig)),
-                    ),
-                    child: Container(
-                      margin: const EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                        color: e == selected ? widget.primaryColor : CColors.neutral0,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(Layout.borderRadiusBig)),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  AdaptiveText(
-                    text: widget.text(e),
-                    textType: TextType.medium,
-                    fWeight: FWeight.bold,
-                  ),
-                ],
+      child: widget.displayAsRow
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: widget.options.map((item) => _widget(item)).toList(),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: widget.options.map((item) => _widget(item)).toList(),
+            ),
+    );
+  }
+
+  Widget _widget(T item) {
+    return Container(
+      margin: EdgeInsets.only(
+        bottom: widget.displayAsRow
+            ? 0
+            : (widget.options.indexOf(item) < widget.options.length - 1 ? 24 : 0),
+        right: !widget.displayAsRow
+            ? 0
+            : (widget.options.indexOf(item) < widget.options.length - 1 ? 24 : 0),
+      ),
+      child: GestureDetector(
+        onTap: () {
+          setState(() => selected = item);
+          widget.onTap(selected as T);
+        },
+        child: Row(
+          children: [
+            Container(
+              width: 22,
+              height: 22,
+              decoration: BoxDecoration(
+                color: item == selected ? CColors.neutral0 : CColors.neutral0,
+                border: Border.all(
+                  color: item == selected ? widget.primaryColor : CColors.neutral600,
+                  width: Layout.borderWidth,
+                ),
+                borderRadius: const BorderRadius.all(Radius.circular(Layout.borderRadiusBig)),
+              ),
+              child: Container(
+                margin: const EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  color: item == selected ? widget.primaryColor : CColors.neutral0,
+                  borderRadius: const BorderRadius.all(Radius.circular(Layout.borderRadiusBig)),
+                ),
               ),
             ),
-          );
-        }).toList(),
+            const SizedBox(width: 16),
+            AdaptiveText(
+              text: widget.text(item),
+              textType: TextType.medium,
+              fWeight: FWeight.bold,
+            ),
+          ],
+        ),
       ),
     );
   }

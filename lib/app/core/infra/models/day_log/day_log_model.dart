@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
-import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_with_energy_model.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_by_meals_of_day_model.dart';
 import 'package:nutrilog/app/core/infra/models/physical_activity/physical_activity_with_duration_model.dart';
 
 class DayLogModel extends Equatable {
   final DateTime date;
   final List<PhysicalActivityWithDurationModel> physicalActivities;
-  final List<NutritionWithEnergyModel> nutritions;
+  final NutritionsByMealsOfDayModel? nutritions;
 
   const DayLogModel({
     required this.date,
@@ -27,9 +27,11 @@ class DayLogModel extends Equatable {
           : (map['physical-activities'] as List)
               .map((e) => PhysicalActivityWithDurationModel.fromMap(e))
               .toList(),
-      nutritions: map['nutritions'] == null
-          ? []
-          : (map['nutritions'] as List).map((e) => NutritionWithEnergyModel.fromMap(e)).toList(),
+      nutritions: map['nutrition'] == null
+          ? null
+          : NutritionsByMealsOfDayModel.fromMap(
+              map['nutrition'],
+            ),
     );
   }
 }

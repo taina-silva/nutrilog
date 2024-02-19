@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:nutrilog/app/core/infra/models/day_log_model.dart';
+import 'package:nutrilog/app/core/infra/models/day_log/day_log_model.dart';
 
 abstract class GetUserDayLogState extends Equatable {
   @override

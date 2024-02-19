@@ -11,7 +11,7 @@ import 'package:nutrilog/app/core/utils/show_time_picker.dart';
 class NutritionMealTypeBottomSheet extends StatefulWidget {
   final MealType initialMealValue;
   final TimeOfDay? initialTimeValue;
-  final void Function(MealType) onOkCallback;
+  final void Function(MealType, TimeOfDay) onOkCallback;
 
   const NutritionMealTypeBottomSheet({
     super.key,
@@ -93,8 +93,9 @@ class _NutritionMealTypeBottomSheetState extends State<NutritionMealTypeBottomSh
                 CustomButton.primaryNeutroSmall(
                   ButtonParameters(
                     text: 'OK',
+                    isDisabled: selectedTime == null,
                     width: (MediaQuery.of(context).size.width - 2 * ScreenMargin.horizontal) * 0.45,
-                    onTap: () => widget.onOkCallback(selectedMeal),
+                    onTap: () => widget.onOkCallback(selectedMeal, selectedTime!),
                   ),
                 ),
               ],
