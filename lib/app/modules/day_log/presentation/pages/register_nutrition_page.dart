@@ -66,7 +66,7 @@ class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
     return CustomScaffold(
       appBar: CustomAppBar(title: Left(formatDate(widget.date))),
       floatingActionButton: Container(
-        margin: const EdgeInsets.symmetric(horizontal: ScreenMargin.horizontal),
+        margin: const EdgeInsets.symmetric(horizontal: DefaultMargin.horizontal),
         child: Observer(builder: (context) {
           return CustomButton.primaryNutritionMedium(ButtonParameters(
             text: 'OK',
@@ -102,7 +102,7 @@ class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
         return Container(
           color: CColors.primaryNutritionWithOpacity,
           padding: const EdgeInsets.symmetric(
-              horizontal: ScreenMargin.horizontal, vertical: ScreenMargin.vertical),
+              horizontal: DefaultMargin.horizontal, vertical: DefaultMargin.vertical),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

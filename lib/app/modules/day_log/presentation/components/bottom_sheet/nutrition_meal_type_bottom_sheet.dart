@@ -52,7 +52,7 @@ class _NutritionMealTypeBottomSheetState extends State<NutritionMealTypeBottomSh
     return SingleChildScrollView(
       child: Container(
         margin: const EdgeInsets.symmetric(
-            horizontal: ScreenMargin.horizontal, vertical: ScreenMargin.vertical),
+            horizontal: DefaultMargin.horizontal, vertical: DefaultMargin.vertical),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -86,7 +86,8 @@ class _NutritionMealTypeBottomSheetState extends State<NutritionMealTypeBottomSh
                 CustomButton.secondaryNeutroSmall(
                   ButtonParameters(
                     text: 'VOLTAR',
-                    width: (MediaQuery.of(context).size.width - 2 * ScreenMargin.horizontal) * 0.45,
+                    width:
+                        (MediaQuery.of(context).size.width - 2 * DefaultMargin.horizontal) * 0.45,
                     onTap: () => Modular.to.pop(),
                   ),
                 ),
@@ -94,7 +95,8 @@ class _NutritionMealTypeBottomSheetState extends State<NutritionMealTypeBottomSh
                   ButtonParameters(
                     text: 'OK',
                     isDisabled: selectedTime == null,
-                    width: (MediaQuery.of(context).size.width - 2 * ScreenMargin.horizontal) * 0.45,
+                    width:
+                        (MediaQuery.of(context).size.width - 2 * DefaultMargin.horizontal) * 0.45,
                     onTap: () => widget.onOkCallback(selectedMeal, selectedTime!),
                   ),
                 ),

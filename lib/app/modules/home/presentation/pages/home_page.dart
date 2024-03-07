@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
 
         return Container(
           margin: const EdgeInsets.symmetric(
-              horizontal: ScreenMargin.horizontal, vertical: ScreenMargin.vertical),
+              horizontal: DefaultMargin.horizontal, vertical: DefaultMargin.vertical),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

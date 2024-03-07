@@ -9,10 +9,7 @@ class CustomAppBar extends StatefulWidget {
   final Either<String, Widget> title;
   final List<Widget>? trailing;
   final Widget? leading;
-  final Function()? onBack;
-  final Function()? afterPop;
-  final Color? bgColor;
-  final Color? itemsColor;
+  final Color? backgroundColor;
   final CrossAxisAlignment appBarItemsAlignment;
 
   const CustomAppBar({
@@ -20,10 +17,7 @@ class CustomAppBar extends StatefulWidget {
     required this.title,
     this.trailing,
     this.leading,
-    this.onBack,
-    this.afterPop,
-    this.bgColor,
-    this.itemsColor,
+    this.backgroundColor,
     this.appBarItemsAlignment = CrossAxisAlignment.center,
   }) : super(key: key);
 
@@ -36,13 +30,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: widget.bgColor ?? CColors.primaryBackground,
+        color: widget.backgroundColor ?? CColors.primaryBackground,
         boxShadow: [Layout.boxShadow],
       ),
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: ScreenMargin.horizontal),
+            padding: const EdgeInsets.symmetric(horizontal: DefaultMargin.horizontal),
             child: Column(
               children: [
                 SizedBox(
@@ -55,21 +49,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       Expanded(
                         child: widget.title.fold(
                           (title) => GestureDetector(
-                            onTap: canPop()
-                                ? () {
-                                    if (widget.onBack != null) {
-                                      widget.onBack!();
-                                      return;
-                                    }
-                                    Modular.to.pop(context);
-                                    if (widget.afterPop != null) widget.afterPop!();
-                                  }
-                                : null,
+                            onTap: canPop() ? () => Modular.to.pop() : null,
                             child: AdaptiveText(
                               text: title,
                               textType: TextType.large,
                               fWeight: FWeight.bold,
-                              color: widget.itemsColor ?? CColors.neutral900,
+                              color: CColors.neutral900,
                             ),
                           ),
                           (widget) => Container(
@@ -106,17 +91,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
       return Container(
         margin: const EdgeInsets.only(right: 10),
         child: GestureDetector(
-          onTap: () {
-            if (widget.onBack != null) {
-              widget.onBack!();
-              return;
-            }
-            Modular.to.pop(context);
-            if (widget.afterPop != null) widget.afterPop!();
-          },
-          child: Icon(
+          onTap: () => Modular.to.pop(),
+          child: const Icon(
             Icons.keyboard_arrow_left,
-            color: widget.itemsColor ?? CColors.neutral900,
+            color: CColors.neutral900,
             size: Layout.appBarLeadingAndTrailingWidth,
             semanticLabel: 'Voltar para a página anterior',
           ),

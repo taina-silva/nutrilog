@@ -46,7 +46,7 @@ class _NutritionEnergyBottomSheetState extends State<NutritionEnergyBottomSheet>
               padding: MediaQuery.of(context).viewInsets,
               child: Container(
                 margin: const EdgeInsets.symmetric(
-                    horizontal: ScreenMargin.horizontal, vertical: ScreenMargin.vertical),
+                    horizontal: DefaultMargin.horizontal, vertical: DefaultMargin.vertical),
                 child: Column(
                   children: [
                     _informEnergyByWidget(),
@@ -65,7 +65,7 @@ class _NutritionEnergyBottomSheetState extends State<NutritionEnergyBottomSheet>
           )
         : Container(
             margin: const EdgeInsets.symmetric(
-                horizontal: ScreenMargin.horizontal, vertical: ScreenMargin.vertical),
+                horizontal: DefaultMargin.horizontal, vertical: DefaultMargin.vertical),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -117,14 +117,14 @@ class _NutritionEnergyBottomSheetState extends State<NutritionEnergyBottomSheet>
             CustomButton.secondaryNeutroSmall(
               ButtonParameters(
                 text: 'VOLTAR',
-                width: (MediaQuery.of(context).size.width - 2 * ScreenMargin.horizontal) * 0.45,
+                width: (MediaQuery.of(context).size.width - 2 * DefaultMargin.horizontal) * 0.45,
                 onTap: () => Modular.to.pop(),
               ),
             ),
             CustomButton.primaryNeutroSmall(
               ButtonParameters(
                 text: 'OK',
-                width: (MediaQuery.of(context).size.width - 2 * ScreenMargin.horizontal) * 0.45,
+                width: (MediaQuery.of(context).size.width - 2 * DefaultMargin.horizontal) * 0.45,
                 onTap: () => widget.onOkCallback(list, energy),
               ),
             ),
@@ -155,7 +155,7 @@ class _NutritionEnergyBottomSheetState extends State<NutritionEnergyBottomSheet>
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         SizedBox(
-          width: (MediaQuery.of(context).size.width - 2 * ScreenMargin.horizontal) * 0.8,
+          width: (MediaQuery.of(context).size.width - 2 * DefaultMargin.horizontal) * 0.8,
           child: CommonField(
             initialValue: initialValue.toString().replaceAll('.', ','),
             onChange: onChange,

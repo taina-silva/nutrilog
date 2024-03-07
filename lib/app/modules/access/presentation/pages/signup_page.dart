@@ -56,7 +56,7 @@ class _SignupPageState extends State<SignupPage> {
           child: Observer(builder: (context) {
             return Container(
               margin: const EdgeInsets.symmetric(
-                  horizontal: ScreenMargin.horizontal, vertical: ScreenMargin.vertical),
+                  horizontal: DefaultMargin.horizontal, vertical: DefaultMargin.vertical),
               child: Column(
                 children: [
                   SizedBox(height: 350, child: Center(child: Image.asset(Assets.logo))),

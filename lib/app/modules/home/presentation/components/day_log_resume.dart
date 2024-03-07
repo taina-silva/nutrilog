@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
 import 'package:nutrilog/app/core/infra/enums/meal_type.dart';
 import 'package:nutrilog/app/core/infra/models/day_log/day_log_model.dart';
@@ -36,6 +37,16 @@ class DayLogResume extends StatelessWidget {
                     : 'Atividades Físicas (${totalHoursFromDurationsAsStr(dayLog.physicalActivities.map((e) => e.duration).toList())})',
                 Icons.fitness_center_outlined,
                 CColors.primaryActivity,
+                () {
+                  Modular.to.pushNamed(
+                    'physical-activities',
+                    forRoot: true,
+                    arguments: {
+                      'date': dayLog.date,
+                      'physicalActivities': dayLog.physicalActivities,
+                    },
+                  );
+                },
               ),
               const SizedBox(height: 8),
               Builder(builder: (context) {
@@ -52,40 +63,54 @@ class DayLogResume extends StatelessWidget {
                   dayLog.nutritions == null ? 'Nutrição' : 'Nutrição ($totalNergy Kcal)',
                   Icons.local_grocery_store_outlined,
                   CColors.primaryNutrition,
+                  () {
+                    Modular.to.pushNamed(
+                      'nutritions',
+                      forRoot: true,
+                      arguments: {
+                        'date': dayLog.date,
+                        'nutritions': dayLog.nutritions,
+                      },
+                    );
+                  },
                 );
               }),
             ],
           ),
-        )
+        ),
+        const SizedBox(height: 24),
       ],
     );
   }
 
-  Widget itemFromDayLog(String title, IconData icon, Color color) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(DefaultPadding.small),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: const BorderRadius.all(Radius.circular(Layout.borderRadiusBig)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Icon(icon, color: CColors.neutral0),
-              const SizedBox(width: 16),
-              AdaptiveText(
-                text: title,
-                textType: TextType.small,
-                color: CColors.neutral0,
-              ),
-            ],
-          ),
-          const SizedBox(width: 16),
-          const Icon(Icons.arrow_forward_outlined, color: CColors.neutral0),
-        ],
+  Widget itemFromDayLog(String title, IconData icon, Color color, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(DefaultPadding.small),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: const BorderRadius.all(Radius.circular(Layout.borderRadiusBig)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Icon(icon, color: CColors.neutral0),
+                const SizedBox(width: 16),
+                AdaptiveText(
+                  text: title,
+                  textType: TextType.small,
+                  color: CColors.neutral0,
+                ),
+              ],
+            ),
+            const SizedBox(width: 16),
+            const Icon(Icons.arrow_forward_outlined, color: CColors.neutral0),
+          ],
+        ),
       ),
     );
   }

@@ -64,7 +64,7 @@ abstract class DefaultPadding {
   static const double extraLarge = 32;
 }
 
-abstract class ScreenMargin {
+abstract class DefaultMargin {
   static const double horizontal = 18;
   static const double vertical = 24;
 }

@@ -19,7 +19,7 @@ class CustomBottomSheet extends StatelessWidget {
     return SingleChildScrollView(
       child: Container(
         padding: MediaQuery.of(context).viewInsets,
-        margin: const EdgeInsets.symmetric(horizontal: ScreenMargin.horizontal),
+        margin: const EdgeInsets.symmetric(horizontal: DefaultMargin.horizontal),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

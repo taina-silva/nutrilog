@@ -63,7 +63,7 @@ class _RegisterPhysicalActivityPageState extends State<RegisterPhysicalActivityP
     return CustomScaffold(
       appBar: CustomAppBar(title: Left(formatDate(widget.date))),
       floatingActionButton: Container(
-        margin: const EdgeInsets.symmetric(horizontal: ScreenMargin.horizontal),
+        margin: const EdgeInsets.symmetric(horizontal: DefaultMargin.horizontal),
         child: Observer(builder: (context) {
           return CustomButton.primaryActivityMedium(ButtonParameters(
             text: 'OK',
@@ -116,7 +116,7 @@ class _RegisterPhysicalActivityPageState extends State<RegisterPhysicalActivityP
         return Container(
           color: CColors.primaryActivityWithOpacity,
           padding: const EdgeInsets.symmetric(
-              horizontal: ScreenMargin.horizontal, vertical: ScreenMargin.vertical),
+              horizontal: DefaultMargin.horizontal, vertical: DefaultMargin.vertical),
           margin: const EdgeInsets.only(bottom: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
