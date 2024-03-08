@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart' hide State;
-import 'package:nutrilog/app/core/components/buttons/custom_button.dart';
+import 'package:nutrilog/app/core/components/divider/custom_divider.dart';
 import 'package:nutrilog/app/core/components/structure/custom_app_bar.dart';
 import 'package:nutrilog/app/core/components/structure/custom_scaffold.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_by_meals_of_day_model.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_one_meal_model.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
+import 'package:nutrilog/app/core/utils/custom_colors.dart';
 import 'package:nutrilog/app/core/utils/formatters/formatters.dart';
-import 'package:nutrilog/app/modules/nutritions/presentation/components/nutritions_resume.dart';
+import 'package:nutrilog/app/modules/nutritions/presentation/components/nutrition_resume.dart';
 
 class NutritionsListPage extends StatefulWidget {
   final DateTime date;
-  final NutritionsByMealsOfDayModel? nutritions;
+  final NutritionsByMealOfDayModel? nutritions;
 
   const NutritionsListPage({
     Key? key,
@@ -47,26 +48,32 @@ class _NutritionsListPageState extends State<NutritionsListPage> {
 
     return CustomScaffold(
       appBar: const CustomAppBar(title: Left('Nutrição')),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: DefaultMargin.horizontal,
-        ),
-        child: CustomButton.primaryNutritionMedium(
-          const ButtonParameters(text: 'Salvar alterações'),
-        ),
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            margin: const EdgeInsets.only(top: 8, right: 8),
+            decoration: const BoxDecoration(
+                color: CColors.primaryNutrition,
+                borderRadius: BorderRadius.all(Radius.circular(Layout.borderRadiusBig))),
+            child: const Icon(Icons.add_outlined, color: CColors.neutral0),
+          ),
+        ],
       ),
       body: Container(
         margin: const EdgeInsets.symmetric(
           horizontal: DefaultMargin.horizontal,
           vertical: DefaultMargin.vertical,
         ),
-        child: ListView.builder(
+        child: ListView.separated(
           padding: const EdgeInsets.all(0),
+          separatorBuilder: (context, index) => const CustomDivider(),
           itemCount: widget.nutritions!.nutritions.values.length,
           itemBuilder: (context, index) {
             NutritionsOneMealModel nutritions =
                 widget.nutritions!.nutritions.values.toList()[index];
-            return NutritionsResume(nutritions: nutritions);
+            return NutritionResume(nutritions: nutritions);
           },
         ),
       ),

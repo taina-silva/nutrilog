@@ -13,12 +13,19 @@ Duration durationFromString(String duration) {
 }
 
 String durationToString(Duration duration) {
-  String negativeSign = duration.isNegative ? '-' : '';
   String twoDigits(int n) => n.toString().padLeft(2, "0");
+
+  String twoDigitHours = twoDigits(duration.inHours);
   String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60).abs());
   String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60).abs());
 
-  return "$negativeSign${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  String str = '';
+
+  if (twoDigitHours != '00') str += '${twoDigitHours}h';
+  if (twoDigitMinutes != '00') str += '${twoDigitMinutes}min';
+  if (twoDigitSeconds != '00') str += '${twoDigitMinutes}s';
+
+  return str;
 }
 
 String totalHoursFromDurationsAsStr(List<Duration> durations) {

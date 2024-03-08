@@ -10,7 +10,7 @@ import 'package:nutrilog/app/core/utils/storage_keys.dart';
 abstract class UserDatasource {
   Future<List<DayLogModel>?> getDayLogList();
   Future<List<PhysicalActivityWithDurationModel>> getPhysicalActivitiesByDate(DateTime date);
-  Future<NutritionsByMealsOfDayModel?> getNutritionsByDate(DateTime date);
+  Future<NutritionsByMealOfDayModel?> getNutritionsByDate(DateTime date);
   Future<void> registerPhysicalActivityAtDate(
       DateTime date, PhysicalActivityWithDurationModel payload);
   Future<void> registerNutritionAtDate(DateTime date, NutritionsOneMealModel payload);
@@ -71,7 +71,7 @@ class UserDatasourceImpl implements UserDatasource {
   }
 
   @override
-  Future<NutritionsByMealsOfDayModel?> getNutritionsByDate(DateTime date) async {
+  Future<NutritionsByMealOfDayModel?> getNutritionsByDate(DateTime date) async {
     try {
       String? userId = await _localStorage.read<String>(StorageKeys.userId);
 
@@ -84,7 +84,7 @@ class UserDatasourceImpl implements UserDatasource {
 
       if (snapshot.docs.isEmpty) return null;
 
-      NutritionsByMealsOfDayModel docs = NutritionsByMealsOfDayModel.fromMap(
+      NutritionsByMealOfDayModel docs = NutritionsByMealOfDayModel.fromMap(
           (snapshot.docs.first.data() as Map<String, dynamic>)['nutrition']);
 
       return docs;
@@ -124,7 +124,7 @@ class UserDatasourceImpl implements UserDatasource {
 
       if (userId == null) throw const NoPermissionsException();
 
-      NutritionsByMealsOfDayModel? registered = await getNutritionsByDate(date);
+      NutritionsByMealOfDayModel? registered = await getNutritionsByDate(date);
 
       if (registered != null) {
         if (registered.nutritions[payload.mealType] == null) {
@@ -135,7 +135,7 @@ class UserDatasourceImpl implements UserDatasource {
               payload.copyWith(nutritions: old.nutritions + payload.nutritions);
         }
       } else {
-        registered = NutritionsByMealsOfDayModel(nutritions: {payload.mealType: payload});
+        registered = NutritionsByMealOfDayModel(nutritions: {payload.mealType: payload});
       }
 
       String id = date.millisecondsSinceEpoch.toString();

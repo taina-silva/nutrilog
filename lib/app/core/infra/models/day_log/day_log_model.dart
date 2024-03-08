@@ -5,7 +5,7 @@ import 'package:nutrilog/app/core/infra/models/physical_activity/physical_activi
 class DayLogModel extends Equatable {
   final DateTime date;
   final List<PhysicalActivityWithDurationModel> physicalActivities;
-  final NutritionsByMealsOfDayModel? nutritions;
+  final NutritionsByMealOfDayModel? nutritions;
 
   const DayLogModel({
     required this.date,
@@ -29,7 +29,7 @@ class DayLogModel extends Equatable {
               .toList(),
       nutritions: map['nutrition'] == null
           ? null
-          : NutritionsByMealsOfDayModel.fromMap(
+          : NutritionsByMealOfDayModel.fromMap(
               map['nutrition'],
             ),
     );

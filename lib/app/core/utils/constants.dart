@@ -72,5 +72,6 @@ abstract class DefaultMargin {
 abstract class Assets {
   static const String logo = 'assets/logo/logo.png';
   static const String images = 'assets/images';
+  static const String icons = 'assets/icons';
   static const String jsons = 'assets/jsons';
 }

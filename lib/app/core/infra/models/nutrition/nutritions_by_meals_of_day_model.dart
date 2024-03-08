@@ -2,10 +2,10 @@ import 'package:equatable/equatable.dart';
 import 'package:nutrilog/app/core/infra/enums/meal_type.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_one_meal_model.dart';
 
-class NutritionsByMealsOfDayModel extends Equatable {
+class NutritionsByMealOfDayModel extends Equatable {
   final Map<MealType, NutritionsOneMealModel> nutritions;
 
-  const NutritionsByMealsOfDayModel({
+  const NutritionsByMealOfDayModel({
     required this.nutritions,
   });
 
@@ -15,7 +15,7 @@ class NutritionsByMealsOfDayModel extends Equatable {
   @override
   bool get stringify => true;
 
-  factory NutritionsByMealsOfDayModel.fromMap(Map<String, dynamic> map) {
+  factory NutritionsByMealOfDayModel.fromMap(Map<String, dynamic> map) {
     Map<MealType, NutritionsOneMealModel> aux = {};
 
     for (var m in map.entries) {
@@ -26,7 +26,7 @@ class NutritionsByMealsOfDayModel extends Equatable {
       }
     }
 
-    return NutritionsByMealsOfDayModel(
+    return NutritionsByMealOfDayModel(
       nutritions: aux,
     );
   }
