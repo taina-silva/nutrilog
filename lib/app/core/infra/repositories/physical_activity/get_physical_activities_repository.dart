@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:nutrilog/app/core/errors/failures.dart';
-import 'package:nutrilog/app/core/infra/datasources/physical_activity/get_physical_activities_datasource.dart';
+import 'package:nutrilog/app/core/infra/datasources/physical_activity/physical_activities_datasource.dart';
 import 'package:nutrilog/app/core/infra/models/physical_activity/list_physical_activities_model.dart';
 import 'package:nutrilog/app/core/services/logger/logger_service.dart';
 
@@ -9,7 +9,7 @@ abstract class GetPhysicalActivityRepository {
 }
 
 class GetPhysicalActivityRepositoryImpl implements GetPhysicalActivityRepository {
-  final GetPhysicalActivityDatasource _datasource;
+  final PhysicalActivityDatasource _datasource;
   final LoggerService _loggerService;
 
   GetPhysicalActivityRepositoryImpl(this._datasource, this._loggerService);

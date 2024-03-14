@@ -18,7 +18,7 @@ class NutritionsOneMealModel extends Equatable {
   });
 
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object> get props => [energy, mealType, timeOfDay, nutritions];
 
   @override
   bool get stringify => true;
@@ -38,7 +38,7 @@ class NutritionsOneMealModel extends Equatable {
 
     if (totalEnergy == 0) {
       for (NutritionWithEnergyModel n in nutritions) {
-        totalEnergy += n.energy ?? 0;
+        totalEnergy += n.energy;
       }
     }
 

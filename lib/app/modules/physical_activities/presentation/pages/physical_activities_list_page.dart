@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fpdart/fpdart.dart' hide State;
+import 'package:mobx/mobx.dart';
 import 'package:nutrilog/app/core/components/structure/custom_app_bar.dart';
 import 'package:nutrilog/app/core/components/structure/custom_scaffold.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
+import 'package:nutrilog/app/core/components/toasts/toasts.dart';
 import 'package:nutrilog/app/core/infra/models/physical_activity/physical_activity_with_duration_model.dart';
+import 'package:nutrilog/app/core/stores/states/user_states.dart';
+import 'package:nutrilog/app/core/stores/user_store.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
 import 'package:nutrilog/app/core/utils/custom_colors.dart';
 import 'package:nutrilog/app/core/utils/formatters/formatters.dart';
@@ -24,6 +29,26 @@ class PhysicalActivitiesListPage extends StatefulWidget {
 }
 
 class _PhysicalActivitiesListPageState extends State<PhysicalActivitiesListPage> {
+  final userStore = Modular.get<UserStore>();
+
+  List<ReactionDisposer> reactions = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    reactions = [
+      reaction((_) => userStore.unregisterPhysicalActitityState,
+          (UnregisterPhysicalActivityState state) async {
+        if (state is UnregisterPhysicalActivityErrorState) {
+          errorToast(context, 'Falha ao deletar atividade: ${state.message}');
+        } else if (state is UnregisterPhysicalActivitySuccessState) {
+          userStore.getUserDayLog();
+        }
+      }),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.physicalActivities.isEmpty) {
@@ -69,7 +94,10 @@ class _PhysicalActivitiesListPageState extends State<PhysicalActivitiesListPage>
           itemCount: widget.physicalActivities.length,
           itemBuilder: (context, index) {
             PhysicalActivityWithDurationModel pA = widget.physicalActivities[index];
-            return PhysicalActivityResume(pA: pA);
+            return PhysicalActivityResume(
+              pA: pA,
+              onDeleteCallback: (pA) => userStore.unregisterPhysicalActivity(widget.date, pA),
+            );
           },
         ),
       ),

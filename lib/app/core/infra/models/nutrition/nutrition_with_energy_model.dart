@@ -4,7 +4,7 @@ import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_model.dart';
 
 class NutritionWithEnergyModel extends Equatable {
   final NutritionModel nutrition;
-  final double? energy;
+  final double energy;
 
   const NutritionWithEnergyModel({
     required this.nutrition,
@@ -12,7 +12,7 @@ class NutritionWithEnergyModel extends Equatable {
   });
 
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object> get props => [nutrition, energy];
 
   @override
   bool get stringify => true;

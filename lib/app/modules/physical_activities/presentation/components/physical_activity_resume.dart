@@ -8,15 +8,17 @@ import 'package:nutrilog/app/core/utils/string.dart';
 
 class PhysicalActivityResume extends StatelessWidget {
   final PhysicalActivityWithDurationModel pA;
+  final void Function(PhysicalActivityWithDurationModel) onDeleteCallback;
 
   const PhysicalActivityResume({
     Key? key,
     required this.pA,
+    required this.onDeleteCallback,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    double containerHeight = 120;
+    double containerHeight = 144;
     double iconContainerWidth = 72;
     double infoContainerWidth =
         MediaQuery.of(context).size.width - 2 * DefaultMargin.horizontal - 80;
@@ -47,10 +49,7 @@ class PhysicalActivityResume extends StatelessWidget {
               width: infoContainerWidth,
               height: containerHeight,
               padding: const EdgeInsets.all(DefaultPadding.nano),
-              margin: const EdgeInsets.only(
-                bottom: DefaultPadding.normal,
-                right: DefaultPadding.nano,
-              ),
+              margin: const EdgeInsets.only(bottom: DefaultPadding.normal),
               decoration: const BoxDecoration(
                 color: CColors.primaryActivity,
                 borderRadius: BorderRadius.only(
@@ -65,10 +64,17 @@ class PhysicalActivityResume extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      AdaptiveText(
-                        text: pA.physicalActivity.name,
-                        textType: TextType.small,
-                        color: CColors.neutral0,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width -
+                            2 * DefaultMargin.horizontal -
+                            iconContainerWidth -
+                            2 * DefaultPadding.nano -
+                            40,
+                        child: AdaptiveText(
+                          text: pA.physicalActivity.name,
+                          textType: TextType.small,
+                          color: CColors.neutral0,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       AdaptiveText(
@@ -91,11 +97,14 @@ class PhysicalActivityResume extends StatelessWidget {
                       )
                     ],
                   ),
-                  const Column(
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(Icons.edit_outlined, color: CColors.neutral0, size: 32),
-                      Icon(Icons.delete_outlined, color: CColors.neutral0, size: 32),
+                      const Icon(Icons.edit_outlined, color: CColors.neutral0, size: 32),
+                      GestureDetector(
+                        onTap: () => onDeleteCallback(pA),
+                        child: const Icon(Icons.delete_outlined, color: CColors.neutral0, size: 32),
+                      ),
                     ],
                   )
                 ],

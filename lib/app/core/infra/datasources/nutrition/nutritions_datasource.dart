@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_model.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/list_nutritions_model.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_model.dart';
 
-abstract class GetNutritionDatasource {
+abstract class NutritionDatasource {
   Future<List<ListNutritionsModel>> getAllNutritions();
   Future<void> registerNewNutrition(NutritionModel payload);
 }
 
-class GetNutritionDatasourceImpl implements GetNutritionDatasource {
+class NutritionDatasourceImpl implements NutritionDatasource {
   final FirebaseFirestore _firestore;
 
-  GetNutritionDatasourceImpl(this._firestore);
+  NutritionDatasourceImpl(this._firestore);
 
   @override
   Future<List<ListNutritionsModel>> getAllNutritions() async {
@@ -32,12 +32,12 @@ class GetNutritionDatasourceImpl implements GetNutritionDatasource {
       QuerySnapshot snapshot =
           await _firestore.collection('nutrition').where("type", isEqualTo: payload.type).get();
       QueryDocumentSnapshot doc = snapshot.docs.first;
-      List<String> pA = List.from((doc.data() as Map<String, dynamic>)["nutrition"]);
-      pA.add(payload.name);
+      List<String> n = List.from((doc.data() as Map<String, dynamic>)["nutrition"]);
+      n.add(payload.name);
 
       await _firestore.collection('nutrition').doc(doc.id).set({
         'type': payload.type,
-        'nutrition': pA,
+        'nutrition': n,
       });
     } catch (exception) {
       rethrow;

@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 import 'package:nutrilog/app/core/infra/models/physical_activity/physical_activity_model.dart';
 import 'package:nutrilog/app/core/utils/duration.dart';
@@ -12,7 +13,7 @@ class PhysicalActivityWithDurationModel extends Equatable {
   });
 
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object> get props => [physicalActivity, duration];
 
   @override
   bool get stringify => true;

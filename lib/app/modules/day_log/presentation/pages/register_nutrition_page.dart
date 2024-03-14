@@ -53,7 +53,8 @@ class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
     reactions = [
       reaction((_) => userStore.registerNutritionState, (RegisterNutritionState state) {
         if (state is RegisterNutritionSuccessState) {
-          Modular.to.pop();
+          userStore.getUserDayLog();
+          Modular.to.popUntil(ModalRoute.withName('entry/home/'));
         } else if (state is RegisterNutritionErrorState) {
           errorToast(context, state.message);
         }
@@ -191,7 +192,7 @@ class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
                     dayLogStore.nutritions = newNutritions;
 
                     userStore.registerNutrition(
-                      DateTime.now(),
+                      widget.date,
                       NutritionsOneMealModel(
                         energy: dayLogStore.energy ?? 0,
                         mealType: dayLogStore.mealType ?? MealType.breakfast,

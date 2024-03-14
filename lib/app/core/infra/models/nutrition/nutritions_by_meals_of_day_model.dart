@@ -1,4 +1,6 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
+
 import 'package:nutrilog/app/core/infra/enums/meal_type.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_one_meal_model.dart';
 
@@ -39,5 +41,13 @@ class NutritionsByMealOfDayModel extends Equatable {
     }
 
     return aux;
+  }
+
+  NutritionsByMealOfDayModel copyWith({
+    Map<MealType, NutritionsOneMealModel>? nutritions,
+  }) {
+    return NutritionsByMealOfDayModel(
+      nutritions: nutritions ?? this.nutritions,
+    );
   }
 }

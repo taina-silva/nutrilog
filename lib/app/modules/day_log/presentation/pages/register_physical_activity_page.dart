@@ -48,10 +48,11 @@ class _RegisterPhysicalActivityPageState extends State<RegisterPhysicalActivityP
 
     reactions = [
       reaction((_) => userStore.registerPhysicalActitityState,
-          (RegisterPhysicalActitityState state) {
-        if (state is RegisterPhysicalActititySuccessState) {
-          Modular.to.pop();
-        } else if (state is RegisterPhysicalActitityErrorState) {
+          (RegisterPhysicalActivityState state) {
+        if (state is RegisterPhysicalActivitySuccessState) {
+          userStore.getUserDayLog();
+          Modular.to.popUntil(ModalRoute.withName('entry/home/'));
+        } else if (state is RegisterPhysicalActivityErrorState) {
           errorToast(context, state.message);
         }
       })
@@ -69,7 +70,7 @@ class _RegisterPhysicalActivityPageState extends State<RegisterPhysicalActivityP
             text: 'OK',
             isDisabled: dayLogStore.physicalActivity == null,
             isLoading:
-                userStore.registerPhysicalActitityState is RegisterPhysicalActitityLoadingState,
+                userStore.registerPhysicalActitityState is RegisterPhysicalActivityLoadingState,
             onTap: () {
               showCustomBottomSheet(
                 context: context,

@@ -2,15 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nutrilog/app/core/infra/models/physical_activity/list_physical_activities_model.dart';
 import 'package:nutrilog/app/core/infra/models/physical_activity/physical_activity_model.dart';
 
-abstract class GetPhysicalActivityDatasource {
+abstract class PhysicalActivityDatasource {
   Future<List<ListPhysicalActivitiesModel>> getAllPhysicalActivities();
   Future<void> registerNewPhysicalActivity(PhysicalActivityModel payload);
 }
 
-class GetPhysicalActivityDatasourceImpl implements GetPhysicalActivityDatasource {
+class PhysicalActivityDatasourceImpl implements PhysicalActivityDatasource {
   final FirebaseFirestore _firestore;
 
-  GetPhysicalActivityDatasourceImpl(this._firestore);
+  PhysicalActivityDatasourceImpl(this._firestore);
 
   @override
   Future<List<ListPhysicalActivitiesModel>> getAllPhysicalActivities() async {

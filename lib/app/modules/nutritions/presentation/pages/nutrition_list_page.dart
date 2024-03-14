@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fpdart/fpdart.dart' hide State;
+import 'package:mobx/mobx.dart';
 import 'package:nutrilog/app/core/components/divider/custom_divider.dart';
 import 'package:nutrilog/app/core/components/structure/custom_app_bar.dart';
 import 'package:nutrilog/app/core/components/structure/custom_scaffold.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
+import 'package:nutrilog/app/core/components/toasts/toasts.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_by_meals_of_day_model.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_one_meal_model.dart';
+import 'package:nutrilog/app/core/stores/states/user_states.dart';
+import 'package:nutrilog/app/core/stores/user_store.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
 import 'package:nutrilog/app/core/utils/custom_colors.dart';
 import 'package:nutrilog/app/core/utils/formatters/formatters.dart';
@@ -26,6 +31,25 @@ class NutritionsListPage extends StatefulWidget {
 }
 
 class _NutritionsListPageState extends State<NutritionsListPage> {
+  final userStore = Modular.get<UserStore>();
+
+  List<ReactionDisposer> reactions = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    reactions = [
+      reaction((_) => userStore.unregisterNutritionState, (UnregisterNutritionState state) async {
+        if (state is UnregisterNutritionErrorState) {
+          errorToast(context, 'Falha ao deletar alimento: ${state.message}');
+        } else if (state is UnregisterNutritionSuccessState) {
+          userStore.getUserDayLog();
+        }
+      }),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.nutritions == null) {
@@ -73,7 +97,11 @@ class _NutritionsListPageState extends State<NutritionsListPage> {
           itemBuilder: (context, index) {
             NutritionsOneMealModel nutritions =
                 widget.nutritions!.nutritions.values.toList()[index];
-            return NutritionResume(nutritions: nutritions);
+            return NutritionResume(
+              nutritions: nutritions,
+              ondeDeleteCallback: (mealType, nutrition) =>
+                  userStore.unregisterNutrition(widget.date, mealType, nutrition),
+            );
           },
         ),
       ),

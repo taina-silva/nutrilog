@@ -30,17 +30,17 @@ mixin _$UserStore on UserStoreBase, Store {
   late final _$_registerPhysicalActitityStateAtom = Atom(
       name: 'UserStoreBase._registerPhysicalActitityState', context: context);
 
-  RegisterPhysicalActitityState get registerPhysicalActitityState {
+  RegisterPhysicalActivityState get registerPhysicalActitityState {
     _$_registerPhysicalActitityStateAtom.reportRead();
     return super._registerPhysicalActitityState;
   }
 
   @override
-  RegisterPhysicalActitityState get _registerPhysicalActitityState =>
+  RegisterPhysicalActivityState get _registerPhysicalActitityState =>
       registerPhysicalActitityState;
 
   @override
-  set _registerPhysicalActitityState(RegisterPhysicalActitityState value) {
+  set _registerPhysicalActitityState(RegisterPhysicalActivityState value) {
     _$_registerPhysicalActitityStateAtom
         .reportWrite(value, super._registerPhysicalActitityState, () {
       super._registerPhysicalActitityState = value;
@@ -63,6 +63,46 @@ mixin _$UserStore on UserStoreBase, Store {
     _$_registerNutritionStateAtom
         .reportWrite(value, super._registerNutritionState, () {
       super._registerNutritionState = value;
+    });
+  }
+
+  late final _$_unregisterPhysicalActitityStateAtom = Atom(
+      name: 'UserStoreBase._unregisterPhysicalActitityState', context: context);
+
+  UnregisterPhysicalActivityState get unregisterPhysicalActitityState {
+    _$_unregisterPhysicalActitityStateAtom.reportRead();
+    return super._unregisterPhysicalActitityState;
+  }
+
+  @override
+  UnregisterPhysicalActivityState get _unregisterPhysicalActitityState =>
+      unregisterPhysicalActitityState;
+
+  @override
+  set _unregisterPhysicalActitityState(UnregisterPhysicalActivityState value) {
+    _$_unregisterPhysicalActitityStateAtom
+        .reportWrite(value, super._unregisterPhysicalActitityState, () {
+      super._unregisterPhysicalActitityState = value;
+    });
+  }
+
+  late final _$_unregisterNutritionStateAtom =
+      Atom(name: 'UserStoreBase._unregisterNutritionState', context: context);
+
+  UnregisterNutritionState get unregisterNutritionState {
+    _$_unregisterNutritionStateAtom.reportRead();
+    return super._unregisterNutritionState;
+  }
+
+  @override
+  UnregisterNutritionState get _unregisterNutritionState =>
+      unregisterNutritionState;
+
+  @override
+  set _unregisterNutritionState(UnregisterNutritionState value) {
+    _$_unregisterNutritionStateAtom
+        .reportWrite(value, super._unregisterNutritionState, () {
+      super._unregisterNutritionState = value;
     });
   }
 
@@ -92,6 +132,26 @@ mixin _$UserStore on UserStoreBase, Store {
       DateTime date, NutritionsOneMealModel payload) {
     return _$registerNutritionAsyncAction
         .run(() => super.registerNutrition(date, payload));
+  }
+
+  late final _$unregisterPhysicalActivityAsyncAction =
+      AsyncAction('UserStoreBase.unregisterPhysicalActivity', context: context);
+
+  @override
+  Future<void> unregisterPhysicalActivity(
+      DateTime date, PhysicalActivityWithDurationModel payload) {
+    return _$unregisterPhysicalActivityAsyncAction
+        .run(() => super.unregisterPhysicalActivity(date, payload));
+  }
+
+  late final _$unregisterNutritionAsyncAction =
+      AsyncAction('UserStoreBase.unregisterNutrition', context: context);
+
+  @override
+  Future<void> unregisterNutrition(
+      DateTime date, MealType mealType, NutritionWithEnergyModel payload) {
+    return _$unregisterNutritionAsyncAction
+        .run(() => super.unregisterNutrition(date, mealType, payload));
   }
 
   @override

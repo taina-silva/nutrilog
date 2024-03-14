@@ -20,20 +20,20 @@ class GetUserDayLogErrorState extends GetUserDayLogState {
   GetUserDayLogErrorState(this.message);
 }
 
-abstract class RegisterPhysicalActitityState extends Equatable {
+abstract class RegisterPhysicalActivityState extends Equatable {
   @override
   List<Object> get props => [];
 }
 
-class RegisterPhysicalActitityInitialState extends RegisterPhysicalActitityState {}
+class RegisterPhysicalActivityInitialState extends RegisterPhysicalActivityState {}
 
-class RegisterPhysicalActitityLoadingState extends RegisterPhysicalActitityState {}
+class RegisterPhysicalActivityLoadingState extends RegisterPhysicalActivityState {}
 
-class RegisterPhysicalActititySuccessState extends RegisterPhysicalActitityState {}
+class RegisterPhysicalActivitySuccessState extends RegisterPhysicalActivityState {}
 
-class RegisterPhysicalActitityErrorState extends RegisterPhysicalActitityState {
+class RegisterPhysicalActivityErrorState extends RegisterPhysicalActivityState {
   final String message;
-  RegisterPhysicalActitityErrorState(this.message);
+  RegisterPhysicalActivityErrorState(this.message);
 }
 
 abstract class RegisterNutritionState extends Equatable {
@@ -50,4 +50,36 @@ class RegisterNutritionSuccessState extends RegisterNutritionState {}
 class RegisterNutritionErrorState extends RegisterNutritionState {
   final String message;
   RegisterNutritionErrorState(this.message);
+}
+
+sealed class UnregisterPhysicalActivityState extends Equatable {
+  @override
+  List<Object> get props => [];
+}
+
+final class UnregisterPhysicalActivityInitialState extends UnregisterPhysicalActivityState {}
+
+final class UnregisterPhysicalActivityLoadingState extends UnregisterPhysicalActivityState {}
+
+final class UnregisterPhysicalActivitySuccessState extends UnregisterPhysicalActivityState {}
+
+final class UnregisterPhysicalActivityErrorState extends UnregisterPhysicalActivityState {
+  final String message;
+  UnregisterPhysicalActivityErrorState(this.message);
+}
+
+sealed class UnregisterNutritionState extends Equatable {
+  @override
+  List<Object> get props => [];
+}
+
+final class UnregisterNutritionInitialState extends UnregisterNutritionState {}
+
+final class UnregisterNutritionLoadingState extends UnregisterNutritionState {}
+
+final class UnregisterNutritionSuccessState extends UnregisterNutritionState {}
+
+final class UnregisterNutritionErrorState extends UnregisterNutritionState {
+  final String message;
+  UnregisterNutritionErrorState(this.message);
 }

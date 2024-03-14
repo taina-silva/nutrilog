@@ -83,7 +83,7 @@ class _NutritionEnergyBottomSheetState extends State<NutritionEnergyBottomSheet>
                                 text: list[index].nutrition.name, textType: TextType.medium),
                             const SizedBox(height: 8),
                             _commonFieldWidget(
-                              list[index].energy ?? 0,
+                              list[index].energy,
                               (value) {
                                 List<NutritionWithEnergyModel> auxList = List.from(list);
                                 NutritionWithEnergyModel? oldNutrition =

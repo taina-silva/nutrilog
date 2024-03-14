@@ -1,4 +1,6 @@
 import 'package:mobx/mobx.dart';
+import 'package:nutrilog/app/core/infra/enums/meal_type.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_with_energy_model.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_one_meal_model.dart';
 import 'package:nutrilog/app/core/infra/models/physical_activity/physical_activity_with_duration_model.dart';
 import 'package:nutrilog/app/core/infra/repositories/user/user_repository.dart';
@@ -17,11 +19,18 @@ abstract class UserStoreBase with Store {
   GetUserDayLogState _getUserDayLogState = GetUserDayLogLoadingState();
 
   @readonly
-  RegisterPhysicalActitityState _registerPhysicalActitityState =
-      RegisterPhysicalActitityInitialState();
+  RegisterPhysicalActivityState _registerPhysicalActitityState =
+      RegisterPhysicalActivityInitialState();
 
   @readonly
   RegisterNutritionState _registerNutritionState = RegisterNutritionInitialState();
+
+  @readonly
+  UnregisterPhysicalActivityState _unregisterPhysicalActitityState =
+      UnregisterPhysicalActivityInitialState();
+
+  @readonly
+  UnregisterNutritionState _unregisterNutritionState = UnregisterNutritionInitialState();
 
   @action
   Future<void> getUserDayLog() async {
@@ -38,16 +47,13 @@ abstract class UserStoreBase with Store {
   @action
   Future<void> registerPhysicalActivity(
       DateTime date, PhysicalActivityWithDurationModel payload) async {
-    _registerPhysicalActitityState = RegisterPhysicalActitityLoadingState();
+    _registerPhysicalActitityState = RegisterPhysicalActivityLoadingState();
 
     final result = await _repository.registerPhysicalActivity(date, payload);
 
     result.fold(
-      (l) => _registerPhysicalActitityState = RegisterPhysicalActitityErrorState(l.message),
-      (r) async {
-        await getUserDayLog();
-        _registerPhysicalActitityState = RegisterPhysicalActititySuccessState();
-      },
+      (l) => _registerPhysicalActitityState = RegisterPhysicalActivityErrorState(l.message),
+      (r) => _registerPhysicalActitityState = RegisterPhysicalActivitySuccessState(),
     );
   }
 
@@ -59,10 +65,33 @@ abstract class UserStoreBase with Store {
 
     result.fold(
       (l) => _registerNutritionState = RegisterNutritionErrorState(l.message),
-      (r) async {
-        await getUserDayLog();
-        _registerNutritionState = RegisterNutritionSuccessState();
-      },
+      (r) => _registerNutritionState = RegisterNutritionSuccessState(),
+    );
+  }
+
+  @action
+  Future<void> unregisterPhysicalActivity(
+      DateTime date, PhysicalActivityWithDurationModel payload) async {
+    _unregisterPhysicalActitityState = UnregisterPhysicalActivityLoadingState();
+
+    final result = await _repository.unregisterPhysicalActivity(date, payload);
+
+    result.fold(
+      (l) => _unregisterPhysicalActitityState = UnregisterPhysicalActivityErrorState(l.message),
+      (r) => _unregisterPhysicalActitityState = UnregisterPhysicalActivitySuccessState(),
+    );
+  }
+
+  @action
+  Future<void> unregisterNutrition(
+      DateTime date, MealType mealType, NutritionWithEnergyModel payload) async {
+    _unregisterNutritionState = UnregisterNutritionLoadingState();
+
+    final result = await _repository.unregisterNutrition(date, mealType, payload);
+
+    result.fold(
+      (l) => _unregisterNutritionState = UnregisterNutritionErrorState(l.message),
+      (r) => _unregisterNutritionState = UnregisterNutritionSuccessState(),
     );
   }
 }

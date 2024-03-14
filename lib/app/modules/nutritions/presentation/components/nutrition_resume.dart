@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
+import 'package:nutrilog/app/core/infra/enums/meal_type.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_with_energy_model.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_one_meal_model.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
 import 'package:nutrilog/app/core/utils/custom_colors.dart';
 
 class NutritionResume extends StatelessWidget {
   final NutritionsOneMealModel nutritions;
+  final void Function(MealType, NutritionWithEnergyModel) ondeDeleteCallback;
 
   const NutritionResume({
     Key? key,
     required this.nutritions,
+    required this.ondeDeleteCallback,
   }) : super(key: key);
 
   @override
@@ -29,7 +33,7 @@ class NutritionResume extends StatelessWidget {
         ),
         if (nutritions.energy != 0)
           AdaptiveText(
-            text: 'Calorias: ${nutritions.energy} cal',
+            text: 'Calorias: ${nutritions.energy} kcal',
             textType: TextType.small,
           ),
         const SizedBox(height: 16),
@@ -83,7 +87,7 @@ class NutritionResume extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(top: 8),
                               child: AdaptiveText(
-                                text: '${n.energy} cal',
+                                text: '${n.energy} kcal',
                                 textType: TextType.large,
                                 fWeight: FWeight.bold,
                                 color: CColors.neutral0,
@@ -91,11 +95,15 @@ class NutritionResume extends StatelessWidget {
                             ),
                         ],
                       ),
-                      const Column(
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(Icons.edit_outlined, color: CColors.neutral0, size: 32),
-                          Icon(Icons.delete_outlined, color: CColors.neutral0, size: 32),
+                          const Icon(Icons.edit_outlined, color: CColors.neutral0, size: 32),
+                          GestureDetector(
+                            onTap: () => ondeDeleteCallback(nutritions.mealType, n),
+                            child: const Icon(Icons.delete_outlined,
+                                color: CColors.neutral0, size: 32),
+                          ),
                         ],
                       )
                     ],
