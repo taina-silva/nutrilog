@@ -21,7 +21,6 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    changeStatusBarTheme(StatusBarTheme.light, CColors.primaryBackground);
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
 
@@ -38,7 +37,18 @@ class _AppWidgetState extends State<AppWidget> with WidgetsBindingObserver {
     super.dispose();
   }
 
-  void navigationListener() => logInfo('[NAV]: ${Modular.to.path}');
+  void navigationListener() {
+    logInfo('[NAV]: ${Modular.to.path}');
+
+    List<String> path = Modular.to.path.split('/');
+
+    if (path.contains('access')) {
+      changeStatusBarTheme(StatusBarTheme.light,
+          path.contains('signup') ? CColors.primaryNutrition : CColors.primaryActivity);
+    } else {
+      changeStatusBarTheme(StatusBarTheme.light, CColors.primaryBackground);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

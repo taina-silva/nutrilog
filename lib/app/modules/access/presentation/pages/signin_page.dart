@@ -12,6 +12,7 @@ import 'package:nutrilog/app/core/stores/auth_store.dart';
 import 'package:nutrilog/app/core/stores/states/auth_states.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
 import 'package:nutrilog/app/core/utils/custom_colors.dart';
+import 'package:nutrilog/app/core/utils/status_bar_theme.dart';
 import 'package:nutrilog/app/core/utils/validators.dart';
 
 class SigninPage extends StatefulWidget {
@@ -34,6 +35,7 @@ class _SigninPageState extends State<SigninPage> {
   @override
   void initState() {
     super.initState();
+    changeStatusBarTheme(StatusBarTheme.light, CColors.primaryActivity);
 
     reactions = [
       reaction((_) => authStore.signinState, (SigninState state) async {
@@ -49,81 +51,99 @@ class _SigninPageState extends State<SigninPage> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      body: SingleChildScrollView(
-        child: Observer(builder: (context) {
-          return Container(
-            margin: const EdgeInsets.symmetric(
-                horizontal: DefaultMargin.horizontal, vertical: DefaultMargin.vertical),
-            child: Column(
-              children: [
-                SizedBox(height: 350, child: Center(child: Image.asset(Assets.logo))),
-                const SizedBox(height: 16),
-                Form(
-                  key: formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const AdaptiveText(text: 'E-mail', textType: TextType.medium),
-                      CommonField(
-                        placeholder: 'abc@def.com',
-                        validator: Validators.emailValidator,
-                        controller: emailTextController,
-                      ),
-                      const SizedBox(height: 24),
-                      const AdaptiveText(text: 'Senha', textType: TextType.medium),
-                      CommonField(
-                        placeholder: 'Digite sua senha',
-                        obscure: authStore.passwordIsHidden,
-                        validator: Validators.passwordValidator,
-                        controller: passwordTextController,
-                        suffixIcon: GestureDetector(
-                          onTap: () => authStore.passwordIsHidden = !authStore.passwordIsHidden,
-                          child: Icon(authStore.passwordIsHidden
-                              ? Icons.visibility_off_outlined
-                              : Icons.visibility_outlined),
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          GestureDetector(
-                            onTap: () => Modular.to.pushNamed('signup'),
-                            child: const AdaptiveText(
-                              text: 'Ainda não possui cadastro? Clique aqui.',
-                              textType: TextType.nano,
-                              textDecoration: TextDecoration.underline,
-                              color: CColors.neutral600,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 64),
-                      CustomButton.primaryNeutroMedium(ButtonParameters(
-                        text: 'Fazer login',
-                        isLoading: authStore.signinState is SigninLoadingState,
-                        onTap: () {
-                          if (formKey.currentState?.validate() ?? false) {
-                            authStore.signin(
-                              AuthPayloadModel(
-                                email: emailTextController.text.trim(),
-                                password: passwordTextController.text.trim(),
-                              ),
-                            );
-                          } else {
-                            warningToast(context, "Preencha os campos corretamente");
-                          }
-                        },
-                      )),
-                    ],
+      backgroundColor: CColors.primaryActivity,
+      body: Observer(builder: (context) {
+        return Column(
+          children: [
+            const SizedBox(height: 80),
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: DefaultMargin.horizontal,
+                  vertical: 2 * DefaultMargin.horizontal,
+                ),
+                decoration: const BoxDecoration(
+                  color: CColors.neutral0,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(48),
+                    topRight: Radius.circular(48),
                   ),
                 ),
-              ],
+                child: Column(
+                  children: [
+                    Center(child: Image.asset(Assets.logo, width: 240)),
+                    const SizedBox(height: 24),
+                    Expanded(
+                      child: Form(
+                        key: formKey,
+                        child: ListView(
+                          children: [
+                            const AdaptiveText(text: 'E-mail', textType: TextType.medium),
+                            CommonField(
+                              placeholder: 'abc@def.com',
+                              validator: Validators.emailValidator,
+                              controller: emailTextController,
+                            ),
+                            const SizedBox(height: 24),
+                            const AdaptiveText(text: 'Senha', textType: TextType.medium),
+                            CommonField(
+                              placeholder: 'Digite sua senha',
+                              obscure: authStore.passwordIsHidden,
+                              validator: Validators.passwordValidator,
+                              controller: passwordTextController,
+                              suffixIcon: GestureDetector(
+                                onTap: () =>
+                                    authStore.passwordIsHidden = !authStore.passwordIsHidden,
+                                child: Icon(authStore.passwordIsHidden
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility_outlined),
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                GestureDetector(
+                                  onTap: () => Modular.to.pushNamed('signup'),
+                                  child: const AdaptiveText(
+                                    text: 'Ainda não possui cadastro? Clique aqui.',
+                                    textType: TextType.nano,
+                                    textDecoration: TextDecoration.underline,
+                                    color: CColors.neutral600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 64),
+                            CustomButton.primaryNeutroMedium(ButtonParameters(
+                              text: 'Fazer login',
+                              isLoading: authStore.signinState is SigninLoadingState,
+                              onTap: () {
+                                if (!(formKey.currentState?.validate() ?? false)) {
+                                  warningToast(context, "Preencha os campos corretamente");
+                                  return;
+                                }
+
+                                authStore.signin(
+                                  AuthPayloadModel(
+                                    email: emailTextController.text.trim(),
+                                    password: passwordTextController.text.trim(),
+                                  ),
+                                );
+                              },
+                            )),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          );
-        }),
-      ),
+          ],
+        );
+      }),
     );
   }
 }

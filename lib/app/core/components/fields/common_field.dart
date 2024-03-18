@@ -106,7 +106,7 @@ class CommonField extends StatelessWidget {
     this.contentPadding = const EdgeInsets.only(left: 10, top: 10, right: 44, bottom: 10),
     this.textAlignVertical = TextAlignVertical.center,
     this.disableBorder = false,
-    this.fillColor = CColors.primaryBackground,
+    this.fillColor = CColors.neutral0,
   })  : assert(
           initialValue == null || controller == null,
           'You cannot pass initialValue AND controller at the same time',

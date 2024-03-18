@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
-import 'package:nutrilog/app/core/infra/enums/meal_type.dart';
 import 'package:nutrilog/app/core/infra/models/day_log/day_log_model.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_one_meal_model.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
@@ -53,9 +52,8 @@ class DayLogResume extends StatelessWidget {
                 double totalNergy = 0;
 
                 if (dayLog.nutritions != null) {
-                  for (MapEntry<MealType, NutritionsOneMealModel> item
-                      in (dayLog.nutritions!.nutritions.entries)) {
-                    totalNergy += item.value.energy;
+                  for (NutritionsOneMealModel item in (dayLog.nutritions!.nutritions)) {
+                    totalNergy += item.energy;
                   }
                 }
 

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:nutrilog/app/core/errors/exceptions.dart';
 import 'package:nutrilog/app/core/infra/enums/meal_type.dart';
 import 'package:nutrilog/app/core/infra/models/day_log/day_log_model.dart';
@@ -136,15 +137,19 @@ class UserDatasourceImpl implements UserDatasource {
       NutritionsByMealOfDayModel? registered = (await getNutritionsByDate(date))?.copyWith();
 
       if (registered != null) {
-        if (registered.nutritions[payload.mealType] == null) {
-          registered.nutritions[payload.mealType] = payload;
+        List<NutritionsOneMealModel> nutritions = List.from(registered.nutritions);
+        NutritionsOneMealModel? oldNutrition =
+            nutritions.firstWhereOrNull((e) => e.mealType == payload.mealType);
+        if (oldNutrition == null) {
+          nutritions.add(payload);
         } else {
-          NutritionsOneMealModel old = registered.nutritions[payload.mealType]!;
-          registered.nutritions[payload.mealType] = payload.copyWith(
-              nutritions: old.nutritions + payload.nutritions, energy: old.energy + payload.energy);
+          registered.nutritions.remove(oldNutrition);
+          registered.nutritions.add(payload.copyWith(
+              nutritions: oldNutrition.nutritions + payload.nutritions,
+              energy: oldNutrition.energy + payload.energy));
         }
       } else {
-        registered = NutritionsByMealOfDayModel(nutritions: {payload.mealType: payload});
+        registered = NutritionsByMealOfDayModel(nutritions: [payload]);
       }
 
       String id = date.millisecondsSinceEpoch.toString();
@@ -189,22 +194,31 @@ class UserDatasourceImpl implements UserDatasource {
 
       if (userId == null) throw const NoPermissionsException();
 
-      NutritionsByMealOfDayModel? registered = (await getNutritionsByDate(date))?.copyWith();
+      NutritionsByMealOfDayModel? registeredNutritions =
+          (await getNutritionsByDate(date))?.copyWith();
+      List<PhysicalActivityWithDurationModel> registeredPhysicalActivities =
+          List.from((await getPhysicalActivitiesByDate(date)));
 
-      if (registered == null) return;
-      if (registered.nutritions[mealType] == null) return;
+      if (registeredNutritions == null) return;
 
-      Map<MealType, NutritionsOneMealModel> nutritions = Map.from(registered.nutritions);
-      NutritionsOneMealModel old = nutritions[mealType]!;
-      old.nutritions.removeWhere((e) => e == payload);
+      List<NutritionsOneMealModel> nutritions = List.from(registeredNutritions.nutritions);
+      NutritionsOneMealModel? oldNutrition =
+          nutritions.firstWhereOrNull((e) => e.mealType == mealType);
+      oldNutrition?.nutritions.removeWhere((e) => e == payload);
 
-      NutritionsByMealOfDayModel newRegistration = registered.copyWith(nutritions: nutritions);
+      NutritionsByMealOfDayModel newRegistration =
+          registeredNutritions.copyWith(nutritions: nutritions);
 
       String id = date.millisecondsSinceEpoch.toString();
 
+      if (nutritions.isEmpty && registeredPhysicalActivities.isEmpty) {
+        await _firestore.doc('users/$userId').collection('day-log').doc(id).delete();
+        return;
+      }
+
       await _firestore.doc('users/$userId').collection('day-log').doc(id).set({
         'date': date.millisecondsSinceEpoch.toString(),
-        'nutrition': newRegistration.toMap(),
+        'nutrition': nutritions.isEmpty ? {} : newRegistration.toMap(),
       }, SetOptions(merge: true));
     } catch (exception) {
       rethrow;

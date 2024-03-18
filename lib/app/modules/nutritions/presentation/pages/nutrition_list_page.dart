@@ -93,10 +93,9 @@ class _NutritionsListPageState extends State<NutritionsListPage> {
         child: ListView.separated(
           padding: const EdgeInsets.all(0),
           separatorBuilder: (context, index) => const CustomDivider(),
-          itemCount: widget.nutritions!.nutritions.values.length,
+          itemCount: widget.nutritions!.nutritions.length,
           itemBuilder: (context, index) {
-            NutritionsOneMealModel nutritions =
-                widget.nutritions!.nutritions.values.toList()[index];
+            NutritionsOneMealModel nutritions = widget.nutritions!.nutritions.toList()[index];
             return NutritionResume(
               nutritions: nutritions,
               ondeDeleteCallback: (mealType, nutrition) =>
