@@ -98,9 +98,9 @@ class PhysicalActivityResume extends StatelessWidget {
                     ],
                   ),
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      const Icon(Icons.edit_outlined, color: CColors.neutral0, size: 32),
+                      // const Icon(Icons.edit_outlined, color: CColors.neutral0, size: 32),
                       GestureDetector(
                         onTap: () => onDeleteCallback(pA),
                         child: const Icon(Icons.delete_outlined, color: CColors.neutral0, size: 32),

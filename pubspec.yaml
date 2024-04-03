@@ -69,6 +69,7 @@ flutter:
     - assets/logo/
     - assets/icons/
     - assets/jsons/
+    - assets/gifs/
 
   fonts:
     - family: K2D

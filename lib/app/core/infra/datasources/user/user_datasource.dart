@@ -141,7 +141,7 @@ class UserDatasourceImpl implements UserDatasource {
         NutritionsOneMealModel? oldNutrition =
             nutritions.firstWhereOrNull((e) => e.mealType == payload.mealType);
         if (oldNutrition == null) {
-          nutritions.add(payload);
+          registered.nutritions.add(payload.copyWith());
         } else {
           registered.nutritions.remove(oldNutrition);
           registered.nutritions.add(payload.copyWith(
@@ -204,7 +204,13 @@ class UserDatasourceImpl implements UserDatasource {
       List<NutritionsOneMealModel> nutritions = List.from(registeredNutritions.nutritions);
       NutritionsOneMealModel? oldNutrition =
           nutritions.firstWhereOrNull((e) => e.mealType == mealType);
-      oldNutrition?.nutritions.removeWhere((e) => e == payload);
+
+      if (oldNutrition == null) return;
+
+      oldNutrition.nutritions.removeWhere((e) => e == payload);
+      nutritions.removeWhere((e) => e.mealType == mealType);
+
+      if (oldNutrition.nutritions.isNotEmpty) nutritions.add(oldNutrition);
 
       NutritionsByMealOfDayModel newRegistration =
           registeredNutritions.copyWith(nutritions: nutritions);
@@ -219,7 +225,8 @@ class UserDatasourceImpl implements UserDatasource {
       await _firestore.doc('users/$userId').collection('day-log').doc(id).set({
         'date': date.millisecondsSinceEpoch.toString(),
         'nutrition': nutritions.isEmpty ? {} : newRegistration.toMap(),
-      }, SetOptions(merge: true));
+        'physical-activities': registeredPhysicalActivities.map((e) => e.toMap()).toList(),
+      });
     } catch (exception) {
       rethrow;
     }

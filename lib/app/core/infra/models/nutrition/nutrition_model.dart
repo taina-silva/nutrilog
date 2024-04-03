@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 
 class NutritionModel extends Equatable {
@@ -28,4 +30,9 @@ class NutritionModel extends Equatable {
       'type': type,
     };
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory NutritionModel.fromJson(String source) =>
+      NutritionModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

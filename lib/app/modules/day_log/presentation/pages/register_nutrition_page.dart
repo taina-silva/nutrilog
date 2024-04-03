@@ -54,7 +54,12 @@ class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
       reaction((_) => userStore.registerNutritionState, (RegisterNutritionState state) {
         if (state is RegisterNutritionSuccessState) {
           userStore.getUserDayLog();
-          Modular.to.popUntil(ModalRoute.withName('entry/home/'));
+
+          Modular.to.path.contains('nutrition')
+              ? Modular.to.pop()
+              : Modular.to.popUntil(ModalRoute.withName('entry/home/'));
+
+          disposeReactions();
         } else if (state is RegisterNutritionErrorState) {
           errorToast(context, state.message);
         }
@@ -210,5 +215,17 @@ class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
         );
       },
     );
+  }
+
+  void disposeReactions() {
+    for (var r in reactions) {
+      r.reaction.dispose();
+    }
+  }
+
+  @override
+  void dispose() {
+    disposeReactions();
+    super.dispose();
   }
 }

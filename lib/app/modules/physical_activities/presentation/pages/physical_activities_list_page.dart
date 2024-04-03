@@ -1,4 +1,6 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fpdart/fpdart.dart' hide State;
 import 'package:mobx/mobx.dart';
@@ -6,6 +8,7 @@ import 'package:nutrilog/app/core/components/structure/custom_app_bar.dart';
 import 'package:nutrilog/app/core/components/structure/custom_scaffold.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
 import 'package:nutrilog/app/core/components/toasts/toasts.dart';
+import 'package:nutrilog/app/core/infra/models/day_log/day_log_model.dart';
 import 'package:nutrilog/app/core/infra/models/physical_activity/physical_activity_with_duration_model.dart';
 import 'package:nutrilog/app/core/stores/states/user_states.dart';
 import 'package:nutrilog/app/core/stores/user_store.dart';
@@ -16,12 +19,10 @@ import 'package:nutrilog/app/modules/physical_activities/presentation/components
 
 class PhysicalActivitiesListPage extends StatefulWidget {
   final DateTime date;
-  final List<PhysicalActivityWithDurationModel> physicalActivities;
 
   const PhysicalActivitiesListPage({
     Key? key,
     required this.date,
-    required this.physicalActivities,
   }) : super(key: key);
 
   @override
@@ -51,24 +52,6 @@ class _PhysicalActivitiesListPageState extends State<PhysicalActivitiesListPage>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.physicalActivities.isEmpty) {
-      return CustomScaffold(
-        appBar: const CustomAppBar(title: Left('Atividades físicas')),
-        body: Container(
-          margin: const EdgeInsets.symmetric(
-            horizontal: DefaultMargin.horizontal,
-            vertical: DefaultMargin.vertical,
-          ),
-          alignment: Alignment.center,
-          child: AdaptiveText(
-            text: 'Sem atividades físicas registradas para o dia ${formatDate(widget.date)}',
-            textType: TextType.medium,
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-    }
-
     return CustomScaffold(
       appBar: const CustomAppBar(title: Left('Atividades Físicas')),
       floatingActionButton: Row(
@@ -80,7 +63,16 @@ class _PhysicalActivitiesListPageState extends State<PhysicalActivitiesListPage>
             decoration: const BoxDecoration(
                 color: CColors.primaryActivity,
                 borderRadius: BorderRadius.all(Radius.circular(Layout.borderRadiusBig))),
-            child: const Icon(Icons.add_outlined, color: CColors.neutral0),
+            child: InkWell(
+              onTap: () {
+                Modular.to.pushNamed(
+                  'day-log/physical-activity',
+                  forRoot: true,
+                  arguments: {'date': widget.date},
+                );
+              },
+              child: const Icon(Icons.add_outlined, color: CColors.neutral0),
+            ),
           ),
         ],
       ),
@@ -89,17 +81,52 @@ class _PhysicalActivitiesListPageState extends State<PhysicalActivitiesListPage>
           horizontal: DefaultMargin.horizontal,
           vertical: DefaultMargin.vertical,
         ),
-        child: ListView.builder(
-          padding: const EdgeInsets.all(0),
-          itemCount: widget.physicalActivities.length,
-          itemBuilder: (context, index) {
-            PhysicalActivityWithDurationModel pA = widget.physicalActivities[index];
-            return PhysicalActivityResume(
-              pA: pA,
-              onDeleteCallback: (pA) => userStore.unregisterPhysicalActivity(widget.date, pA),
-            );
-          },
-        ),
+        child: Observer(builder: (context) {
+          if (userStore.getUserDayLogState is GetUserDayLogInitialState) return const SizedBox();
+
+          if (userStore.getUserDayLogState is GetUserDayLogLoadingState) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (userStore.getUserDayLogState is GetUserDayLogErrorState) {
+            return _noPhysicalActivitiesWidget();
+          }
+
+          List<DayLogModel> dayLogs =
+              (userStore.getUserDayLogState as GetUserDayLogSuccessState).list;
+          DayLogModel? dayLog = dayLogs.firstWhereOrNull((e) => e.date == widget.date);
+          List<PhysicalActivityWithDurationModel> physicalActivities =
+              dayLog?.physicalActivities ?? [];
+
+          if (physicalActivities.isEmpty) return _noPhysicalActivitiesWidget();
+
+          return ListView.builder(
+            padding: const EdgeInsets.all(0),
+            itemCount: physicalActivities.length,
+            itemBuilder: (context, index) {
+              PhysicalActivityWithDurationModel pA = physicalActivities[index];
+              return PhysicalActivityResume(
+                pA: pA,
+                onDeleteCallback: (pA) => userStore.unregisterPhysicalActivity(widget.date, pA),
+              );
+            },
+          );
+        }),
+      ),
+    );
+  }
+
+  Widget _noPhysicalActivitiesWidget() {
+    return Container(
+      margin: const EdgeInsets.symmetric(
+        horizontal: DefaultMargin.horizontal,
+        vertical: DefaultMargin.vertical,
+      ),
+      alignment: Alignment.center,
+      child: AdaptiveText(
+        text: 'Sem atividades físicas registradas para o dia ${formatDate(widget.date)}',
+        textType: TextType.medium,
+        textAlign: TextAlign.center,
       ),
     );
   }

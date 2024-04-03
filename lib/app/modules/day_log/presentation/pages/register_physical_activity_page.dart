@@ -51,7 +51,12 @@ class _RegisterPhysicalActivityPageState extends State<RegisterPhysicalActivityP
           (RegisterPhysicalActivityState state) {
         if (state is RegisterPhysicalActivitySuccessState) {
           userStore.getUserDayLog();
-          Modular.to.popUntil(ModalRoute.withName('entry/home/'));
+
+          Modular.to.path.contains('physical-activity')
+              ? Modular.to.pop()
+              : Modular.to.popUntil(ModalRoute.withName('entry/home/'));
+
+          disposeReactions();
         } else if (state is RegisterPhysicalActivityErrorState) {
           errorToast(context, state.message);
         }
@@ -168,5 +173,17 @@ class _RegisterPhysicalActivityPageState extends State<RegisterPhysicalActivityP
         );
       }),
     );
+  }
+
+  void disposeReactions() {
+    for (var r in reactions) {
+      r.reaction.dispose();
+    }
+  }
+
+  @override
+  void dispose() {
+    disposeReactions();
+    super.dispose();
   }
 }

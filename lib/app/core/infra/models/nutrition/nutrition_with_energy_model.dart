@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_model.dart';
 
@@ -40,4 +42,9 @@ class NutritionWithEnergyModel extends Equatable {
       energy: energy ?? this.energy,
     );
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory NutritionWithEnergyModel.fromJson(String source) =>
+      NutritionWithEnergyModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

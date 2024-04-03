@@ -101,27 +101,37 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 24),
               const AdaptiveText(text: 'Histórico', textType: TextType.medium),
               const SizedBox(height: 24),
-              Expanded(
-                child: Builder(builder: (context) {
-                  List<DayLogModel> dayLog =
-                      (userStore.getUserDayLogState as GetUserDayLogSuccessState).list;
+              Observer(builder: (context) {
+                List<DayLogModel> dayLog =
+                    (userStore.getUserDayLogState as GetUserDayLogSuccessState).list;
 
-                  if (dayLog.isEmpty) {
-                    return const Center(
-                      child: AdaptiveText(
-                          text: 'Nenhum registro até o momento', textType: TextType.small),
-                    );
-                  }
+                if (dayLog.isEmpty) {
+                  return Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.symmetric(vertical: DefaultMargin.vertical),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset("${Assets.gifs}/not_found.gif"),
+                          const AdaptiveText(
+                              text: 'Nenhum registro até o momento.', textType: TextType.small),
+                        ],
+                      ),
+                    ),
+                  );
+                }
 
-                  return ListView.builder(
+                return Expanded(
+                  child: ListView.builder(
                     padding: const EdgeInsets.all(0),
                     itemCount: dayLog.length,
                     itemBuilder: (context, index) {
                       return DayLogResume(dayLog: dayLog[index]);
                     },
-                  );
-                }),
-              )
+                  ),
+                );
+              })
             ],
           ),
         );

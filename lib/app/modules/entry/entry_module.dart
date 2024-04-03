@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:nutrilog/app/modules/entry/presentation/pages/entry_page.dart';
 import 'package:nutrilog/app/modules/entry/presentation/stores/entry_store.dart';
+import 'package:nutrilog/app/modules/graphics/graphics_module.dart';
 import 'package:nutrilog/app/modules/home/home_module.dart';
 
 class EntryModule extends Module {
@@ -21,11 +22,11 @@ class EntryModule extends Module {
           module: HomeModule(),
           transition: TransitionType.fadeIn,
         ),
-        /*  ModuleRoute(
-          '/notepad',
-          module: NotepadModule(),
+        ModuleRoute(
+          '/graphics',
+          module: GraphicsModule(),
           transition: TransitionType.fadeIn,
-        ), */
+        ),
       ],
     ),
   ];

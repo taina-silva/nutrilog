@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:nutrilog/app/core/infra/enums/meal_type.dart';
@@ -63,4 +65,9 @@ class NutritionsOneMealModel extends Equatable {
       nutritions: nutritions ?? this.nutritions,
     );
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory NutritionsOneMealModel.fromJson(String source) =>
+      NutritionsOneMealModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

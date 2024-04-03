@@ -1,5 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:equatable/equatable.dart';
+
 import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_one_meal_model.dart';
 
 class NutritionsByMealOfDayModel extends Equatable {
@@ -10,7 +13,7 @@ class NutritionsByMealOfDayModel extends Equatable {
   });
 
   @override
-  List<Object?> get props => throw UnimplementedError();
+  List<Object> get props => [nutritions];
 
   @override
   bool get stringify => true;
@@ -46,4 +49,9 @@ class NutritionsByMealOfDayModel extends Equatable {
       nutritions: nutritions ?? this.nutritions,
     );
   }
+
+  String toJson() => json.encode(toMap());
+
+  factory NutritionsByMealOfDayModel.fromJson(String source) =>
+      NutritionsByMealOfDayModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }
