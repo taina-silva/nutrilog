@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:nutrilog/app/core/errors/exceptions.dart';
+import 'package:nutrilog/app/core/errors/exceptions/auth.dart';
 import 'package:nutrilog/app/core/infra/models/auth/auth_payload_model.dart';
 
 abstract class AuthDatasource {

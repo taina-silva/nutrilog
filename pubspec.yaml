@@ -13,11 +13,14 @@ scripts:
 
   clean:
     $script: fvm flutter clean
-    $after: $get
+    $after: fvm flutter pub get
 
   gen:
-    $before: $clean
-    $script: fvm flutter pub run build_runner watch --delete-conflicting-outputs
+    $script: dart run build_runner watch --delete-conflicting-outputs
+
+  clean-gen:
+    $before: fvm flutter clean
+    $script: dart run build_runner watch --delete-conflicting-outputs
 
   test:
     $before: fvm flutter pub run full_coverage

@@ -1,6 +1,7 @@
 import 'package:fpdart/fpdart.dart';
-import 'package:nutrilog/app/core/errors/exceptions.dart';
-import 'package:nutrilog/app/core/errors/failures.dart';
+import 'package:nutrilog/app/core/errors/exceptions/auth.dart';
+import 'package:nutrilog/app/core/errors/failures/auth.dart';
+import 'package:nutrilog/app/core/errors/failures/general.dart';
 import 'package:nutrilog/app/core/infra/datasources/auth/auth_datasource.dart';
 import 'package:nutrilog/app/core/infra/models/auth/auth_payload_model.dart';
 import 'package:nutrilog/app/core/services/logger/logger_service.dart';

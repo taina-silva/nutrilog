@@ -3,7 +3,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 import json
 
-cred = credentials.Certificate("lib/scripts/service_account_key_dev.json")
+cred = credentials.Certificate("scripts/service_account_key_dev.json")
 app = firebase_admin.initialize_app(cred)
 client = firestore.client()
 
@@ -28,7 +28,7 @@ with open("assets/jsons/physical_activities.json") as f:
 
 print("\nDone uploading physical activities data to firesore!\n")
 
-with open("assets/jsons/nutrition.json") as f:
+with open("assets/jsons/nutritions.json") as f:
     data = json.load(f)
 
     types = data["types"]
@@ -39,12 +39,12 @@ with open("assets/jsons/nutrition.json") as f:
     for doc in docs:
         doc.delete()
 
-    doc_ref = client.collection("nutrition").document("types")
+    doc_ref = client.collection("nutritions").document("types")
     doc_ref.set({"types": types})
 
     for item in nutrition:
         print(item)
-        doc_ref = client.collection("nutrition").document()
+        doc_ref = client.collection("nutritions").document()
         doc_ref.set({"type": item["type"], "nutrition": item["food"]})
 
 print("\nDone uploading nutrition data to firesore!\n")

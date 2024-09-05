@@ -10,13 +10,14 @@ import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
 import 'package:nutrilog/app/core/components/toasts/toasts.dart';
 import 'package:nutrilog/app/core/infra/models/day_log/day_log_model.dart';
 import 'package:nutrilog/app/core/stores/auth_store.dart';
-import 'package:nutrilog/app/core/stores/get_nutrition_store.dart';
 import 'package:nutrilog/app/core/stores/states/auth_states.dart';
-import 'package:nutrilog/app/core/stores/states/user_states.dart';
-import 'package:nutrilog/app/core/stores/user_store.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
 import 'package:nutrilog/app/core/utils/show_date_picker.dart';
 import 'package:nutrilog/app/modules/home/presentation/components/day_log_resume.dart';
+import 'package:nutrilog/app/modules/home/presentation/stores/manage_general_nutritions_store.dart';
+import 'package:nutrilog/app/modules/home/presentation/stores/manage_general_physical_activities_store.dart';
+import 'package:nutrilog/app/modules/home/presentation/stores/states/user_history_states.dart';
+import 'package:nutrilog/app/modules/home/presentation/stores/user_history_store.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,8 +28,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final authStore = Modular.get<AuthStore>();
-  final userStore = Modular.get<UserStore>();
-  final nutritionsStore = Modular.get<GetNutritionStore>();
+  final userHistoryStore = Modular.get<UserHistoryStore>();
+  final manageGeneralPhysicalActivitiesStore = Modular.get<ManageGeneralPhysicalActivitiesStore>();
+  final manageGeneralNutritionsStore = Modular.get<ManageGeneralNutritionsStore>();
 
   List<ReactionDisposer> reactions = [];
 
@@ -36,7 +38,9 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    userStore.getUserDayLog();
+    userHistoryStore.getHistory();
+    manageGeneralPhysicalActivitiesStore.getGeneralPhysicalActivities();
+    manageGeneralNutritionsStore.getGeneralNutritions();
 
     reactions = [
       reaction((_) => authStore.signoutState, (SignoutState state) async {
@@ -64,78 +68,76 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: Observer(builder: (context) {
-        if (userStore.getUserDayLogState is GetUserDayLogInitialState) {
-          return const SizedBox();
-        }
+      body: Container(
+        margin: const EdgeInsets.symmetric(
+            horizontal: DefaultMargin.horizontal, vertical: DefaultMargin.vertical),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomButton.secondaryActivityMedium(ButtonParameters(
+              text: 'Atividade física',
+              prefixIcon: Icons.add_outlined,
+              onTap: () async => onTapRegister('physical-activity'),
+            )),
+            const SizedBox(height: 8),
+            CustomButton.secondaryNutritionMedium(ButtonParameters(
+              text: 'Alimentação',
+              prefixIcon: Icons.add_outlined,
+              onTap: () async => onTapRegister('nutrition'),
+            )),
+            const SizedBox(height: 24),
+            const AdaptiveText(text: 'Histórico', textType: TextType.medium),
+            const SizedBox(height: 24),
+            Observer(builder: (context) {
+              if (userHistoryStore.getHistoryState is GetHistoryInitialState) {
+                return const SizedBox();
+              }
 
-        if (userStore.getUserDayLogState is GetUserDayLogLoadingState) {
-          return const Center(child: CircularProgressIndicator());
-        }
+              if (userHistoryStore.getHistoryState is GetHistoryLoadingState) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-        if (userStore.getUserDayLogState is GetUserDayLogErrorState) {
-          return Center(
-              child: AdaptiveText(
-            text: (userStore.getUserDayLogState as GetUserDayLogErrorState).message,
-            textType: TextType.medium,
-          ));
-        }
+              if (userHistoryStore.getHistoryState is GetHistoryErrorState) {
+                return Center(
+                    child: AdaptiveText(
+                  text: (userHistoryStore.getHistoryState as GetHistoryErrorState).message,
+                  textType: TextType.medium,
+                ));
+              }
 
-        return Container(
-          margin: const EdgeInsets.symmetric(
-              horizontal: DefaultMargin.horizontal, vertical: DefaultMargin.vertical),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomButton.secondaryActivityMedium(ButtonParameters(
-                text: 'Atividade física',
-                prefixIcon: Icons.add_outlined,
-                onTap: () async => onTapRegister('physical-activity'),
-              )),
-              const SizedBox(height: 8),
-              CustomButton.secondaryNutritionMedium(ButtonParameters(
-                text: 'Alimentação',
-                prefixIcon: Icons.add_outlined,
-                onTap: () async => onTapRegister('nutrition'),
-              )),
-              const SizedBox(height: 24),
-              const AdaptiveText(text: 'Histórico', textType: TextType.medium),
-              const SizedBox(height: 24),
-              Observer(builder: (context) {
-                List<DayLogModel> dayLog =
-                    (userStore.getUserDayLogState as GetUserDayLogSuccessState).list;
+              List<DayLogModel> dayLog =
+                  (userHistoryStore.getHistoryState as GetHistorySuccessState).list;
 
-                if (dayLog.isEmpty) {
-                  return Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      margin: const EdgeInsets.symmetric(vertical: DefaultMargin.vertical),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset("${Assets.gifs}/not_found.gif"),
-                          const AdaptiveText(
-                              text: 'Nenhum registro até o momento.', textType: TextType.small),
-                        ],
-                      ),
-                    ),
-                  );
-                }
-
+              if (dayLog.isEmpty) {
                 return Expanded(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(0),
-                    itemCount: dayLog.length,
-                    itemBuilder: (context, index) {
-                      return DayLogResume(dayLog: dayLog[index]);
-                    },
+                  child: Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.symmetric(vertical: DefaultMargin.vertical),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset("${Assets.gifs}/not_found.gif"),
+                        const AdaptiveText(
+                            text: 'Nenhum registro até o momento.', textType: TextType.small),
+                      ],
+                    ),
                   ),
                 );
-              })
-            ],
-          ),
-        );
-      }),
+              }
+
+              return Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(0),
+                  itemCount: dayLog.length,
+                  itemBuilder: (context, index) {
+                    return DayLogResume(dayLog: dayLog[index]);
+                  },
+                ),
+              );
+            })
+          ],
+        ),
+      ),
     );
   }
 
@@ -144,7 +146,7 @@ class _HomePageState extends State<HomePage> {
     if (date == null) return;
 
     Modular.to.pushNamed(
-      'day-log/$path',
+      'new-log/$path',
       arguments: {'date': date},
       forRoot: true,
     );

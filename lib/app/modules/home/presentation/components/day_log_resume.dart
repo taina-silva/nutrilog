@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
 import 'package:nutrilog/app/core/infra/models/day_log/day_log_model.dart';
-import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_one_meal_model.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_by_meal_model.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
 import 'package:nutrilog/app/core/utils/custom_colors.dart';
 import 'package:nutrilog/app/core/utils/duration.dart';
@@ -46,16 +46,14 @@ class DayLogResume extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Builder(builder: (context) {
-                double totalNergy = 0;
+                double totalEnergy = 0;
 
-                if (dayLog.nutritions != null) {
-                  for (NutritionsOneMealModel item in (dayLog.nutritions!.nutritions)) {
-                    totalNergy += item.energy;
-                  }
+                for (NutritionsByMealModel item in (dayLog.nutritions)) {
+                  totalEnergy += item.energy;
                 }
 
                 return itemFromDayLog(
-                  dayLog.nutritions == null ? 'Nutrição' : 'Nutrição ($totalNergy Kcal)',
+                  dayLog.nutritions.isEmpty ? 'Nutrição' : 'Nutrição ($totalEnergy Kcal)',
                   Icons.local_grocery_store_outlined,
                   CColors.primaryNutrition,
                   () {
