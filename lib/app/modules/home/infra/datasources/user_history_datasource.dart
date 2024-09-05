@@ -76,6 +76,7 @@ class UserHistoryDatasourceImpl implements UserHistoryDatasource {
         'date': date.millisecondsSinceEpoch,
         payload.meal.title: {
           if (payload.time != null) 'time': timeOfDayAsStr(payload.time!),
+          if (payload.energy != 0) 'energy': payload.energy,
           'nutritions': FieldValue.arrayUnion(payload.nutritions.map((e) => e.toMap()).toList())
         },
       });

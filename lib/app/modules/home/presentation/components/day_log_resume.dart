@@ -38,7 +38,7 @@ class DayLogResume extends StatelessWidget {
                 CColors.primaryActivity,
                 () {
                   Modular.to.pushNamed(
-                    'physical-activities/',
+                    'daily-history/physical-activities',
                     forRoot: true,
                     arguments: {'date': dayLog.date},
                   );
@@ -58,7 +58,7 @@ class DayLogResume extends StatelessWidget {
                   CColors.primaryNutrition,
                   () {
                     Modular.to.pushNamed(
-                      'nutritions/',
+                      'daily-history/nutritions',
                       forRoot: true,
                       arguments: {'date': dayLog.date},
                     );

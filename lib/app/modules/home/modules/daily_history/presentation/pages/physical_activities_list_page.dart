@@ -3,33 +3,31 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fpdart/fpdart.dart' hide State;
 import 'package:mobx/mobx.dart';
-import 'package:nutrilog/app/core/components/divider/custom_divider.dart';
 import 'package:nutrilog/app/core/components/structure/custom_app_bar.dart';
 import 'package:nutrilog/app/core/components/structure/custom_scaffold.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
 import 'package:nutrilog/app/core/components/toasts/toasts.dart';
-import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_by_meal_model.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
 import 'package:nutrilog/app/core/utils/custom_colors.dart';
 import 'package:nutrilog/app/core/utils/formatters/formatters.dart';
-import 'package:nutrilog/app/modules/home/daily_history/presentation/components/nutrition_resume.dart';
-import 'package:nutrilog/app/modules/home/daily_history/presentation/stores/daily_history_store.dart';
+import 'package:nutrilog/app/modules/home/modules/daily_history/presentation/components/physical_activity_resume.dart';
+import 'package:nutrilog/app/modules/home/modules/daily_history/presentation/stores/daily_history_store.dart';
 import 'package:nutrilog/app/modules/home/presentation/stores/states/user_history_states.dart';
 import 'package:nutrilog/app/modules/home/presentation/stores/user_history_store.dart';
 
-class NutritionsListPage extends StatefulWidget {
+class PhysicalActivitiesListPage extends StatefulWidget {
   final DateTime date;
 
-  const NutritionsListPage({
+  const PhysicalActivitiesListPage({
     Key? key,
     required this.date,
   }) : super(key: key);
 
   @override
-  State<NutritionsListPage> createState() => _NutritionsListPageState();
+  State<PhysicalActivitiesListPage> createState() => _PhysicalActivitiesListPageState();
 }
 
-class _NutritionsListPageState extends State<NutritionsListPage> {
+class _PhysicalActivitiesListPageState extends State<PhysicalActivitiesListPage> {
   final userHistoryStore = Modular.get<UserHistoryStore>();
   final dailyHistoryStore = Modular.get<DailyHistoryStore>();
 
@@ -42,9 +40,10 @@ class _NutritionsListPageState extends State<NutritionsListPage> {
     dailyHistoryStore.getNutritions(widget.date);
 
     reactions = [
-      reaction((_) => userHistoryStore.manageNutritionState, (ManageNutritionState state) async {
-        if (state is ManageNutritionErrorState) {
-          errorToast(context, 'Falha ao deletar alimento: ${state.message}');
+      reaction((_) => userHistoryStore.managePhysicalActivityState,
+          (ManagePhysicalActivityState state) async {
+        if (state is ManagePhysicalActivityErrorState) {
+          errorToast(context, 'Falha ao deletar atividade física: ${state.message}');
         }
       }),
     ];
@@ -53,7 +52,7 @@ class _NutritionsListPageState extends State<NutritionsListPage> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const CustomAppBar(title: Left('Nutrição')),
+      appBar: const CustomAppBar(title: Left('Atividades Físicas')),
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -61,12 +60,12 @@ class _NutritionsListPageState extends State<NutritionsListPage> {
             padding: const EdgeInsets.all(16),
             margin: const EdgeInsets.only(top: 8, right: 8),
             decoration: const BoxDecoration(
-                color: CColors.primaryNutrition,
+                color: CColors.primaryActivity,
                 borderRadius: BorderRadius.all(Radius.circular(Layout.borderRadiusBig))),
             child: InkWell(
               onTap: () {
                 Modular.to.pushNamed(
-                  'day-log/nutrition',
+                  'day-log/physical-activity',
                   forRoot: true,
                   arguments: {'date': widget.date},
                 );
@@ -82,17 +81,21 @@ class _NutritionsListPageState extends State<NutritionsListPage> {
           vertical: DefaultMargin.vertical,
         ),
         child: Observer(builder: (context) {
-          if (dailyHistoryStore.nutritions.isEmpty) return _noNutritionsWidget();
+          if (dailyHistoryStore.physicalActivities.isEmpty) {
+            return _noPhysicalActivitiesWidget();
+          }
 
-          return ListView.separated(
+          return ListView.builder(
             padding: const EdgeInsets.all(0),
-            separatorBuilder: (context, index) => const CustomDivider(),
-            itemCount: dailyHistoryStore.nutritions.length,
+            itemCount: dailyHistoryStore.physicalActivities.length,
             itemBuilder: (context, index) {
-              return NutritionResume(
-                nutritions: dailyHistoryStore.nutritions[index],
-                ondeDeleteCallback: (mealType, nutrition) => userHistoryStore.unregisterNutrition(
-                    widget.date, NutritionsByMealModel(meal: mealType, nutritions: [nutrition])),
+              return PhysicalActivityResume(
+                pA: dailyHistoryStore.physicalActivities[index],
+                onDeleteCallback: (pA) =>
+                    userHistoryStore.unregisterPhysicalActivity(widget.date, pA),
+                isBeingDeleted: (pA) {
+                  return false;
+                },
               );
             },
           );
@@ -101,7 +104,7 @@ class _NutritionsListPageState extends State<NutritionsListPage> {
     );
   }
 
-  Widget _noNutritionsWidget() {
+  Widget _noPhysicalActivitiesWidget() {
     return Container(
       margin: const EdgeInsets.symmetric(
         horizontal: DefaultMargin.horizontal,
@@ -109,7 +112,7 @@ class _NutritionsListPageState extends State<NutritionsListPage> {
       ),
       alignment: Alignment.center,
       child: AdaptiveText(
-        text: 'Sem refeições registradas para o dia ${formatDate(widget.date)}',
+        text: 'Sem atividades físicas registradas para o dia ${formatDate(widget.date)}',
         textType: TextType.medium,
         textAlign: TextAlign.center,
       ),

@@ -5,7 +5,8 @@ import 'package:nutrilog/app/modules/home/infra/datasources/user_history_datasou
 import 'package:nutrilog/app/modules/home/infra/repositories/manage_general_nutritions_repository.dart';
 import 'package:nutrilog/app/modules/home/infra/repositories/manage_general_physical_activities_repository.dart';
 import 'package:nutrilog/app/modules/home/infra/repositories/user_history_repository.dart';
-import 'package:nutrilog/app/modules/home/new_log/new_log_module.dart';
+import 'package:nutrilog/app/modules/home/modules/daily_history/daily_history_module.dart';
+import 'package:nutrilog/app/modules/home/modules/new_log/new_log_module.dart';
 import 'package:nutrilog/app/modules/home/presentation/pages/home_page.dart';
 import 'package:nutrilog/app/modules/home/presentation/stores/manage_general_nutritions_store.dart';
 import 'package:nutrilog/app/modules/home/presentation/stores/manage_general_physical_activities_store.dart';
@@ -41,9 +42,9 @@ class HomeModule extends Module {
       '/new-log',
       module: NewLogModule(),
     ),
-    // ModuleRoute(
-    //   '/daily-history',
-    //   module: DayLogModule(),
-    // ),
+    ModuleRoute(
+      '/daily-history',
+      module: DailyHistoryModule(),
+    ),
   ];
 }

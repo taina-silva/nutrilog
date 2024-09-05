@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:nutrilog/app/modules/home/new_log/presentation/pages/register_nutrition_page.dart';
-import 'package:nutrilog/app/modules/home/new_log/presentation/pages/register_physical_activity_page.dart';
-import 'package:nutrilog/app/modules/home/new_log/presentation/stores/new_log_store.dart';
+import 'package:nutrilog/app/modules/home/modules/new_log/presentation/pages/register_nutrition_page.dart';
+import 'package:nutrilog/app/modules/home/modules/new_log/presentation/pages/register_physical_activity_page.dart';
+import 'package:nutrilog/app/modules/home/modules/new_log/presentation/stores/new_log_store.dart';
 
 class NewLogModule extends Module {
   @override
