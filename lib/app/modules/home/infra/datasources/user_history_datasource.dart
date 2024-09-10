@@ -54,10 +54,13 @@ class UserHistoryDatasourceImpl implements UserHistoryDatasource {
       await _firestore
           .collection('users/$userId/day-log')
           .doc(date.millisecondsSinceEpoch.toString())
-          .set({
-        'date': date.millisecondsSinceEpoch,
-        'physical-activities': FieldValue.arrayUnion([payload.toMap()]),
-      });
+          .set(
+        {
+          'date': date.millisecondsSinceEpoch,
+          'physical-activities': FieldValue.arrayUnion([payload.toMap()]),
+        },
+        SetOptions(merge: true),
+      );
     } catch (exception) {
       throw const RegisterPhysicalActivityException();
     }
@@ -72,14 +75,17 @@ class UserHistoryDatasourceImpl implements UserHistoryDatasource {
       await _firestore
           .collection('users/$userId/day-log')
           .doc(date.millisecondsSinceEpoch.toString())
-          .set({
-        'date': date.millisecondsSinceEpoch,
-        payload.meal.title: {
-          if (payload.time != null) 'time': timeOfDayAsStr(payload.time!),
-          if (payload.energy != 0) 'energy': payload.energy,
-          'nutritions': FieldValue.arrayUnion(payload.nutritions.map((e) => e.toMap()).toList())
+          .set(
+        {
+          'date': date.millisecondsSinceEpoch,
+          payload.meal.key: {
+            if (payload.time != null) 'time': timeOfDayAsStr(payload.time!),
+            if (payload.energy != 0) 'energy': payload.energy,
+            'nutritions': FieldValue.arrayUnion(payload.nutritions.map((e) => e.toMap()).toList()),
+          },
         },
-      });
+        SetOptions(merge: true),
+      );
     } catch (exception) {
       throw const RegisterNutritionException();
     }
@@ -95,9 +101,12 @@ class UserHistoryDatasourceImpl implements UserHistoryDatasource {
       await _firestore
           .collection('users/$userId/day-log')
           .doc(date.millisecondsSinceEpoch.toString())
-          .update({
-        'physicalActivities': FieldValue.arrayRemove([payload.toMap()]),
-      });
+          .set(
+        {
+          'physicalActivities': FieldValue.arrayRemove([payload.toMap()]),
+        },
+        SetOptions(merge: true),
+      );
     } catch (exception) {
       throw const UnregisterPhysicalActivityException();
     }
@@ -112,9 +121,13 @@ class UserHistoryDatasourceImpl implements UserHistoryDatasource {
       await _firestore
           .collection('users/$userId/day-log')
           .doc(date.millisecondsSinceEpoch.toString())
-          .update({
-        payload.meal: FieldValue.arrayRemove(payload.nutritions.map((e) => e.toMap()).toList()),
-      });
+          .set(
+        {
+          payload.meal.key:
+              FieldValue.arrayRemove(payload.nutritions.map((e) => e.toMap()).toList()),
+        },
+        SetOptions(merge: true),
+      );
     } catch (exception) {
       throw const UnregisterNutritionException();
     }

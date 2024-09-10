@@ -37,7 +37,7 @@ class _PhysicalActivitiesListPageState extends State<PhysicalActivitiesListPage>
   void initState() {
     super.initState();
 
-    dailyHistoryStore.getNutritions(widget.date);
+    dailyHistoryStore.getPhysicalActivities(widget.date);
 
     reactions = [
       reaction((_) => userHistoryStore.managePhysicalActivityState,

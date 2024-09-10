@@ -125,7 +125,7 @@ class _RegisterPhysicalActivityPageState extends State<RegisterPhysicalActivityP
               const SizedBox(height: 16),
               Expanded(
                 child: ListView.builder(
-                  padding: const EdgeInsets.all(0),
+                  padding: EdgeInsets.zero,
                   itemCount: physicalActivites.length,
                   itemBuilder: (context, index) {
                     return Container(

@@ -71,6 +71,8 @@ flutter:
     - assets/app_icon/
     - assets/logo/
     - assets/icons/
+    - assets/icons/nutritions/
+    - assets/icons/physical-activities/
     - assets/jsons/
     - assets/gifs/
 

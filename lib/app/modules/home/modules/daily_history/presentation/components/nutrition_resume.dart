@@ -5,6 +5,7 @@ import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_with_energy_m
 import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_by_meal_model.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
 import 'package:nutrilog/app/core/utils/custom_colors.dart';
+import 'package:nutrilog/app/core/utils/string.dart';
 
 class NutritionResume extends StatelessWidget {
   final NutritionsByMealModel nutritions;
@@ -22,6 +23,11 @@ class NutritionResume extends StatelessWidget {
     double iconContainerWidth = 72;
     double infoContainerWidth =
         MediaQuery.of(context).size.width - 2 * DefaultMargin.horizontal - 80;
+    double nameContainerWidth = MediaQuery.of(context).size.width -
+        2 * DefaultMargin.horizontal -
+        iconContainerWidth -
+        2 * DefaultPadding.nano -
+        40;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,88 +37,110 @@ class NutritionResume extends StatelessWidget {
           textType: TextType.medium,
           fWeight: FWeight.bold,
         ),
-        // if (nutritions.energy != 0)
-        //   AdaptiveText(
-        //     text: 'Calorias: ${nutritions.energy} kcal',
-        //     textType: TextType.small,
-        //   ),
+        if (nutritions.energy != 0)
+          AdaptiveText(
+            text: 'Calorias: ${nutritions.energy} kcal',
+            textType: TextType.small,
+          ),
         const SizedBox(height: 16),
-        Column(
-          children: nutritions.nutritions.map((n) {
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: iconContainerWidth,
-                  height: containerHeight,
-                  padding: const EdgeInsets.all(DefaultPadding.nano),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: CColors.primaryNutrition, width: Layout.borderWidth),
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(Layout.borderRadiusSmall),
-                      bottomLeft: Radius.circular(Layout.borderRadiusSmall),
+        ListView.builder(
+            padding: EdgeInsets.zero,
+            itemBuilder: (context, index) {
+              NutritionWithEnergyModel nutrition = nutritions.nutritions[index];
+
+              return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: iconContainerWidth,
+                    height: containerHeight,
+                    padding: const EdgeInsets.all(DefaultPadding.nano),
+                    decoration: BoxDecoration(
+                      border:
+                          Border.all(color: CColors.primaryNutrition, width: Layout.borderWidth),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(Layout.borderRadiusSmall),
+                        bottomLeft: Radius.circular(Layout.borderRadiusSmall),
+                      ),
+                    ),
+                    child: Image.asset(
+                      '${Assets.icons}/nutritions/${removeAccentsFromStr(nutrition.nutrition.type)}.png',
+                      color: CColors.primaryNutrition,
                     ),
                   ),
-                  child:
-                      const Icon(Icons.breakfast_dining, color: CColors.primaryNutrition, size: 48),
-                ),
-                Container(
-                  width: infoContainerWidth,
-                  height: containerHeight,
-                  padding: const EdgeInsets.all(DefaultPadding.nano),
-                  margin: const EdgeInsets.only(
-                    bottom: DefaultPadding.normal,
-                    right: DefaultPadding.nano,
-                  ),
-                  decoration: const BoxDecoration(
-                    color: CColors.primaryNutrition,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(Layout.borderRadiusSmall),
-                      bottomRight: Radius.circular(Layout.borderRadiusSmall),
+                  Container(
+                    width: infoContainerWidth,
+                    height: containerHeight,
+                    padding: const EdgeInsets.all(DefaultPadding.nano),
+                    margin: const EdgeInsets.only(
+                      bottom: DefaultPadding.normal,
+                      right: DefaultPadding.nano,
                     ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          AdaptiveText(
-                            text: n.nutrition.name,
-                            textType: TextType.small,
-                            color: CColors.neutral0,
-                          ),
-                          if (n.energy != 0)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8),
+                    decoration: const BoxDecoration(
+                      color: CColors.primaryNutrition,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(Layout.borderRadiusSmall),
+                        bottomRight: Radius.circular(Layout.borderRadiusSmall),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: nameContainerWidth,
                               child: AdaptiveText(
-                                text: '${n.energy} kcal',
-                                textType: TextType.large,
-                                fWeight: FWeight.bold,
+                                text: nutrition.nutrition.name,
+                                textType: TextType.small,
                                 color: CColors.neutral0,
                               ),
                             ),
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          // const Icon(Icons.edit_outlined, color: CColors.neutral0, size: 32),
-                          GestureDetector(
-                            onTap: () => ondeDeleteCallback(nutritions.meal, n),
-                            child: const Icon(Icons.delete_outlined,
-                                color: CColors.neutral0, size: 32),
-                          ),
-                        ],
-                      )
-                    ],
+                            if (nutrition.energy != 0)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: AdaptiveText(
+                                  text: '${nutrition.energy} kcal',
+                                  textType: TextType.large,
+                                  fWeight: FWeight.bold,
+                                  color: CColors.neutral0,
+                                ),
+                              ),
+                            const SizedBox(height: 12),
+                            Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                  color: CColors.neutral0,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(Layout.borderRadiusBig))),
+                              child: AdaptiveText(
+                                text: nutrition.nutrition.type,
+                                textType: TextType.nano,
+                              ),
+                            )
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            // const Icon(Icons.edit_outlined, color: CColors.neutral0, size: 32),
+                            GestureDetector(
+                              onTap: () => ondeDeleteCallback(nutritions.meal, nutrition),
+                              child: const Icon(Icons.delete_outlined,
+                                  color: CColors.neutral0, size: 32),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            );
-          }).toList(),
-        )
+                ],
+              );
+            },
+            itemCount: nutritions.nutritions.length,
+            shrinkWrap: true),
       ],
     );
   }

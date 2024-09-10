@@ -3,7 +3,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:fpdart/fpdart.dart' hide State;
 import 'package:mobx/mobx.dart';
-import 'package:nutrilog/app/core/components/divider/custom_divider.dart';
 import 'package:nutrilog/app/core/components/structure/custom_app_bar.dart';
 import 'package:nutrilog/app/core/components/structure/custom_scaffold.dart';
 import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
@@ -84,9 +83,8 @@ class _NutritionsListPageState extends State<NutritionsListPage> {
         child: Observer(builder: (context) {
           if (dailyHistoryStore.nutritions.isEmpty) return _noNutritionsWidget();
 
-          return ListView.separated(
-            padding: const EdgeInsets.all(0),
-            separatorBuilder: (context, index) => const CustomDivider(),
+          return ListView.builder(
+            padding: EdgeInsets.zero,
             itemCount: dailyHistoryStore.nutritions.length,
             itemBuilder: (context, index) {
               return NutritionResume(

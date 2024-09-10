@@ -11,9 +11,9 @@ class NutritionsByMealModel extends Equatable {
   final List<NutritionWithEnergyModel> nutritions;
 
   const NutritionsByMealModel({
+    this.time,
     required this.meal,
     required this.nutritions,
-    this.time,
     this.energy = 0,
   });
 
@@ -34,9 +34,9 @@ class NutritionsByMealModel extends Equatable {
 
   factory NutritionsByMealModel.fromMap(Map<String, dynamic> map) {
     return NutritionsByMealModel(
-      time: timeOfDayFromStr(map['time']),
+      time: map['time'] != null ? timeOfDayFromStr(map['time']) : null,
       meal: MealType.fromStr(map['meal']),
-      energy: map['energy'],
+      energy: map['energy'] ?? 0,
       nutritions: (map['nutritions'] as List)
           .map((item) => NutritionWithEnergyModel.fromMap(item as Map<String, dynamic>))
           .toList(),

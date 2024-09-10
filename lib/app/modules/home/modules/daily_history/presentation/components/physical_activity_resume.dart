@@ -25,6 +25,11 @@ class PhysicalActivityResume extends StatelessWidget {
     double iconContainerWidth = 72;
     double infoContainerWidth =
         MediaQuery.of(context).size.width - 2 * DefaultMargin.horizontal - 80;
+    double nameContainerWidth = MediaQuery.of(context).size.width -
+        2 * DefaultMargin.horizontal -
+        iconContainerWidth -
+        2 * DefaultPadding.nano -
+        40;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -42,7 +47,7 @@ class PhysicalActivityResume extends StatelessWidget {
             ),
           ),
           child: Image.asset(
-            '${Assets.icons}/${removeAccentsFromStr(pA.physicalActivity.type)}.png',
+            '${Assets.icons}/physical-activities/${removeAccentsFromStr(pA.physicalActivity.type)}.png',
             color: CColors.primaryActivity,
           ),
         ),
@@ -66,11 +71,7 @@ class PhysicalActivityResume extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: MediaQuery.of(context).size.width -
-                        2 * DefaultMargin.horizontal -
-                        iconContainerWidth -
-                        2 * DefaultPadding.nano -
-                        40,
+                    width: nameContainerWidth,
                     child: AdaptiveText(
                       text: pA.physicalActivity.name,
                       textType: TextType.small,
@@ -110,7 +111,6 @@ class PhysicalActivityResume extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         // const Icon(Icons.edit_outlined, color: CColors.neutral0, size: 32),
-
                         GestureDetector(
                           onTap: () => onDeleteCallback(pA),
                           child:

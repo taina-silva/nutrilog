@@ -11,7 +11,6 @@ import 'package:nutrilog/app/core/components/text/auto_size_text.dart';
 import 'package:nutrilog/app/core/components/toasts/toasts.dart';
 import 'package:nutrilog/app/core/infra/enums/meal_type.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/list_nutritions_model.dart';
-import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_model.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_with_energy_model.dart';
 import 'package:nutrilog/app/core/utils/constants.dart';
 import 'package:nutrilog/app/core/utils/custom_colors.dart';
@@ -116,7 +115,7 @@ class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
               //   ),
               Expanded(
                 child: ListView.builder(
-                  padding: const EdgeInsets.all(0),
+                  padding: EdgeInsets.zero,
                   itemCount: nutritions.length,
                   itemBuilder: (context, index) {
                     return Container(
@@ -127,10 +126,7 @@ class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
                         onSelect: (values) {
                           setState(() {
                             final list = values
-                                .map((s) => NutritionWithEnergyModel(
-                                      nutrition:
-                                          NutritionModel(name: s, type: nutritions[index].type),
-                                    ))
+                                .map((value) => NutritionWithEnergyModel(nutrition: value))
                                 .toList();
                             newLogStore.nutritions = List.from(list);
                           });
@@ -169,8 +165,6 @@ class _RegisterNutritionPageState extends State<RegisterNutritionPage> {
                     newLogStore.energy = energy;
                     // newLogStore.nutritions = newNutrition;
                     newLogStore.registerNutrition(widget.date);
-
-                    // Modular.to.pop();
                   },
                 );
               },

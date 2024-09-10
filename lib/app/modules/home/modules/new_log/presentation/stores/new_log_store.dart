@@ -45,7 +45,12 @@ abstract class NewLogStoreBase with Store {
 
     await _userHistoryStore.registerNutrition(
       date,
-      NutritionsByMealModel(meal: mealType!, nutritions: nutritions!, time: time!),
+      NutritionsByMealModel(
+        time: time!,
+        meal: mealType!,
+        nutritions: nutritions!,
+        energy: energy ?? 0,
+      ),
     );
   }
 }

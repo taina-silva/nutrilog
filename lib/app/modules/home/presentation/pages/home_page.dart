@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
 
               return Expanded(
                 child: ListView.builder(
-                  padding: const EdgeInsets.all(0),
+                  padding: EdgeInsets.zero,
                   itemCount: dayLog.length,
                   itemBuilder: (context, index) {
                     return DayLogResume(dayLog: dayLog[index]);
