@@ -9,13 +9,13 @@ import 'package:nutrilog/app/core/utils/string.dart';
 class PhysicalActivityResume extends StatelessWidget {
   final PhysicalActivityWithDurationModel pA;
   final void Function(PhysicalActivityWithDurationModel) onDeleteCallback;
-  final bool Function(PhysicalActivityWithDurationModel) isBeingDeleted;
+  final PhysicalActivityWithDurationModel? physicalActivityBeingDeleted;
 
   const PhysicalActivityResume({
     Key? key,
     required this.pA,
     required this.onDeleteCallback,
-    required this.isBeingDeleted,
+    required this.physicalActivityBeingDeleted,
   }) : super(key: key);
 
   @override
@@ -98,7 +98,7 @@ class PhysicalActivityResume extends StatelessWidget {
                   )
                 ],
               ),
-              isBeingDeleted(pA)
+              pA == physicalActivityBeingDeleted
                   ? Align(
                       alignment: Alignment.bottomRight,
                       child: SizedBox(

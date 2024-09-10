@@ -50,6 +50,7 @@ dependencies:
   intl: ^0.18.0
   mobx: 2.2.0
   permission_handler: 10.4.3
+  sliver_tools: ^0.2.12
   uuid: ^4.3.3
 
 dev_dependencies:

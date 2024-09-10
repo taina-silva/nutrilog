@@ -58,6 +58,41 @@ mixin _$DailyHistoryStore on DailyHistoryStoreBase, Store {
     });
   }
 
+  late final _$physicalActivityBeingDeletedAtom = Atom(
+      name: 'DailyHistoryStoreBase.physicalActivityBeingDeleted',
+      context: context);
+
+  @override
+  PhysicalActivityWithDurationModel? get physicalActivityBeingDeleted {
+    _$physicalActivityBeingDeletedAtom.reportRead();
+    return super.physicalActivityBeingDeleted;
+  }
+
+  @override
+  set physicalActivityBeingDeleted(PhysicalActivityWithDurationModel? value) {
+    _$physicalActivityBeingDeletedAtom
+        .reportWrite(value, super.physicalActivityBeingDeleted, () {
+      super.physicalActivityBeingDeleted = value;
+    });
+  }
+
+  late final _$nutritionBeingDeletedAtom = Atom(
+      name: 'DailyHistoryStoreBase.nutritionBeingDeleted', context: context);
+
+  @override
+  Tuple2<MealType, NutritionWithEnergyModel>? get nutritionBeingDeleted {
+    _$nutritionBeingDeletedAtom.reportRead();
+    return super.nutritionBeingDeleted;
+  }
+
+  @override
+  set nutritionBeingDeleted(Tuple2<MealType, NutritionWithEnergyModel>? value) {
+    _$nutritionBeingDeletedAtom.reportWrite(value, super.nutritionBeingDeleted,
+        () {
+      super.nutritionBeingDeleted = value;
+    });
+  }
+
   late final _$DailyHistoryStoreBaseActionController =
       ActionController(name: 'DailyHistoryStoreBase', context: context);
 
@@ -84,11 +119,35 @@ mixin _$DailyHistoryStore on DailyHistoryStoreBase, Store {
   }
 
   @override
+  void updatePhysicalActivitiesAfterDelete() {
+    final _$actionInfo = _$DailyHistoryStoreBaseActionController.startAction(
+        name: 'DailyHistoryStoreBase.updatePhysicalActivitiesAfterDelete');
+    try {
+      return super.updatePhysicalActivitiesAfterDelete();
+    } finally {
+      _$DailyHistoryStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void updateNutritionsAfterDelete() {
+    final _$actionInfo = _$DailyHistoryStoreBaseActionController.startAction(
+        name: 'DailyHistoryStoreBase.updateNutritionsAfterDelete');
+    try {
+      return super.updateNutritionsAfterDelete();
+    } finally {
+      _$DailyHistoryStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 selectedDate: ${selectedDate},
 physicalActivities: ${physicalActivities},
-nutritions: ${nutritions}
+nutritions: ${nutritions},
+physicalActivityBeingDeleted: ${physicalActivityBeingDeleted},
+nutritionBeingDeleted: ${nutritionBeingDeleted}
     ''';
   }
 }

@@ -44,6 +44,8 @@ class _PhysicalActivitiesListPageState extends State<PhysicalActivitiesListPage>
           (ManagePhysicalActivityState state) async {
         if (state is ManagePhysicalActivityErrorState) {
           errorToast(context, 'Falha ao deletar atividade física: ${state.message}');
+        } else if (state is ManagePhysicalActivitySuccessState) {
+          dailyHistoryStore.updatePhysicalActivitiesAfterDelete();
         }
       }),
     ];
@@ -86,16 +88,16 @@ class _PhysicalActivitiesListPageState extends State<PhysicalActivitiesListPage>
           }
 
           return ListView.builder(
-            padding: const EdgeInsets.all(0),
+            padding: EdgeInsets.zero,
             itemCount: dailyHistoryStore.physicalActivities.length,
             itemBuilder: (context, index) {
               return PhysicalActivityResume(
                 pA: dailyHistoryStore.physicalActivities[index],
-                onDeleteCallback: (pA) =>
-                    userHistoryStore.unregisterPhysicalActivity(widget.date, pA),
-                isBeingDeleted: (pA) {
-                  return false;
+                onDeleteCallback: (pA) {
+                  dailyHistoryStore.physicalActivityBeingDeleted = pA;
+                  userHistoryStore.unregisterPhysicalActivity(widget.date, pA);
                 },
+                physicalActivityBeingDeleted: dailyHistoryStore.physicalActivityBeingDeleted,
               );
             },
           );

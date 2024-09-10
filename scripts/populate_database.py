@@ -7,7 +7,7 @@ cred = credentials.Certificate("scripts/service_account_key_dev.json")
 app = firebase_admin.initialize_app(cred)
 client = firestore.client()
 
-with open("assets/jsons/physical_activities.json") as f:
+with open("assets/jsons/physical_activities.json", encoding='utf-8') as f:
     data = json.load(f)
 
     types = data["types"]
@@ -28,7 +28,7 @@ with open("assets/jsons/physical_activities.json") as f:
 
 print("\nDone uploading physical activities data to firesore!\n")
 
-with open("assets/jsons/nutritions.json") as f:
+with open("assets/jsons/nutritions.json", encoding='utf-8') as f:
     data = json.load(f)
 
     types = data["types"]

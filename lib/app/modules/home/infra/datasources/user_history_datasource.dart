@@ -123,8 +123,9 @@ class UserHistoryDatasourceImpl implements UserHistoryDatasource {
           .doc(date.millisecondsSinceEpoch.toString())
           .set(
         {
-          payload.meal.key:
-              FieldValue.arrayRemove(payload.nutritions.map((e) => e.toMap()).toList()),
+          payload.meal.key: {
+            'nutritions': FieldValue.arrayRemove(payload.nutritions.map((e) => e.toMap()).toList()),
+          }
         },
         SetOptions(merge: true),
       );

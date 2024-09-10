@@ -1,5 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:nutrilog/app/modules/home/modules/daily_history/presentation/pages/nutrition_list_page.dart';
+import 'package:nutrilog/app/modules/home/modules/daily_history/presentation/pages/nutritions_list_page.dart';
 import 'package:nutrilog/app/modules/home/modules/daily_history/presentation/pages/physical_activities_list_page.dart';
 import 'package:nutrilog/app/modules/home/modules/daily_history/presentation/stores/daily_history_store.dart';
 

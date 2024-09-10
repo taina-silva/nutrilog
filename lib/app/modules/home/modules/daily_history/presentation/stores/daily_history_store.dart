@@ -1,4 +1,7 @@
+import 'package:fpdart/fpdart.dart';
 import 'package:mobx/mobx.dart';
+import 'package:nutrilog/app/core/infra/enums/meal_type.dart';
+import 'package:nutrilog/app/core/infra/models/nutrition/nutrition_with_energy_model.dart';
 import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_by_meal_model.dart';
 import 'package:nutrilog/app/core/infra/models/physical_activity/physical_activity_with_duration_model.dart';
 import 'package:nutrilog/app/modules/home/presentation/stores/states/user_history_states.dart';
@@ -22,6 +25,12 @@ abstract class DailyHistoryStoreBase with Store {
 
   @observable
   ObservableList<NutritionsByMealModel> nutritions = ObservableList<NutritionsByMealModel>();
+
+  @observable
+  PhysicalActivityWithDurationModel? physicalActivityBeingDeleted;
+
+  @observable
+  Tuple2<MealType, NutritionWithEnergyModel>? nutritionBeingDeleted;
 
   @action
   void getPhysicalActivities(DateTime date) {
@@ -49,5 +58,29 @@ abstract class DailyHistoryStoreBase with Store {
         .map((e) => e.nutritions)
         .expand((element) => element)
         .toList());
+  }
+
+  @action
+  void updatePhysicalActivitiesAfterDelete() {
+    physicalActivities = ObservableList.of(
+      physicalActivities.where((element) => element != physicalActivityBeingDeleted),
+    );
+  }
+
+  @action
+  void updateNutritionsAfterDelete() {
+    final mealToDelete = nutritionBeingDeleted?.first;
+    final nutritionToDelete = nutritionBeingDeleted?.second;
+
+    nutritions = ObservableList.of(
+      nutritions.map((item) {
+        if (item.meal == mealToDelete) {
+          return item.copyWith(
+            nutritions: item.nutritions.where((element) => element != nutritionToDelete).toList(),
+          );
+        }
+        return item;
+      }).toList(),
+    );
   }
 }

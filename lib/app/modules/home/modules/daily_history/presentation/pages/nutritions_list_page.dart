@@ -11,10 +11,12 @@ import 'package:nutrilog/app/core/infra/models/nutrition/nutritions_by_meal_mode
 import 'package:nutrilog/app/core/utils/constants.dart';
 import 'package:nutrilog/app/core/utils/custom_colors.dart';
 import 'package:nutrilog/app/core/utils/formatters/formatters.dart';
-import 'package:nutrilog/app/modules/home/modules/daily_history/presentation/components/nutrition_resume.dart';
+import 'package:nutrilog/app/modules/home/modules/daily_history/presentation/components/meal_resume.dart';
+import 'package:nutrilog/app/modules/home/modules/daily_history/presentation/components/nutritions_by_meal_resume.dart';
 import 'package:nutrilog/app/modules/home/modules/daily_history/presentation/stores/daily_history_store.dart';
 import 'package:nutrilog/app/modules/home/presentation/stores/states/user_history_states.dart';
 import 'package:nutrilog/app/modules/home/presentation/stores/user_history_store.dart';
+import 'package:sliver_tools/sliver_tools.dart';
 
 class NutritionsListPage extends StatefulWidget {
   final DateTime date;
@@ -33,6 +35,7 @@ class _NutritionsListPageState extends State<NutritionsListPage> {
   final dailyHistoryStore = Modular.get<DailyHistoryStore>();
 
   List<ReactionDisposer> reactions = [];
+  ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -44,6 +47,8 @@ class _NutritionsListPageState extends State<NutritionsListPage> {
       reaction((_) => userHistoryStore.manageNutritionState, (ManageNutritionState state) async {
         if (state is ManageNutritionErrorState) {
           errorToast(context, 'Falha ao deletar alimento: ${state.message}');
+        } else if (state is ManageNutritionSuccessState) {
+          dailyHistoryStore.updateNutritionsAfterDelete();
         }
       }),
     ];
@@ -83,17 +88,28 @@ class _NutritionsListPageState extends State<NutritionsListPage> {
         child: Observer(builder: (context) {
           if (dailyHistoryStore.nutritions.isEmpty) return _noNutritionsWidget();
 
-          return ListView.builder(
-            padding: EdgeInsets.zero,
-            itemCount: dailyHistoryStore.nutritions.length,
-            itemBuilder: (context, index) {
-              return NutritionResume(
-                nutritions: dailyHistoryStore.nutritions[index],
-                ondeDeleteCallback: (mealType, nutrition) => userHistoryStore.unregisterNutrition(
-                    widget.date, NutritionsByMealModel(meal: mealType, nutritions: [nutrition])),
-              );
-            },
-          );
+          return CustomScrollView(
+              controller: scrollController,
+              slivers: List.generate(
+                dailyHistoryStore.nutritions.length,
+                (index) {
+                  return MultiSliver(
+                    children: [
+                      MealResume(nutritions: dailyHistoryStore.nutritions[index]),
+                      NutritionsByMealResume(
+                        nutritions: dailyHistoryStore.nutritions[index],
+                        ondeDeleteCallback: (meal, nutrition) {
+                          final nutritionsByMeal =
+                              NutritionsByMealModel(meal: meal, nutritions: [nutrition]);
+                          dailyHistoryStore.nutritionBeingDeleted = Tuple2(meal, nutrition);
+                          userHistoryStore.unregisterNutrition(widget.date, nutritionsByMeal);
+                        },
+                        nutritionBeingDeleted: dailyHistoryStore.nutritionBeingDeleted,
+                      ),
+                    ],
+                  );
+                },
+              ));
         }),
       ),
     );
